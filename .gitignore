@@ -102,3 +102,16 @@ dist
 
 # TernJS port file
 .tern-port
+
+#ignoring .vscode folder but we keep some files for debuging
+/.vscode/chrome
+/.vs/
+/.vscode/*
+/.vscode/**
+/.idea/*
+
+package-lock.json
+.DS_Store
+
+# Code Coverage Folder
+coverage/
