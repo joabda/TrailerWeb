@@ -1,7 +1,7 @@
 import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { CommunicationService } from "./communication.service";
+// import { CommunicationService } from "./communication.service";
 
 @Component({
   selector: "app-root",
@@ -11,7 +11,7 @@ import { CommunicationService } from "./communication.service";
 export class AppComponent implements OnInit {
     public route: string;
 
-    public constructor(communicationService: CommunicationService, location: Location, router: Router) {
+    public constructor(location: Location, router: Router) {
         router.events.subscribe((val) => {
             if (location.path() !== "") {
               this.route = location.path();

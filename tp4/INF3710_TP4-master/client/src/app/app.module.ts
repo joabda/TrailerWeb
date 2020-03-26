@@ -3,23 +3,23 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
-// import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { CommunicationService } from "./communication.service";
-import { HomeComponent } from './home/home.component';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
+// import { CommunicationService } from "./communication.service";
+import { HomeComponent } from './components/home/home.component';
+import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowseComponent } from './browse/browse.component';
 import { appRoutingModule } from './app.routing';
+import { BrowseComponent } from "./components/browse/browse.component";
+import { JwtModule } from '@auth0/angular-jwt';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     SignInComponent,
-    SignUpComponent,
     BrowseComponent,
   ],
   imports: [
@@ -29,9 +29,19 @@ import { appRoutingModule } from './app.routing';
     FormsModule,
     appRoutingModule,
     MatDialogModule,
-    NgbModalModule
+    NgbModalModule,
+    MatSnackBarModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: function  tokenGetter() {
+             return     localStorage.getItem('access_token');},
+        whitelistedDomains: ['localhost:3000'],                       // Public API
+        blacklistedRoutes: ['http://localhost:3000/auth/login']       // SECURED ROUTES
+      }
+    }),
+    BrowserAnimationsModule
   ],
-  providers: [CommunicationService],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
