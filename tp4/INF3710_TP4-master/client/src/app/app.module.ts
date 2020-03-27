@@ -12,11 +12,18 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { appRoutingModule } from './app.routing';
 import { BrowseComponent } from "./components/browse/browse.component";
 import { JwtModule } from '@auth0/angular-jwt';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 
 @NgModule({
   declarations: [
@@ -27,9 +34,17 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     ToolbarComponent,
   ],
   imports: [
+    MatButtonModule,
+    MatGridListModule,
+    MatMenuModule,
+    BrowserModule, 
+    BrowserAnimationsModule, 
+    FormsModule,
+    MatIconModule,
     MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
     CommonModule,
-    BrowserModule,
     HttpClientModule,
     FormsModule,
     appRoutingModule,
