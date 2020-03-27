@@ -7,14 +7,22 @@ import { DatabaseService } from "../services/database.service";
 import Types from "../types";
 import { Movie } from "../interface/movie";
 import * as fs from "fs";
+import { Token } from "../interface/token";
+import { TOKEN } from "../constants";
 
 @injectable()
 export class DatabaseController {
     public constructor(@inject(Types.DatabaseService) private databaseService: DatabaseService) { }
 
     public get router(): Router {
+        // const expressJwt = require('express-jwt');
         const router: Router = Router();
         const RSA_PRIVATE_KEY = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
+        // const RSA_PUBLIC_KEY = fs.readFileSync(require('path').resolve(__dirname, 'public.key')).toString('utf8');
+        // const checkIfAuthenticated = expressJwt({
+        //     secret: RSA_PUBLIC_KEY,
+        //     algorithms: ['RS256']
+        // }); 
 
         router.post("/createSchema",
             (req: Request, res: Response, next: NextFunction) => {
@@ -36,22 +44,26 @@ export class DatabaseController {
 
         router.get("/movies",
             (req: Request, res: Response, next: NextFunction) => {
-                // Send the request to the service and send the response
-                this.databaseService.getMovies().then((result: pg.QueryResult) => {
-                    const movies: Movie[] = result.rows.map((movie: any) => (
-                        {
-                            id             : movie.id,                
-                            title          : movie.title,             
-                            category       : movie.category,          
-                            productionDate : movie.productionDate,    
-                            duration       : movie.duraction,          
-                            dvdPrice       : movie.dvdPrice,          
-                            streamingFee   : movie.streamingFee      
-                        }));
-                    res.json(movies);
-                }).catch((e: Error) => {
-                    console.error(e.stack);
-                });
+                if(this.isValid(req.header(TOKEN) as unknown as string)) {
+                    // Send the request to the service and send the response
+                    this.databaseService.getMovies().then((result: pg.QueryResult) => {
+                        const movies: Movie[] = result.rows.map((movie: any) => (
+                            {
+                                id             : movie.id,                
+                                title          : movie.title,             
+                                category       : movie.category,          
+                                productionDate : movie.productionDate,    
+                                duration       : movie.duraction,          
+                                dvdPrice       : movie.dvdPrice,          
+                                streamingFee   : movie.streamingFee      
+                            }));
+                        res.json(movies);
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                    });
+                } else {
+                    res.sendStatus(401);
+                }
             });
 
         router.post("/movie/insert",
@@ -79,7 +91,7 @@ export class DatabaseController {
                         if(result.rowCount === 1) {
                             const jwtBearerToken = jwt.sign({}, RSA_PRIVATE_KEY, {
                                 algorithm: 'RS256',
-                                expiresIn: 120,
+                                expiresIn: 7200,
                                 subject: req.body.username as string
                             });
                             res.cookie("SESSIONID", jwtBearerToken, {httpOnly:true, secure:true});
@@ -107,4 +119,22 @@ export class DatabaseController {
 
         return router;
     }
+
+
+    private isValid(tokenString: string): boolean {
+        const token = this.decode(tokenString);
+        let date = new Date(0);
+        date.setUTCSeconds(token.expiry);
+        return (date.valueOf() > new Date().valueOf());
+    }
+
+    private decode(token: string): Token {
+        const result: any = jwt.decode(token);
+        return {
+            producedAt  : result.iat,
+            expiry      : result.exp,
+            user        : result.sub
+        };
+    }
+
 }
