@@ -1,7 +1,7 @@
 <app-toolbar id="toolbar"></app-toolbar>
 <div id="body">
   <mat-grid-list cols="2" rowHeight="2:1">
-    <mat-grid-tile *ngFor="let movie of movies">
+    <mat-grid-tile *ngFor="let movie of data.getMovies()">
       <mat-card class="movie-card" >
           <mat-card-header>
             <div mat-card-avatar class="movie-header-image"></div>

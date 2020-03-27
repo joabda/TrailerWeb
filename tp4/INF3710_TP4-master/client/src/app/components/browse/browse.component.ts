@@ -3,6 +3,7 @@ import { BrowseService } from 'src/app/services/browse/browse.service';
 import { Movie } from 'src/app/interfaces/movie';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { DataService } from 'src/app/services/data/data.service';
 
 @Component({
   selector: 'app-browse',
@@ -11,17 +12,15 @@ import { Router } from '@angular/router';
 })
 export class BrowseComponent implements OnInit {
 
-  movies: Movie[];
-
   constructor(
     private snacks: MatSnackBar,
     private router: Router,
-    private service: BrowseService
+    private service: BrowseService,
+    public data: DataService
     ) { }
 
   async ngOnInit() {
     const result = await this.service.getMovies(); 
-    console.log(result);
     if(result.valueOf() === false) {
       this.snacks.open(
         'Please Sign In First', 
@@ -34,7 +33,7 @@ export class BrowseComponent implements OnInit {
       );
       this.router.navigate(['']);
     } else {
-      this.movies = result as unknown as Movie[];
+      this.data.setMovies(result as unknown as Movie[]);
     }
   }
 
