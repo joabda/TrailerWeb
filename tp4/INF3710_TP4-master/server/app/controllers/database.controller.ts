@@ -2,7 +2,6 @@ import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import * as jwt from 'jsonwebtoken';
 import * as pg from "pg";
-
 import * as fs from "fs";
 import { TOKEN } from "../constants";
 import { Tables } from "../enum/tables";
@@ -10,6 +9,7 @@ import { Movie } from "../interface/movie";
 import { Participant } from "../interface/participant";
 import { Token } from "../interface/token";
 import { DatabaseService } from "../services/database.service";
+import Types from "../types";
 
 @injectable()
 export class DatabaseController {
