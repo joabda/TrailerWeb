@@ -1,4 +1,5 @@
 export enum Token {
-    id      = "token-id",
-    expiry  = "token-expiry"
+    admin   = 'token-admin',
+    id      = 'token-id',
+    expiry  = 'token-expiry'
 }

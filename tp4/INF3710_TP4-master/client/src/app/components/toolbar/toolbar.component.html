@@ -1,3 +1,22 @@
-<mat-toolbar>
-    
-</mat-toolbar>
+<mat-toolbar color="primary">
+    <span class="fill-remaining-space">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" [overlapTrigger]="false">
+        <button mat-menu-item [routerLink]="['/browse'] " >
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </button>
+        <button mat-menu-item [routerLink]="['/search'] " >
+          <mat-icon>videocam</mat-icon>
+          <span>Search</span>
+        </button>
+        <button mat-menu-item (click)='logout()' >
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </span>
+    <span class="fill-remaining-space" ><a href="/browse" >NETFLIXPOLY</a></span>
+  </mat-toolbar>
