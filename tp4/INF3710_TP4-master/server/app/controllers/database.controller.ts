@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import * as pg from "pg";
-
-import {Hotel} from "../../../common/tables/Hotel";
-import {Room} from '../../../common/tables/Room';
+import * as jwt from 'jsonwebtoken';
 
 import { DatabaseService } from "../services/database.service";
 import Types from "../types";
+import { Movie } from "../interface/movie";
+import * as fs from "fs";
+import { Token } from "../interface/token";
+import { TOKEN } from "../constants";
 
 @injectable()
 export class DatabaseController {
@@ -14,105 +16,93 @@ export class DatabaseController {
 
     public get router(): Router {
         const router: Router = Router();
+        const RSA_PRIVATE_KEY = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
 
         router.post("/createSchema",
-                    (req: Request, res: Response, next: NextFunction) => {
-                    this.databaseService.createSchema().then((result: pg.QueryResult) => {
-                        res.json(result);
-                    }).catch((e: Error) => {
-                        console.error(e.stack);
-                    });
-                });
-
-        router.post("/populateDb",
-                    (req: Request, res: Response, next: NextFunction) => {
-                    this.databaseService.populateDb().then((result: pg.QueryResult) => {
-                        res.json(result);
-                    }).catch((e: Error) => {
-                        console.error(e.stack);
-                    });
-        });
-
-        router.get("/hotel",
-                   (req: Request, res: Response, next: NextFunction) => {
-                    // Send the request to the service and send the response
-                    this.databaseService.getHotels().then((result: pg.QueryResult) => {
-                    const hotels: Hotel[] = result.rows.map((hot: any) => (
-                        {
-                        hotelno: hot.hotelno,
-                        hotelname: hot.hotelname,
-                        city: hot.city
-                    }));
-                    res.json(hotels);
+            (req: Request, res: Response, next: NextFunction) => {
+                this.databaseService.createSchema().then((result: pg.QueryResult) => {
+                    res.json(result);
                 }).catch((e: Error) => {
                     console.error(e.stack);
                 });
             });
 
-        router.get("/hotel/hotelNo",
-                   (req: Request, res: Response, next: NextFunction) => {
-                      this.databaseService.getHotelNo().then((result: pg.QueryResult) => {
-                        const hotelPKs: string[] = result.rows.map((row: any) => row.hotelno);
-                        res.json(hotelPKs);
-                      }).catch((e: Error) => {
-                        console.error(e.stack);
-                    });
-                  });
+        router.post("/populateDb",
+            (req: Request, res: Response, next: NextFunction) => {
+                this.databaseService.populateDb().then((result: pg.QueryResult) => {
+                    res.json(result);
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                });
+            });
 
-        router.post("/hotel/insert",
-                    (req: Request, res: Response, next: NextFunction) => {
-                        const hotelNo: string = req.body.hotelNo;
-                        const hotelName: string = req.body.hotelName;
-                        const city: string = req.body.city;
-                        this.databaseService.createHotel(hotelNo, hotelName, city).then((result: pg.QueryResult) => {
-                        res.json(result.rowCount);
+        router.get("/movies",
+            (req: Request, res: Response, next: NextFunction) => {
+                if(this.isValid(req.header(TOKEN) as unknown as string)) {
+                    // Send the request to the service and send the response
+                    this.databaseService.getMovies().then((result: pg.QueryResult) => {
+                        const movies: Movie[] = result.rows.map((movie: any) => (
+                            {
+                                id             : movie.id,                
+                                title          : movie.title,             
+                                category       : movie.category,          
+                                productionDate : movie.productionDate,    
+                                duration       : movie.duraction,          
+                                dvdPrice       : movie.dvdPrice,          
+                                streamingFee   : movie.streamingFee      
+                            }));
+                        res.json(movies);
                     }).catch((e: Error) => {
                         console.error(e.stack);
-                        res.json(-1);
                     });
-        });
-		
-		router.delete("/hotel/insert", /*TODO*/);
+                } else {
+                    res.sendStatus(401);
+                }
+            });
 
-        router.get("/rooms",
-                   (req: Request, res: Response, next: NextFunction) => {
+        router.post("/movie/insert",
+            (req: Request, res: Response, next: NextFunction) => {
+                const title : string        = req.body.title;
+                const category : string     = req.body.category;
+                const productionDate : Date = req.body.productionDate;
+                const duration: number      = req.body.duration;
+                const dvdPrice : number     = req.body.dvdPrice;
+                const streamingFee : number = req.body.streamingFee;
+                this.databaseService.addMovie(title, category, productionDate, duration, dvdPrice, streamingFee).then((result: pg.QueryResult) => {
+                    res.json(result.rowCount);
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                    res.json(-1);
+                });
+            });
 
-                    this.databaseService.getRoomFromHotelParams(req.query)
+        router.delete("/movie/insert");
+
+        router.post("/users",
+            (req: Request, res: Response, next: NextFunction) => {
+                this.databaseService.verifyUser(req.body.username, req.body.password)
                     .then((result: pg.QueryResult) => {
-                        const rooms: Room[] = result.rows.map((room: Room) => (
-                            {
-                            hotelno: room.hotelno,
-                            roomno: room.roomno,
-                            typeroom: room.typeroom,
-                            price: parseFloat(room.price.toString())
-                        }));
-                        res.json(rooms);
+                        if(result.rowCount === 1) {
+                            const jwtBearerToken = jwt.sign({}, RSA_PRIVATE_KEY, {
+                                algorithm: 'RS256',
+                                expiresIn: 7200,
+                                subject: req.body.username as string
+                            });
+                            res.cookie("SESSIONID", jwtBearerToken, {httpOnly:true, secure:true});
+                            res.status(200).json({
+                                idToken: jwtBearerToken, 
+                                expiresIn: 120
+                              });
+                        } else {
+                            res.sendStatus(401);
+                        }
                     }).catch((e: Error) => {
                         console.error(e.stack);
                     });
             });
 
-        router.post("/rooms/insert",
-                    (req: Request, res: Response, next: NextFunction) => {
-                    const room: Room = {
-                        hotelno: req.body.hotelno,
-                        roomno: req.body.roomno,
-                        typeroom: req.body.typeroom,
-                        price: parseFloat(req.body.price)};
-                    console.log(room);
-
-                    this.databaseService.createRoom(room)
-                    .then((result: pg.QueryResult) => {
-                        res.json(result.rowCount);
-                    })
-                    .catch((e: Error) => {
-                        console.error(e.stack);
-                        res.json(-1);
-                    });
-        });
-
         router.get("/tables/:tableName",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.getAllFromTable(req.params.tableName)
                     .then((result: pg.QueryResult) => {
                         res.json(result.rows);
@@ -123,4 +113,22 @@ export class DatabaseController {
 
         return router;
     }
+
+
+    private isValid(tokenString: string): boolean {
+        const token = this.decode(tokenString);
+        let date = new Date(0);
+        date.setUTCSeconds(token.expiry);
+        return (date.valueOf() > new Date().valueOf());
+    }
+
+    private decode(token: string): Token {
+        const result: any = jwt.decode(token);
+        return {
+            producedAt  : result.iat,
+            expiry      : result.exp,
+            user        : result.sub
+        };
+    }
+
 }

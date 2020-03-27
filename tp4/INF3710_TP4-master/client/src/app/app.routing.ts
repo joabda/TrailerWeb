@@ -1,8 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { BrowseComponent } from './browse/browse.component';
-
-
+import { HomeComponent } from './components/home/home.component';
+import { BrowseComponent } from './components/browse/browse.component';
 
 const routes: Routes = [
     { path: 'browse', component: BrowseComponent },
