@@ -46,7 +46,7 @@ export class Application {
         // development error handler
         // will print stacktrace
         // if (this.app.get("env") === "development") {
-        if(true){   
+        if (true) {
         // tslint:disable-next-line:no-any
             this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
                 res.status(err.status || this.internalError);

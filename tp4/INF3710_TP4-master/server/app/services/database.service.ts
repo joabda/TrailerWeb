@@ -1,10 +1,10 @@
 import { injectable } from "inversify";
 import * as pg from "pg";
 import "reflect-metadata";
-import { SCHEMA } from "../createSchema";
-import { DATA } from "../populateDB";
 import { DB_NAME } from '../constants';
+import { SCHEMA } from "../createSchema";
 import { Tables } from "../enum/tables";
+import { DATA } from "../populateDB";
 
 @injectable()
 export class DatabaseService {
@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     public connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: "tp3",
+        database: DB_NAME,
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -39,9 +39,9 @@ export class DatabaseService {
 
     public verifyUser(username: string, password: string): Promise<pg.QueryResult> {
         return this.pool.query(`
-            Select * 
+            Select *
             FROM ${DB_NAME}.${Tables.M}
-            WHERE email = '${username}' 
+            WHERE email = '${username}'
             AND password = '${password}';`);
     }
 
@@ -51,11 +51,11 @@ export class DatabaseService {
     }
 
     public addMovie(
-        title:          string, 
-        category:       string, 
-        productionDate: Date, 
-        duration:       number, 
-        dvdPrice:       number, 
+        title:          string,
+        category:       string,
+        productionDate: Date,
+        duration:       number,
+        dvdPrice:       number,
         streamingFee:   number): Promise<pg.QueryResult> {
             const values: any[] = [
                 title,
@@ -69,7 +69,7 @@ export class DatabaseService {
 
             return this.pool.query(queryText, values);
     }
-	
+
 	public deleteMovie(title: string): Promise<pg.QueryResult> {
         const values: any[] = [
             title,
@@ -102,10 +102,11 @@ export class DatabaseService {
             values.push(endDate);
         }
         const queryText = `INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM}
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10
                 ${subscribed ? '$11, $12' : ''}
                 );
         `;
+
         return this.pool.query(queryText, values);
     }
 }

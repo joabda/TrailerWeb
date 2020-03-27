@@ -38,7 +38,7 @@
     "instrument": true
   },
   "dependencies": {
-    "@types/pg": "^7.14.1",
+    "@types/pg": "^7.14.3",
     "axios": "^0.18.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "1.4.1",
@@ -50,7 +50,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.4",
-    "pg": "7.4.0",
+    "pg": "^7.4.0",
     "reflect-metadata": "^0.1.13",
     "serve-favicon": "~2.5.0",
     "socket.io": "^2.3.0",

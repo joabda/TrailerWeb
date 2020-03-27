@@ -1,6 +1,6 @@
 export const DATA: string = `
     SET search_path = netflixpoly;
-    
+
     -- Members
     INSERT INTO NETFLIXPOLY.Member VALUES ('email1@gmail.com', 'abcd-asdf-asdf-ae42', 'Jean',   'Lebeau',       'rue du gouverneur',        '301', 'H7P 9H7', 'Laval',      'QC', 'Canada');
     INSERT INTO NETFLIXPOLY.Member VALUES ('email2@gmail.com', 'abce-asdf-asdf-ae42', 'Marie',  'Antoinette',   '90e avenue',               '590', 'H7W 6H7', 'Laval',      'QC', 'Canada');
@@ -47,7 +47,7 @@ export const DATA: string = `
     -- Order
     SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Order', 'idorder')), 1, false);
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email1@gmail.com', 4,  '2020-03-29'); -- 1
-    INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 3,  '2020-01-30'); -- 2 
+    INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 3,  '2020-01-30'); -- 2
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 4,  '2020-01-13'); -- 3
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 5,  '2020-03-28'); -- 4
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email3@gmail.com', 1,  '2020-02-15'); -- 5
@@ -83,8 +83,8 @@ export const DATA: string = `
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (2, 1, 666); -- frais a calculer en fonction de la distance
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (3, 5, 666);
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (4, 7, 666); -- DVD IDs a changer
-    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666); 
-    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666); 
+    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666);
+    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666);
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (7, 2, 666);
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (8, 2, 666);
 
@@ -112,26 +112,26 @@ export const DATA: string = `
 
     -- Participant
     SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Participant', 'idparticipant')), 1, false);
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Vin Diesel',          52, 'USA',      'M'); -- 1
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'John Cena',           42, 'USA',      'M'); -- 2
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jason Statham',       52, 'USA',      'M'); -- 3
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Iliza Shlesinger',    37, 'USA',      'F'); -- 4
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Angelina Jolie',      44, 'USA',      'F'); -- 5
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jeremy Renner',       49, 'USA',      'M'); -- 6
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Daniel Craig',        52, 'England',  'M'); -- 7
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Dwayne Johnson',      47, 'Canada',   'M'); -- 8
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kevin Hart',          40, 'USA',      'M'); -- 9
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Tom Cruise',          57, 'USA',      'M'); -- 10
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kate Winslet',        44, 'England',  'F'); -- 11
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'James Cameron',       65, 'USA',      'M'); -- 12
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Steven Spielberg',    73, 'USA',      'M'); -- 13
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Mel Brooks'      ,    93, 'USA',      'M'); -- 14
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jerry Bruckheimer',   76, 'USA',      'M'); -- 15
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'George Lucas',        76, 'USA',      'M'); -- 16
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Woody Allen',        	84, 'USA',      'M'); -- 17
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Hope Olaide Wilson', 	34, 'England',  'F'); -- 18
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'olya zueva',        	32, 'Russia',   'F'); -- 19
-    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jennifer Connelly',  	49, 'USA',      'F'); -- 20
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Vin Diesel',          '1967/07/18', 'USA',      'M'); -- 1
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'John Cena',           '1977/04/23', 'USA',      'M'); -- 2
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jason Statham',       '1967/07/26', 'USA',      'M'); -- 3
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Iliza Shlesinger',    '1983/02/22', 'USA',      'F'); -- 4
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Angelina Jolie',      '1975/06/04', 'USA',      'F'); -- 5
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jeremy Renner',       '1971/01/07', 'USA',      'M'); -- 6
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Daniel Craig',        '1968/03/02', 'England',  'M'); -- 7
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Dwayne Johnson',      '1972/05/02', 'Canada',   'M'); -- 8
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kevin Hart',          '1979/07/06', 'USA',      'M'); -- 9
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Tom Cruise',          '1962/07/03', 'USA',      'M'); -- 10
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kate Winslet',        '1975/10/05', 'England',  'F'); -- 11
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'James Cameron',       '1954/08/16', 'USA',      'M'); -- 12
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Steven Spielberg',    '1946/12/18', 'USA',      'M'); -- 13
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Mel Brooks'      ,    '1926/06/28', 'USA',      'M'); -- 14
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jerry Bruckheimer',   '1943/09/21', 'USA',      'M'); -- 15
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'George Lucas',        '1944/05/14', 'USA',      'M'); -- 16
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Woody Allen',        	'1935/12/01', 'USA',      'M'); -- 17
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Hope Olaide Wilson', 	'1985/08/16', 'England',  'F'); -- 18
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'olya zueva',        	'1987/08/23', 'Russia',   'F'); -- 19
+    INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jennifer Connelly',  	'1970/12/12', 'USA',      'F'); -- 20
 
 
     -- Participation
@@ -165,7 +165,7 @@ export const DATA: string = `
 
     -- Oscars
     INSERT INTO NETFLIXPOLY.Oscars VALUES ('2020-02-09', 'Los Angeles', ''); -- No host
-    INSERT INTO NETFLIXPOLY.Oscars VALUES ('2019-02-24', 'Los Angeles', 'David Oyelowo'); 
+    INSERT INTO NETFLIXPOLY.Oscars VALUES ('2019-02-24', 'Los Angeles', 'David Oyelowo');
     INSERT INTO NETFLIXPOLY.Oscars VALUES ('2018-03-04', 'Los Angeles', 'Jimmy Kimmel');
 
     -- Nomination

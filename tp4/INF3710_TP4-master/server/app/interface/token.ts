@@ -1,5 +1,5 @@
 export interface Token {
-    producedAt  : number,
-    expiry      : number,
-    user        : string
+    producedAt: number;
+    expiry: number;
+    user: string;
 }
