@@ -14,6 +14,9 @@ import { BrowseComponent } from "./components/browse/browse.component";
 import { JwtModule } from '@auth0/angular-jwt';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { ToolbarComponent } from "./components/toolbar/toolbar.component";
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -21,8 +24,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     HomeComponent,
     SignInComponent,
     BrowseComponent,
+    ToolbarComponent,
   ],
   imports: [
+    MatToolbarModule,
     CommonModule,
     BrowserModule,
     HttpClientModule,
@@ -31,6 +36,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDialogModule,
     NgbModalModule,
     MatSnackBarModule,
+    MatCardModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: function  tokenGetter() {

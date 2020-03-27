@@ -19,6 +19,7 @@ export class SignInComponent {
     private service: SignInService,
     private snacks: MatSnackBar,
     ) {
+      localStorage.setItem(Token.id, '');
   }
 
   async onSubmit(): Promise<void> {

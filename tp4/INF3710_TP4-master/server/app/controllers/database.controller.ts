@@ -15,14 +15,8 @@ export class DatabaseController {
     public constructor(@inject(Types.DatabaseService) private databaseService: DatabaseService) { }
 
     public get router(): Router {
-        // const expressJwt = require('express-jwt');
         const router: Router = Router();
         const RSA_PRIVATE_KEY = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
-        // const RSA_PUBLIC_KEY = fs.readFileSync(require('path').resolve(__dirname, 'public.key')).toString('utf8');
-        // const checkIfAuthenticated = expressJwt({
-        //     secret: RSA_PUBLIC_KEY,
-        //     algorithms: ['RS256']
-        // }); 
 
         router.post("/createSchema",
             (req: Request, res: Response, next: NextFunction) => {
