@@ -4,7 +4,6 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
-// import { CommunicationService } from "./communication.service";
 import { HomeComponent } from './components/home/home.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MatDialogModule } from '@angular/material/dialog';

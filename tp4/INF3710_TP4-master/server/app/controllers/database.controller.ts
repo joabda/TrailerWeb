@@ -9,6 +9,8 @@ import { Movie } from "../interface/movie";
 import * as fs from "fs";
 import { Token } from "../interface/token";
 import { TOKEN } from "../constants";
+import { Participant } from "../interface/participant";
+import { Tables } from "../enum/tables";
 
 @injectable()
 export class DatabaseController {
@@ -78,6 +80,23 @@ export class DatabaseController {
 
         router.delete("/movie/insert");
 
+        router.get("/participant",
+        (req: Request, res: Response, next: NextFunction) => {
+            if(this.isValid(req.header(TOKEN) as unknown as string)) {
+                this.databaseService.getAllFromTable(Tables.Participant).then((result: pg.QueryResult) => {
+                    const movies: Participant[] = result.rows.map((movie: any) => (
+                        {
+
+                        }));
+                    res.json(movies);
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                });
+            } else {
+                res.sendStatus(401);
+            }
+        });
+
         router.post("/users",
             (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.verifyUser(req.body.username, req.body.password)
@@ -88,10 +107,9 @@ export class DatabaseController {
                                 expiresIn: 7200,
                                 subject: req.body.username as string
                             });
-                            res.cookie("SESSIONID", jwtBearerToken, {httpOnly:true, secure:true});
                             res.status(200).json({
                                 idToken: jwtBearerToken, 
-                                expiresIn: 120
+                                expiresIn: 7200
                               });
                         } else {
                             res.sendStatus(401);

@@ -26,5 +26,6 @@ export class SignInService{
     const expiresAt = moment().add(authResult.expiresIn, 'minute');
     localStorage.setItem(Token.id, authResult.idToken);
     localStorage.setItem(Token.expiry, JSON.stringify(expiresAt.valueOf()) );
+    localStorage.setItem(Token.admin, authResult.admin)
   }
 }
