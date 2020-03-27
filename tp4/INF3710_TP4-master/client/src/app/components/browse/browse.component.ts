@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { BrowseService } from 'src/app/services/browse/browse.service';
-import { Movie } from 'src/app/interfaces/movie';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { Movie } from "src/app/interfaces/movie";
+import { BrowseService } from "src/app/services/browse/browse.service";
 
 @Component({
-  selector: 'app-browse',
-  templateUrl: './browse.component.html',
-  styleUrls: ['./browse.component.css']
+  selector: "app-browse",
+  templateUrl: "./browse.component.html",
+  styleUrls: ["./browse.component.css"]
 })
 export class BrowseComponent implements OnInit {
 
-  movies: Movie[];
+  public movies: Movie[];
 
-  constructor(
+  public constructor(
     private snacks: MatSnackBar,
     private router: Router,
     private service: BrowseService
@@ -24,15 +24,15 @@ export class BrowseComponent implements OnInit {
     console.log(result);
     if(result.valueOf() === false) {
       this.snacks.open(
-        'Please Sign In First', 
-        '', 
+        "Please Sign In First", 
+        "", 
         {
           duration: 3000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center'
+          verticalPosition: "top",
+          horizontalPosition: "center"
         }
       );
-      this.router.navigate(['']);
+      this.router.navigate([""]);
     } else {
       this.movies = result as unknown as Movie[];
     }
