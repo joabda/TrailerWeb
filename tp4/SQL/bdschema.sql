@@ -55,6 +55,8 @@ CREATE TABLE IF NOT EXISTS  NETFLIXPOLY.Movie (
 	duration			NUMERIC							NOT NULL,
 	dvdPrice			NUMERIC							NOT NULL,
 	streamingFee		NUMERIC							NOT NULL,
+	movieURL			VARCHAR							NOT NULL,
+	imgURL				VARCHAR							NOT NULL,
 	PRIMARY KEY (idMovie)
 );
 

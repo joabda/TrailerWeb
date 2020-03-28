@@ -30,16 +30,16 @@ INSERT INTO NETFLIXPOLY.CreditCard VALUES ('348930913082441',   'email1@gmail.co
 
 -- Movies
 SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Movie', 'idmovie')), 1, false);
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Fast and Furious 9',    'Action',   '2020-04-01', 135, 70, 5); -- 1
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'The Transporter 3',     'Crime',    '2008-11-26', 104, 30, 2); -- 2
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Spenser Confidential',  'Action',   '2020-03-06', 111, 60, 5); -- 3
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Salt',                  'Drama',    '2010-07-23', 104, 30, 3); -- 4
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Take',                  'Thriller', '2008-01-30', 93,  20, 2); -- 5
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Skyfall',               'Mystery',  '2012-11-09', 144, 25, 3); -- 6
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Central Intelligence',  'Crime',    '2016-06-17', 116, 40, 3); -- 7
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Ride Along',            'Comedy',   '2016-01-15', 102, 40, 4); -- 8
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Top Gun',               'Action',   '1986-04-12', 110, 10, 1); -- 9
-INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Titanic',               'Drama',    '1997-11-18', 210, 10, 1); -- 10
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Fast and Furious 9',    'Action',   '2020-04-01', 230, 70, 5, 'https://www.youtube.com/watch?v=_qyw6LC5pnE&feature=youtu.be&t=0', 'https://honknews.com/wp-content/uploads/2020/01/fast-furious-1-696x451.png'); -- 1
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'The Transporter 3',     'Crime',    '2008-11-26', 125, 30, 2, 'https://www.youtube.com/watch?v=Pbh3CDBNIQA&feature=youtu.be&t=0', 'https://images.squarespace-cdn.com/content/v1/54e310f0e4b0f4a6ba3ac899/1566682302737-QXI2DF3C1YBQZ07ZU2A1/ke17ZwdGBToddI8pDm48kC_zU2BfZ5ZIMnHNJenIZNVZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpxijL9Wuh_4Ac8cZwXoOib6zhExuFZ5P2Nej7FDWJFPl4XcRpbKNAnqXKYQs44295g/Transporter+3+poster.jpg?format=750w'); -- 2
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Spenser Confidential',  'Action',   '2020-03-06', 177, 60, 5, 'https://youtu.be/bgKEoHNi3Uc?t=0', 'https://m.media-amazon.com/images/M/MV5BMTdkOTEwYjMtNDA1YS00YzVlLTg0NWUtMmQzNDZhYWUxZmIyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg'); -- 3
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Salt',                  'Drama',    '2010-07-23', 118, 30, 3, 'https://youtu.be/QZ40WlshNwU?t=0', 'https://s3.amazonaws.com/sobrosimages/wp-content/uploads/2018/03/15094425/salt1.jpg'); -- 4
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Taken',                 'Thriller', '2008-01-30', 112, 20, 2, 'https://youtu.be/uPJVJBm9TPA?t=0', 'https://images.moviesanywhere.com/9eaf38a4ad109ab3da9969a7a758ce7c/45732e76-78e0-4f7e-82f2-94a77498c0a1.jpg?r=3x1&w=2400'); -- 5
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Skyfall',               'Mystery',  '2012-11-09', 153, 25, 3, 'https://youtu.be/6kw1UVovByw?t=0', 'https://www.denofgeek.com/wp-content/uploads/2012/11/skyfall-main_1.jpg?resize=640%2C380'); -- 6
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Central Intelligence',  'Crime',    '2016-06-17', 147, 40, 3, 'https://youtu.be/0FKctBraQj0?t=0', 'https://www.denofgeek.com/wp-content/uploads/2016/06/central-intelligence-poster.jpg?resize=620%2C347'); -- 7
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Ride Along',            'Comedy',   '2016-01-15', 154, 40, 4, 'https://youtu.be/5klp6rkHIks?t=0', 'https://images.moviesanywhere.com/e38d1594e908c0227da7f0fc6eb92824/fc6b6dcd-2a75-4876-9a51-4fa7e474613c.jpg?h=375&resize=fit&w=250'); -- 8
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Top Gun',               'Action',   '1986-04-12',  88, 10, 1, 'https://youtu.be/xa_z57UatDY?t=0', 'https://www.armytimes.com/resizer/hFdTeHDRGBwBbRX81rIwxXTX_e8=/1200x0/filters:quality(100)/arc-anglerfish-arc2-prod-mco.s3.amazonaws.com/public/35IHQVBWRBCNFPKY6I5CJU3WVQ.jpg'); -- 9
+INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Titanic',               'Drama',    '1997-11-18', 117, 10, 1, 'https://www.youtube.com/watch?v=2e-eXJ6HgkQ&t=0', 'https://www.onthisday.com/images/articles/titanic-the-movie.jpg'); -- 10
 
 -- Order
 SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Order', 'idorder')), 1, false);
