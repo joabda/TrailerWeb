@@ -12,11 +12,11 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     public connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: DB_NAME,
+        database: 'tp4',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
-        keepAlive : true
+        keepAlive: true
     };
 
     private pool: pg.Pool = new pg.Pool(this.connectionConfig);
@@ -51,53 +51,61 @@ export class DatabaseService {
     }
 
     public addMovie(
-        title:          string,
-        category:       string,
+        title: string,
+        category: string,
         productionDate: Date,
-        duration:       number,
-        dvdPrice:       number,
-        streamingFee:   number): Promise<pg.QueryResult> {
-            const values: any[] = [
-                title,
-                category,
-                productionDate,
-                duration,
-                dvdPrice,
-                streamingFee
-            ];
-            const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6);`;
+        duration: number,
+        dvdPrice: number,
+        streamingFee: number): Promise<pg.QueryResult> {
+        const values: any[] = [
+            title,
+            category,
+            productionDate,
+            duration,
+            dvdPrice,
+            streamingFee
+        ];
+        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6);`;
 
-            return this.pool.query(queryText, values);
+        return this.pool.query(queryText, values);
     }
 
-	public deleteMovie(title: string): Promise<pg.QueryResult> {
+    public deleteMovie(title: string): Promise<pg.QueryResult> {
         const values: any[] = [
             title,
         ];
         const queryText: string = `DELETE FROM ${DB_NAME}.${Tables.Movie} WHERE title = $1;`;
         return this.pool.query(queryText, values);
-	}
+    }
+
+    /*public getMovie(title: string): Promise<pg.QueryResult> {
+        const values: any[] = [
+            title,
+        ];
+        const queryText: string = `SELECT * FROM ${DB_NAME}.${Tables.Movie} WHERE title = $1;`;
+        return this.pool.query(queryText, values);
+    }*/
 
     // Users
     public addUser(
-        email:          string,
-        password:       string,
-        firstName:      string,
-        lastName:       string,
-        street:         string,
-        appartmentNo:   number,
-        postalCode:     string,
-        city:           string,
-        state:          string,
-        country:        string,
-        subscribed:     boolean,
-        fee ?:          number,
-        endDate ?:      Date
+        email: string,
+        password: string,
+        firstName: string,
+        lastName: string,
+        street: string,
+        appartmentNo: number,
+        postalCode: string,
+        city: string,
+        state: string,
+        country: string,
+        subscribed: boolean,
+        fee?: number,
+        endDate?: Date
     ): Promise<pg.QueryResult> {
         let values: any[] = [
             email, password, firstName, lastName, street, appartmentNo, postalCode, city, state, country, subscribed
         ];
-        if(subscribed) {
+        if (subscribed) {
             values.push(fee);
             values.push(endDate);
         }

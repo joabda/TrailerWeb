@@ -52,6 +52,7 @@ export class DatabaseController {
                                 dvdPrice: movie.dvdPrice,
                                 streamingFee: movie.streamingFee
                             }));
+                        console.log(movies);
                         res.json(movies);
                     }).catch((e: Error) => {
                         console.error(e.stack);
@@ -60,6 +61,21 @@ export class DatabaseController {
                     res.sendStatus(401);
                 }
             });
+
+
+        /*router.get("/movies/:title",
+                   (req: Request, res: Response, next: NextFunction) => {
+            if (this.isValid(req.header(TOKEN) as unknown as string)) {
+                // Send the request to the service and send the response
+                this.databaseService.getMovie(req.params.title).then((result: pg.QueryResult) => {
+                    res.json(result.rows);
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                });
+            } else {
+                res.sendStatus(401);
+            }
+        });*/
 
         router.post("/movie/insert",
                     (req: Request, res: Response, next: NextFunction) => {
@@ -80,7 +96,7 @@ export class DatabaseController {
         router.delete("/movie/insert");
 
         router.get("/participant",
-        (req: Request, res: Response, next: NextFunction) => {
+                   (req: Request, res: Response, next: NextFunction) => {
             if(this.isValid(req.header(TOKEN) as unknown as string)) {
                 this.databaseService.getAllFromTable(Tables.Participant).then((result: pg.QueryResult) => {
                     const movies: Participant[] = result.rows.map((movie: any) => (
