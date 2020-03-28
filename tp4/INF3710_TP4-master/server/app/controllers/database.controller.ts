@@ -41,17 +41,20 @@ export class DatabaseController {
                    (req: Request, res: Response, next: NextFunction) => {
                 if (this.isValid(req.header(TOKEN) as unknown as string)) {
                     // Send the request to the service and send the response
-                    this.databaseService.getMovies().then((result: pg.QueryResult) => {
+                    this.databaseService.getAllFromTable(Tables.Movie).then((result: pg.QueryResult) => {
                         const movies: Movie[] = result.rows.map((movie: any) => (
                             {
-                                id: movie.id,
-                                title: movie.title,
-                                category: movie.category,
-                                productionDate: movie.productionDate,
-                                duration: movie.duraction,
-                                dvdPrice: movie.dvdPrice,
-                                streamingFee: movie.streamingFee
+                                id:             movie.id,
+                                title:          movie.title,
+                                category:       movie.category,
+                                productionDate: movie.productiondate,
+                                duration:       movie.duration,
+                                dvdPrice:       movie.dvdprice,
+                                streamingFee:   movie.streamingfee,
+                                image:          movie.imgurl,
+                                url:            movie.movieurl,
                             }));
+                            console.log(movies);
                         res.json(movies);
                     }).catch((e: Error) => {
                         console.error(e.stack);

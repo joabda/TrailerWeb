@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     public connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: DB_NAME,
+        database: 'tp3',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -44,12 +44,7 @@ export class DatabaseService {
             WHERE email = '${username}'
             AND password = '${password}';`);
     }
-
-    // Movies
-    public getMovies(): Promise<pg.QueryResult> {
-        return this.pool.query(`SELECT * FROM ${DB_NAME}.${Tables.Movie};`);
-    }
-
+    
     public addMovie(
         title:          string,
         category:       string,

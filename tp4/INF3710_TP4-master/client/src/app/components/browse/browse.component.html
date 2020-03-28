@@ -1,13 +1,11 @@
 <app-toolbar id="toolbar"></app-toolbar>
 <div id="body">
-  <mat-grid-list cols="2" rowHeight="2:1">
-    <mat-grid-tile *ngFor="let movie of data.getMovies()">
-      <mat-card class="movie-card" >
+      <mat-card class="movie-card" *ngFor="let movie of data.getMovies()">
           <mat-card-header>
             <div mat-card-avatar class="movie-header-image"></div>
             <mat-card-title>{{movie.title}}</mat-card-title>
           </mat-card-header>
-          <!-- <img mat-card-image src={{movie.image}} alt="Photo of {{movie.title}}"> -->
+          <img class="movie-cover" mat-card-image src={{movie.image}} alt="Photo of {{movie.title}}">
           <mat-card-content>
             <p>
             </p>
@@ -17,6 +15,4 @@
             <button mat-button>Buy DVD</button>
           </mat-card-actions>
       </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
 </div>
