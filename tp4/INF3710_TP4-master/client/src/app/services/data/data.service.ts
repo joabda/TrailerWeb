@@ -18,7 +18,7 @@ export class DataService {
     }
 
     getTitles(): string[] {
-        let titles: string[] = [];
+        const titles: string[] = [];
         this.movies.forEach((movie) => titles.push(movie.title));
 
         return titles;

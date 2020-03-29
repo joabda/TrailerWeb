@@ -29,25 +29,25 @@ export const DATA: string = `
     INSERT INTO NETFLIXPOLY.CreditCard VALUES ('5485667163502783',  'email5@gmail.com', 'Hugo',   'Boss',       '2024-08-19', 673);
     INSERT INTO NETFLIXPOLY.CreditCard VALUES ('6011605900024209',  'email6@gmail.com', 'Nina',   'Ricci',      '2024-04-20', 747);
     INSERT INTO NETFLIXPOLY.CreditCard VALUES ('0604177510135516',  'email7@gmail.com', 'Yves',   'Rocher',     '2023-10-13', 978);
-    INSERT INTO NETFLIXPOLY.CreditCard VALUES ('348930913082441',   'email1@gmail.com', 'Jeanne', 'Lebeau',     '2022-06-04', 874);
+    INSERT INTO NETFLIXPOLY.CreditCard VALUES ('348930913082441',   'email1@gmail.com', 'Jean', 'Lebeau',     '2022-06-04', 874);
 
     -- Movies
     SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Movie', 'idmovie')), 1, false);
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Fast and Furious 9',    'Action',   '2020-04-01', 135, 70, 5); -- 1
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'The Transporter 3',     'Crime',    '2008-11-26', 104, 30, 2); -- 2
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Spenser Confidential',  'Action',   '2020-03-06', 111, 60, 5); -- 3
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Salt',                  'Drama',    '2010-07-23', 104, 30, 3); -- 4
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Take',                  'Thriller', '2008-01-30', 93,  20, 2); -- 5
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Skyfall',               'Mystery',  '2012-11-09', 144, 25, 3); -- 6
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Central Intelligence',  'Crime',    '2016-06-17', 116, 40, 3); -- 7
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Ride Along',            'Comedy',   '2016-01-15', 102, 40, 4); -- 8
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Top Gun',               'Action',   '1986-04-12', 110, 10, 1); -- 9
-    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Titanic',               'Drama',    '1997-11-18', 210, 10, 1); -- 10
-
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Fast and Furious 9',    'Action',   '2020-04-01', 230, 70, 5, '_qyw6LC5pnE?start=0', 'https://honknews.com/wp-content/uploads/2020/01/fast-furious-1-696x451.png'); -- 1
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'The Transporter 3',     'Crime',    '2008-11-26', 125, 30, 2, 'Pbh3CDBNIQA?start=0', 'https://images.squarespace-cdn.com/content/v1/54e310f0e4b0f4a6ba3ac899/1566682302737-QXI2DF3C1YBQZ07ZU2A1/ke17ZwdGBToddI8pDm48kC_zU2BfZ5ZIMnHNJenIZNVZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpxijL9Wuh_4Ac8cZwXoOib6zhExuFZ5P2Nej7FDWJFPl4XcRpbKNAnqXKYQs44295g/Transporter+3+poster.jpg?format=750w'); -- 2
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Spenser Confidential',  'Action',   '2020-03-06', 177, 60, 5, 'bgKEoHNi3Uc?start=0', 'https://m.media-amazon.com/images/M/MV5BMTdkOTEwYjMtNDA1YS00YzVlLTg0NWUtMmQzNDZhYWUxZmIyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg'); -- 3
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Salt',                  'Drama',    '2010-07-23', 118, 30, 3, 'QZ40WlshNwU?start=0', 'https://s3.amazonaws.com/sobrosimages/wp-content/uploads/2018/03/15094425/salt1.jpg'); -- 4
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Taken',                 'Thriller', '2008-01-30', 112, 20, 2, 'uPJVJBm9TPA?start=0', 'https://images.moviesanywhere.com/9eaf38a4ad109ab3da9969a7a758ce7c/45732e76-78e0-4f7e-82f2-94a77498c0a1.jpg?r=3x1&w=2400'); -- 5
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Skyfall',               'Mystery',  '2012-11-09', 153, 25, 3, '6kw1UVovByw?start=0', 'https://www.denofgeek.com/wp-content/uploads/2012/11/skyfall-main_1.jpg?resize=640%2C380'); -- 6
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Central Intelligence',  'Crime',    '2016-06-17', 147, 40, 3, '0FKctBraQj0?start=0', 'https://www.denofgeek.com/wp-content/uploads/2016/06/central-intelligence-poster.jpg?resize=620%2C347'); -- 7
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Ride Along',            'Comedy',   '2016-01-15', 154, 40, 4, '5klp6rkHIks?start=0', 'https://images.moviesanywhere.com/e38d1594e908c0227da7f0fc6eb92824/fc6b6dcd-2a75-4876-9a51-4fa7e474613c.jpg?h=375&resize=fit&w=250'); -- 8
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Top Gun',               'Action',   '1986-04-12',  88, 10, 1, 'xa_z57UatDY?start=0', 'https://www.armytimes.com/resizer/hFdTeHDRGBwBbRX81rIwxXTX_e8=/1200x0/filters:quality(100)/arc-anglerfish-arc2-prod-mco.s3.amazonaws.com/public/35IHQVBWRBCNFPKY6I5CJU3WVQ.jpg'); -- 9
+    INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Titanic',               'Drama',    '1997-11-18', 117, 10, 1, '2e-eXJ6HgkQ?start=0', 'https://www.onthisday.com/images/articles/titanic-the-movie.jpg'); -- 10
+    
     -- Order
     SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Order', 'idorder')), 1, false);
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email1@gmail.com', 4,  '2020-03-29'); -- 1
-    INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 3,  '2020-01-30'); -- 2
+    INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 3,  '2020-01-30'); -- 2 
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 4,  '2020-01-13'); -- 3
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 5,  '2020-03-28'); -- 4
     INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email3@gmail.com', 1,  '2020-02-15'); -- 5
@@ -83,8 +83,8 @@ export const DATA: string = `
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (2, 1, 666); -- frais a calculer en fonction de la distance
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (3, 5, 666);
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (4, 7, 666); -- DVD IDs a changer
-    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666);
-    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666);
+    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666); 
+    INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666); 
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (7, 2, 666);
     INSERT INTO NETFLIXPOLY.OrderDVD VALUES (8, 2, 666);
 
@@ -132,8 +132,7 @@ export const DATA: string = `
     INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Hope Olaide Wilson', 	'1985/08/16', 'England',  'F'); -- 18
     INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'olya zueva',        	'1987/08/23', 'Russia',   'F'); -- 19
     INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jennifer Connelly',  	'1970/12/12', 'USA',      'F'); -- 20
-
-
+      
     -- Participation
     INSERT INTO NETFLIXPOLY.Participation VALUES (1,  15,    'Producer', 11000);
     INSERT INTO NETFLIXPOLY.Participation VALUES (2,  14,    'Producer', 12000);
@@ -146,7 +145,7 @@ export const DATA: string = `
     INSERT INTO NETFLIXPOLY.Participation VALUES (9,  16,    'Producer', 12400);
     INSERT INTO NETFLIXPOLY.Participation VALUES (10, 16,    'Producer', 10000);
     INSERT INTO NETFLIXPOLY.Participation VALUES (10, 17,    'Producer', 15000);
-
+    
     INSERT INTO NETFLIXPOLY.Participation VALUES (1, 1,     'Actor',    10000);
     INSERT INTO NETFLIXPOLY.Participation VALUES (1, 2,     'Actor',    50000);
     INSERT INTO NETFLIXPOLY.Participation VALUES (2, 5,     'Actor',    100000);
@@ -162,17 +161,17 @@ export const DATA: string = `
     INSERT INTO NETFLIXPOLY.Participation VALUES (3, 18,    'Actor', 	19500);
     INSERT INTO NETFLIXPOLY.Participation VALUES (4, 19,    'Actor', 	190500);
     INSERT INTO NETFLIXPOLY.Participation VALUES (9, 20,    'Actor', 	85000);
-
+    
     -- Oscars
     INSERT INTO NETFLIXPOLY.Oscars VALUES ('2020-02-09', 'Los Angeles', ''); -- No host
-    INSERT INTO NETFLIXPOLY.Oscars VALUES ('2019-02-24', 'Los Angeles', 'David Oyelowo');
+    INSERT INTO NETFLIXPOLY.Oscars VALUES ('2019-02-24', 'Los Angeles', 'David Oyelowo'); 
     INSERT INTO NETFLIXPOLY.Oscars VALUES ('2018-03-04', 'Los Angeles', 'Jimmy Kimmel');
-
+    
     -- Nomination
     INSERT INTO NETFLIXPOLY.Nomination VALUES ('2020-02-09', 1, true,  'Action');
     INSERT INTO NETFLIXPOLY.Nomination VALUES ('2019-02-24', 7, false, 'Action');
     INSERT INTO NETFLIXPOLY.Nomination VALUES ('2019-02-24', 5, false, 'Drama');
     INSERT INTO NETFLIXPOLY.Nomination VALUES ('2018-03-04', 9, true,  'Foreign');
-    INSERT INTO NETFLIXPOLY.Nomination VALUES ('2018-03-04', 4, true,  'Thriller');
+    INSERT INTO NETFLIXPOLY.Nomination VALUES ('2018-03-04', 4, true,  'Thriller');    
 
 ;`;

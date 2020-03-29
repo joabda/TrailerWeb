@@ -37,7 +37,7 @@
         </mat-dialog-content>
     </div>
 
-    <div *ngIf="movieFound" id="movie-card">
+    <div *ngIf="movie" id="movie-card">
         <mat-card>
             <mat-card-header>
                 <div
@@ -46,18 +46,18 @@
                 ></div>
                 <mat-card-title>{{movie.title}}</mat-card-title>
             </mat-card-header>
-            <!-- <img mat-card-image src={{movie.image}} alt="Photo of {{movie.title}}"> -->
+            <img class="movie-cover" src={{movie.image}} alt="{{movie.title}}">
             <mat-card-content>
                 <p>
                     Category : <strong>{{movie.category}}</strong> <br/>
-                    Production date : <strong>A remplir</strong> <br/>
-                    Duration : <strong>A remplir</strong> <br/>
-                    DVD price : <strong>A remplir</strong> <br/>
-                    Streaming fee : <strong>A remplir</strong> <br/>
+                    Production date : <strong>{{movie.productionDate | date:"mediumDate"}}</strong> <br/>
+                    Duration : <strong>{{movie.duration}}</strong> <br/>
+                    DVD price : <strong>{{movie.dvdPrice}}</strong> <br/>
+                    Streaming fee : <strong>{{movie.streamingFee}}</strong> <br/>
                 </p>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-button>Play</button>
+                <button mat-button #play title={{movie.title}} (click)="onPlayClick(play)">Play</button>
                 <button mat-button>Buy DVD</button>
             </mat-card-actions>
         </mat-card>

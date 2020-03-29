@@ -1,3 +1,4 @@
+import {CdkStepperModule} from "@angular/cdk/stepper";
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
@@ -17,6 +18,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { YouTubePlayerModule } from "@angular/youtube-player";
 import { JwtModule } from "@auth0/angular-jwt";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
 import { AppComponent } from "./app.component";
@@ -25,12 +27,10 @@ import { BrowseComponent } from "./components/browse/browse.component";
 import { HomeComponent } from "./components/home/home.component";
 import { SearchComponent } from "./components/search/search.component";
 import { SignInComponent } from "./components/sign-in/sign-in.component";
+import { StreamingpurchaseComponent } from "./components/streamingpurchase/streamingpurchase.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
+import { TrailerComponent } from "./components/trailer/trailer.component";
 import { DataService } from "./services/data/data.service";
-import { TrailerComponent } from './components/trailer/trailer.component';
-import { YouTubePlayerModule } from '@angular/youtube-player';
-import { StreamingpurchaseComponent } from './components/streamingpurchase/streamingpurchase.component';
-import {CdkStepperModule} from '@angular/cdk/stepper';
 
 @NgModule({
   declarations: [
