@@ -6,7 +6,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatDialogModule } from "@angular/material/dialog";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -27,6 +27,10 @@ import { SearchComponent } from "./components/search/search.component";
 import { SignInComponent } from "./components/sign-in/sign-in.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
 import { DataService } from "./services/data/data.service";
+import { TrailerComponent } from './components/trailer/trailer.component';
+import { YouTubePlayerModule } from '@angular/youtube-player';
+import { StreamingpurchaseComponent } from './components/streamingpurchase/streamingpurchase.component';
+import {CdkStepperModule} from '@angular/cdk/stepper';
 
 @NgModule({
   declarations: [
@@ -36,10 +40,14 @@ import { DataService } from "./services/data/data.service";
     BrowseComponent,
     ToolbarComponent,
     SearchComponent,
+    TrailerComponent,
+    StreamingpurchaseComponent,
   ],
   imports: [
-    ReactiveFormsModule,
     MatInputModule,
+    CdkStepperModule,
+    ReactiveFormsModule,
+    YouTubePlayerModule,
     MatFormFieldModule,
     MatAutocompleteModule,
     MatButtonModule,

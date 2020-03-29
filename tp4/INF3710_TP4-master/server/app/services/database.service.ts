@@ -10,7 +10,7 @@ import { DATA } from "../populateDB";
 export class DatabaseService {
 
     // A MODIFIER POUR VOTRE BD
-    public connectionConfig: pg.ConnectionConfig = {
+    private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
         database: 'tp3',
         password: "12345",
@@ -21,23 +21,23 @@ export class DatabaseService {
 
     private pool: pg.Pool = new pg.Pool(this.connectionConfig);
 
-    public constructor() {
+    constructor() {
         this.pool.connect();
     }
 
-    public createSchema(): Promise<pg.QueryResult> {
+    createSchema(): Promise<pg.QueryResult> {
         return this.pool.query(SCHEMA);
     }
 
-    public populateDb(): Promise<pg.QueryResult> {
+    populateDb(): Promise<pg.QueryResult> {
         return this.pool.query(DATA);
     }
 
-    public getAllFromTable(tableName: string): Promise<pg.QueryResult> {
+    getAllFromTable(tableName: string): Promise<pg.QueryResult> {
         return this.pool.query(`SELECT * FROM ${DB_NAME}.${tableName};`);
     }
 
-    public verifyUser(username: string, password: string): Promise<pg.QueryResult> {
+    verifyUser(username: string, password: string): Promise<pg.QueryResult> {
         return this.pool.query(`
             Select *
             FROM ${DB_NAME}.${Tables.M}
@@ -45,7 +45,7 @@ export class DatabaseService {
             AND password = '${password}';`);
     }
     
-    public addMovie(
+    addMovie(
         title:          string,
         category:       string,
         productionDate: Date,
@@ -65,16 +65,60 @@ export class DatabaseService {
             return this.pool.query(queryText, values);
     }
 
-	public deleteMovie(title: string): Promise<pg.QueryResult> {
+	deleteMovie(title: string): Promise<pg.QueryResult> {
         const values: any[] = [
             title,
         ];
         const queryText: string = `DELETE FROM ${DB_NAME}.${Tables.Movie} WHERE title = $1;`;
         return this.pool.query(queryText, values);
-	}
+    }
+    
+    updateURL(id: number, stoppedAt: number, member: string): Promise<pg.QueryResult> {
+        const queryText: string = `
+            UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = (
+                SELECT DISTINCT idorder 
+                FROM ${DB_NAME}.${Tables.Order}, ${DB_NAME}.${Tables.Movie}
+                WHERE movieid = ${id}
+                AND clientid='${member}'
+            );
+        `;
+        return this.pool.query(queryText);
+    }
+
+    getCardsFor(user: string): Promise<pg.QueryResult> {
+        return this.pool.query(`
+            SELECT * 
+            FROM ${DB_NAME}.${Tables.CC}
+            WHERE ownerid = '${user}';
+        `);
+    }
+
+    async addStreamingOrder(movieID: number, memberID: string, dateOfOrder: string): Promise<pg.QueryResult> {
+        await this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
+        `);
+        const numberOfOrders = (await this.pool.query(`SELECT * FROM ${DB_NAME}.${Tables.Order};`)).rowCount;
+        return this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES(${numberOfOrders}, 0);
+        `);
+    }
+
+    validateOrder(movieid: number, user: string): Promise<pg.QueryResult> {
+        return this.pool.query(`
+            SELECT stoppedat 
+            FROM ${DB_NAME}.${Tables.OStream}
+            WHERE idorder = (
+                SELECT DISTINCT idorder
+                FROM ${DB_NAME}.${Tables.Order}
+                WHERE movieid = ${movieid}
+                AND clientid = '${user}' 
+            );
+            `
+        );
+    }
 
     // Users
-    public addUser(
+    addUser(
         email:          string,
         password:       string,
         firstName:      string,

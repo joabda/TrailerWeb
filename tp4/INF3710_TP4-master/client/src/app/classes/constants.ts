@@ -9,3 +9,9 @@ export const ALL_CATEGORIES = [
     Category.Romance,
     Category.Thriller
 ];
+
+export const TITLE = 'title';
+
+export const YOUTUBE_API = 'http://youtube.com/iframe_api';
+
+export const CC_NUMBER_OF_DIGITS = 16;

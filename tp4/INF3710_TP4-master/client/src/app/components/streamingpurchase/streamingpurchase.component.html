@@ -1,0 +1,27 @@
+<mat-dialog-content>
+    <ul>
+        <li>
+            <mat-label class="title">Credit Card</mat-label>
+            <select id="creditCard" (change)="ccChange($event)">
+                <option *ngFor="let cc of data.cc">{{filter(cc.cardNumber)}}</option>
+            </select>
+        </li>
+        <li>
+            <mat-label class="title">First Name</mat-label>
+            <textarea matInput placeholder="Enter your first name" [(ngModel)]='firstName'></textarea>
+        </li>
+        <li>
+            <mat-label class="title">Last Name</mat-label>
+            <textarea matInput placeholder="Enter your last name" [(ngModel)]='lastName'></textarea>
+        </li>
+        <li>
+            <mat-label class="title">CCV</mat-label>
+            <textarea matInput placeholder="Enter the card's CCV" [(ngModel)]='ccv'></textarea>
+        </li>
+    </ul>
+</mat-dialog-content>
+<hr>
+<mat-dialog-actions class="app-dialog-actions">
+    <button type="button" class="btn btn-primary btn-sm" (click)="submit()">Submit</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="close()">Close</button>
+</mat-dialog-actions>

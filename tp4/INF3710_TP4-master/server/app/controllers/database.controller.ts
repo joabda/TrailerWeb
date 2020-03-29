@@ -10,6 +10,8 @@ import { Participant } from "../interface/participant";
 import { Token } from "../interface/token";
 import { DatabaseService } from "../services/database.service";
 import Types from "../types";
+import { HTTP } from "../enum/http-codes";
+import { CreditCard } from "../interface/cc";
 
 @injectable()
 export class DatabaseController {
@@ -20,7 +22,7 @@ export class DatabaseController {
         const RSA_PRIVATE_KEY = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
 
         router.post("/createSchema",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.createSchema().then((result: pg.QueryResult) => {
                     res.json(result);
                 }).catch((e: Error) => {
@@ -29,7 +31,7 @@ export class DatabaseController {
             });
 
         router.post("/populateDb",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.populateDb().then((result: pg.QueryResult) => {
                     res.json(result);
                 }).catch((e: Error) => {
@@ -38,34 +40,33 @@ export class DatabaseController {
             });
 
         router.get("/movies",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 if (this.isValid(req.header(TOKEN) as unknown as string)) {
                     // Send the request to the service and send the response
                     this.databaseService.getAllFromTable(Tables.Movie).then((result: pg.QueryResult) => {
                         const movies: Movie[] = result.rows.map((movie: any) => (
                             {
-                                id:             movie.id,
-                                title:          movie.title,
-                                category:       movie.category,
+                                id: movie.idmovie,
+                                title: movie.title,
+                                category: movie.category,
                                 productionDate: movie.productiondate,
-                                duration:       movie.duration,
-                                dvdPrice:       movie.dvdprice,
-                                streamingFee:   movie.streamingfee,
-                                image:          movie.imgurl,
-                                url:            movie.movieurl,
+                                duration: movie.duration,
+                                dvdPrice: movie.dvdprice,
+                                streamingFee: movie.streamingfee,
+                                image: movie.imgurl,
+                                url: movie.movieurl,
                             }));
-                            console.log(movies);
                         res.json(movies);
                     }).catch((e: Error) => {
                         console.error(e.stack);
                     });
                 } else {
-                    res.sendStatus(401);
+                    res.sendStatus(HTTP.Unauthorized);
                 }
             });
 
-        router.post("/movie/insert",
-                    (req: Request, res: Response, next: NextFunction) => {
+        router.post("/movies/insert",
+            (req: Request, res: Response, next: NextFunction) => {
                 const title: string = req.body.title;
                 const category: string = req.body.category;
                 const productionDate: Date = req.body.productionDate;
@@ -80,27 +81,84 @@ export class DatabaseController {
                 });
             });
 
+        router.put("/order/update",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (this.isValid(tokenString)) {
+                    const id: number = req.body.title;
+                    const stoppedAt: number = req.body.stoppedAt;
+                    const user: string = this.decode(tokenString).user;
+                    this.databaseService.updateURL(id, stoppedAt, user).then((result: pg.QueryResult) => {
+                        res.sendStatus(HTTP.Accepted)
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                        res.json(-1);
+                    });
+                } else {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
+            });
+
+        router.post("/order/validation",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (this.isValid(tokenString)) {
+                    const id: number = req.body.id;
+                    const user: string = this.decode(tokenString).user;
+                    this.databaseService.validateOrder(id, user).then((result: pg.QueryResult) => {
+                        if (result.rowCount === 1) {
+                            res.json(result.rowCount);
+                        } else {
+                            res.sendStatus(HTTP.NoContent);
+                        }
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                        res.sendStatus(HTTP.Error);
+                    });
+                } else {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
+            });
+
+        router.post("/order/insert",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (this.isValid(tokenString)) {
+                    const id  : number = req.body.movieID;
+                    const date: string = req.body.dateOfOrder;
+                    const user: string = this.decode(tokenString).user;
+                    this.databaseService.addStreamingOrder(id, user, date).then((result: pg.QueryResult) => {
+                        res.sendStatus(HTTP.Accepted);
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                        res.sendStatus(HTTP.Error);
+                    });
+                } else {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
+            });
+
         router.delete("/movie/insert");
 
         router.get("/participant",
-        (req: Request, res: Response, next: NextFunction) => {
-            if(this.isValid(req.header(TOKEN) as unknown as string)) {
-                this.databaseService.getAllFromTable(Tables.Participant).then((result: pg.QueryResult) => {
-                    const movies: Participant[] = result.rows.map((movie: any) => (
-                        {
+            (req: Request, res: Response, next: NextFunction) => {
+                if (this.isValid(req.header(TOKEN) as unknown as string)) {
+                    this.databaseService.getAllFromTable(Tables.Participant).then((result: pg.QueryResult) => {
+                        const movies: Participant[] = result.rows.map((movie: any) => (
+                            {
 
-                        }));
-                    res.json(movies);
-                }).catch((e: Error) => {
-                    console.error(e.stack);
-                });
-            } else {
-                res.sendStatus(401);
-            }
-        });
+                            }));
+                        res.json(movies);
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                    });
+                } else {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
+            });
 
         router.post("/users",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.verifyUser(req.body.username, req.body.password)
                     .then((result: pg.QueryResult) => {
                         if (result.rowCount === 1) {
@@ -110,11 +168,11 @@ export class DatabaseController {
                                 subject: req.body.username as string
                             });
                             res.status(200).json({
-                                idToken: jwtBearerToken, 
+                                idToken: jwtBearerToken,
                                 expiresIn: 7200
-                              });
+                            });
                         } else {
-                            res.sendStatus(401);
+                            res.sendStatus(HTTP.Unauthorized);
                         }
                     }).catch((e: Error) => {
                         console.error(e.stack);
@@ -122,13 +180,38 @@ export class DatabaseController {
             });
 
         router.get("/tables/:tableName",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.getAllFromTable(req.params.tableName)
                     .then((result: pg.QueryResult) => {
                         res.json(result.rows);
                     }).catch((e: Error) => {
                         console.error(e.stack);
                     });
+            });
+
+        router.get("/creditcards/",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (this.isValid(tokenString)) {
+                    this.databaseService.getCardsFor(this.decode(tokenString).user)
+                        .then((result: pg.QueryResult) => {
+                            const ccs: CreditCard[] = result.rows.map((cc: any) => (
+                                {
+                                    cardNumber: cc.cardnumber,
+                                    ownerID: cc.ownerid,
+                                    firstName: cc.firstname,
+                                    lastName: cc.lastname,
+                                    cvc: cc.cvc,
+                                    expiryDate: cc.expirydate
+                                }));
+                            res.json(ccs);
+                        }).catch((e: Error) => {
+                            console.error(e.stack);
+                            res.sendStatus(HTTP.Error);
+                        });
+                } else {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
             });
 
         return router;
