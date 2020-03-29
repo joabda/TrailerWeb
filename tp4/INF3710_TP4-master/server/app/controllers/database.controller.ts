@@ -56,6 +56,7 @@ export class DatabaseController {
                                 image: movie.imgurl,
                                 url: movie.movieurl,
                             }));
+                        console.log(movies);
                         res.json(movies);
                     }).catch((e: Error) => {
                         console.error(e.stack);

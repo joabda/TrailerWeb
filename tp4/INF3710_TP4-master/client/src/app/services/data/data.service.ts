@@ -4,22 +4,23 @@ import { Movie } from 'src/app/interfaces/movie';
 @Injectable()
 export class DataService {
 
-  private movies: Movie[];
+    private movies: Movie[];
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  getMovies(): Movie[] {
-    return this.movies;
-  }
+    getMovies(): Movie[] {
+        return this.movies;
+    }
 
-  setMovies(movies: Movie[]): void {
-    this.movies = movies;
-  }
+    setMovies(movies: Movie[]): void {
+        this.movies = movies;
+    }
 
-  getTitles(): string[] {
-    let titles: string[] = [];
-    this.movies.forEach( movie => titles.push(movie.title) );
-    return titles;
-  }
+    getTitles(): string[] {
+        let titles: string[] = [];
+        this.movies.forEach((movie) => titles.push(movie.title));
+
+        return titles;
+    }
 }

@@ -16,7 +16,7 @@ export class DatabaseService {
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
-        keepAlive : true
+        keepAlive: true
     };
 
     private pool: pg.Pool = new pg.Pool(this.connectionConfig);
@@ -49,20 +49,20 @@ export class DatabaseService {
         title:          string,
         category:       string,
         productionDate: Date,
-        duration:       number,
-        dvdPrice:       number,
-        streamingFee:   number): Promise<pg.QueryResult> {
-            const values: any[] = [
-                title,
-                category,
-                productionDate,
-                duration,
-                dvdPrice,
-                streamingFee
-            ];
-            const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6);`;
+        duration: number,
+        dvdPrice: number,
+        streamingFee: number): Promise<pg.QueryResult> {
+        const values: any[] = [
+            title,
+            category,
+            productionDate,
+            duration,
+            dvdPrice,
+            streamingFee
+        ];
+        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6);`;
 
-            return this.pool.query(queryText, values);
+        return this.pool.query(queryText, values);
     }
 
 	deleteMovie(title: string): Promise<pg.QueryResult> {
@@ -136,7 +136,7 @@ export class DatabaseService {
         let values: any[] = [
             email, password, firstName, lastName, street, appartmentNo, postalCode, city, state, country, subscribed
         ];
-        if(subscribed) {
+        if (subscribed) {
             values.push(fee);
             values.push(endDate);
         }

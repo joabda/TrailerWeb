@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Movie } from 'src/app/interfaces/movie';
+import { Injectable } from '@angular/core';
 import { API_URL } from 'src/app/classes/constants';
 import { Token } from 'src/app/enum/token';
 import { Observable } from 'rxjs';
 import { CreditCard } from 'src/app/interfaces/cc';
 import { OrderStreaming } from 'src/app/interfaces/order-streaming';
+import { Movie } from 'src/app/interfaces/movie';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root"
 })
 export class BrowseService {
 
-  constructor(
-    private http: HttpClient) { }
+    public constructor(
+        private http: HttpClient) { }
 
   async getMovies(): Promise<Movie[] | boolean> {
     return (

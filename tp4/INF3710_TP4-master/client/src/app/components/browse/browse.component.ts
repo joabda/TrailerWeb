@@ -13,9 +13,9 @@ import { StreamingpurchaseComponent } from '../streamingpurchase/streamingpurcha
 import { CreditCard } from 'src/app/interfaces/cc';
 
 @Component({
-  selector: "app-browse",
-  templateUrl: "./browse.component.html",
-  styleUrls: ["./browse.component.css"]
+    selector: "app-browse",
+    templateUrl: "./browse.component.html",
+    styleUrls: ["./browse.component.css"]
 })
 export class BrowseComponent implements OnInit {
 

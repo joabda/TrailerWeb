@@ -20,6 +20,8 @@ export class SignInComponent {
     private snacks: MatSnackBar,
     ) {
       localStorage.setItem(Token.id, '');
+      this.username = "email1@gmail.com";
+      this.password = "abcd-asdf-asdf-ae42";
   }
 
   async onSubmit(): Promise<void> {
@@ -37,5 +39,4 @@ export class SignInComponent {
       );
     }
   }
-
 }
