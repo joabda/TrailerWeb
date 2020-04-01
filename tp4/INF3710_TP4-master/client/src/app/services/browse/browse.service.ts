@@ -25,7 +25,7 @@ export class BrowseService {
 
   isOrdered(id: number): Observable<number> {
     return (
-      this.http.post<number>(`${API_URL}order/validation`, 
+      this.http.post<any>(`${API_URL}order/validation`, 
         {id: id},
         {
           headers: new HttpHeaders().set('Authorization', 
@@ -47,8 +47,10 @@ export class BrowseService {
   }
 
   changeCurrentTime(id: number, stoppedAt: number): void {
+    console.log(id);
+    console.log(stoppedAt);
     this.http.put<Movie[]>(
-      `${API_URL}movies/update`, 
+      `${API_URL}order/update`, 
       {
         id          : id,
         stoppedAt   : stoppedAt,

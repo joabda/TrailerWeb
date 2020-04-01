@@ -39,9 +39,9 @@ export class OrderComponent {
       }
     }
     if(
-      card                          !== null            &&
-      this.firstName.toLowerCase()  === card.firstName  &&
-      this.lastName.toLowerCase()   === card.lastName   && 
+      card                          !== null                          &&
+      this.firstName.toLowerCase()  === card.firstName.toLowerCase()  &&
+      this.lastName.toLowerCase()   === card.lastName.toLowerCase()   && 
       this.ccv                      === card.cvc.toString()
     ) {
       this.ref.close({buy: true});

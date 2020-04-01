@@ -73,15 +73,10 @@ export class DatabaseService {
         return this.pool.query(queryText, values);
     }
     
-    updateURL(id: number, stoppedAt: number, member: string): Promise<pg.QueryResult> {
+    updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
-            UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = (
-                SELECT DISTINCT idorder 
-                FROM ${DB_NAME}.${Tables.Order}, ${DB_NAME}.${Tables.Movie}
-                WHERE movieid = ${id}
-                AND clientid='${member}'
-            );
-        `;
+            UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};
+`;
         return this.pool.query(queryText);
     }
 
@@ -97,15 +92,14 @@ export class DatabaseService {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
         `);
-        const numberOfOrders = (await this.pool.query(`SELECT * FROM ${DB_NAME}.${Tables.Order};`)).rowCount;
         return this.pool.query(`
-            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES(${numberOfOrders}, 0);
+            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (select max(idorder) from netflixpoly.order), 0);
         `);
     }
 
     validateOrder(movieid: number, user: string): Promise<pg.QueryResult> {
         return this.pool.query(`
-            SELECT stoppedat 
+            SELECT * 
             FROM ${DB_NAME}.${Tables.OStream}
             WHERE idorder = (
                 SELECT DISTINCT idorder

@@ -85,10 +85,9 @@ export class DatabaseController {
             (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (this.isValid(tokenString)) {
-                    const id: number = req.body.title;
+                    const id: number = req.body.id;
                     const stoppedAt: number = req.body.stoppedAt;
-                    const user: string = this.decode(tokenString).user;
-                    this.databaseService.updateURL(id, stoppedAt, user).then((result: pg.QueryResult) => {
+                    this.databaseService.updateURL(id, stoppedAt).then((result: pg.QueryResult) => {
                         res.sendStatus(HTTP.Accepted);
                     }).catch((e: Error) => {
                         console.error(e.stack);
@@ -107,13 +106,13 @@ export class DatabaseController {
                     const user: string = this.decode(tokenString).user;
                     this.databaseService.validateOrder(id, user).then((result: pg.QueryResult) => {
                         if (result.rowCount === 1) {
-                            res.json(result.rowCount);
+                            res.json(result.rows[0]);
                         } else {
-                            res.sendStatus(HTTP.NoContent);
+                            res.json(-1);
                         }
                     }).catch((e: Error) => {
                         console.error(e.stack);
-                        res.sendStatus(HTTP.Error);
+                        res.json(-1);
                     });
                 } else {
                     res.sendStatus(HTTP.Unauthorized);

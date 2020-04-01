@@ -46,9 +46,12 @@ export class BrowseComponent implements OnInit {
                 .getAttribute(TITLE) as unknown as string
         );
         if (movie !== undefined) {
-            this.service.isOrdered(movie.id).subscribe(res => {
-                if (res !== null && res.valueOf() === 1) {
-                    this.playMovie(movie);
+            this.service.isOrdered(movie.id).subscribe(async res => {
+                if (res !== null && res.valueOf() != -1) {
+                    console.log(res);
+                    console.log((res as any).stoppedat);
+                    // const currentTime = await this.service.getStopTime(movie.id, );
+                    this.playMovie(movie, (res as any).stoppedat, (res as any).idorder);
                 } else {
                     this.orderMovie(movie, type);
                 }
@@ -91,12 +94,12 @@ export class BrowseComponent implements OnInit {
         });
     }
 
-    private playMovie(movie: Movie): void {
+    private playMovie(movie: Movie, currentTime: number, idorder: number): void {
         const reference = this.dialog.open(TrailerComponent, {
             data: {
                 title: movie.title,
                 id: movie.url.slice(0, movie.url.indexOf('?')),
-                start: Number(movie.url.slice(movie.url.indexOf('=') + 1))
+                start: currentTime
             },
             width: '100%',
             height: '800px'
@@ -105,7 +108,7 @@ export class BrowseComponent implements OnInit {
             filter(stopTime => stopTime)
         ).subscribe(stopTime => {
             const newURL = `${movie.url.slice(0, movie.url.indexOf('=') + 1)}${stopTime}`;
-            this.service.changeCurrentTime(movie.id, stopTime);
+            this.service.changeCurrentTime(idorder, stopTime);
             for (let element of this.movies) {
                 if (movie.title === element.title) {
                     element.url = newURL;

@@ -31,6 +31,7 @@ import { OrderComponent } from "./components/order/order.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
 import { TrailerComponent } from "./components/trailer/trailer.component";
 import { DataService } from "./services/data/data.service";
+import { ManageComponent } from './components/manage/manage.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { DataService } from "./services/data/data.service";
     SearchComponent,
     TrailerComponent,
     OrderComponent,
+    ManageComponent,
   ],
   imports: [
     MatInputModule,

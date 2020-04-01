@@ -22,18 +22,19 @@ export class SignInComponent {
     ) {
       localStorage.setItem(Token.id, '');
       this.username = "email1@gmail.com";
-      this.password = "abcd-asdf-asdf-ae42";
+      this.password = "password1";
       this.admin = false;
   }
 
   async onSubmit(): Promise<void> {
     if(this.admin) {
-      this.service.loginAdmin({username: this.username, password: this.password});
+      await this.service.loginAdmin({username: this.username, password: this.password});
     } else {
       await this.service.login({username: this.username, password: this.password});
     }
     if(localStorage.getItem(Token.id) !== '') {
       if(this.admin) {
+        console.log('admin');
         this.router.navigate(['manage']);
       } else {
         this.router.navigate(['browse']);

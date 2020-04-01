@@ -8,7 +8,6 @@
         <div id="authentication">
           <form>
             <ul class="order-elements">
-
               <li><img class="input-icons" src="../../../assets/icons/order/credit-card.png" alt="credit card icon">
               </li>
               <li>
@@ -19,18 +18,19 @@
             </ul>
             <ul class="order-elements">
               <li><img class="input-icons" src="../../../assets/icons/order/name.png" alt="first name icon"></li>
-              <li><input class="input-field" [(ngModel)]="firstName" type="text" name="username" placeholder="email"
-                  alt="email"></li>
+              <li><input class="input-field" type="text" name="firstName" placeholder="First Name"
+                  alt="First name input" [(ngModel)]="firstName"></li>
             </ul>
             <ul class="order-elements">
               <li><img class="input-icons" src="../../../assets/icons/order/name.png" alt="last name icon"></li>
-              <li><input class="input-field" [(ngModel)]="lastName" type="text" name="password" placeholder="password"
-                  alt="password"></li>
+              <li><input class="input-field" type="text" name="lastName" placeholder="Last Name" alt="Last name input"
+                  [(ngModel)]="lastName"></li>
             </ul>
             <ul class="order-elements">
               <li><img class="input-icons" src="../../../assets/icons/order/key.png" alt="key icon"></li>
               <li>
-                <textarea matInput placeholder="Enter the card's CCV" [(ngModel)]='ccv'></textarea>
+                <textarea matInput placeholder="Enter the card's CCV" type="text" name="ccv" placeholder="CCV"
+                  alt="ccv input" [(ngModel)]='ccv'></textarea>
               </li>
             </ul>
           </form>
