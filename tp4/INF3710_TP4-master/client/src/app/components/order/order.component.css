@@ -1,0 +1,104 @@
+#close {
+    cursor: pointer;
+    float: right;
+    margin-bottom: 15px;
+    height: 40px;
+    width: 40px;
+  }
+  
+  .btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+  .btn.btn-lg {
+    height: 46px;
+  }
+  
+  .ui-widget-content a {
+    color: #001cc3 !important;
+  }
+  
+  .order-elements {
+    padding-bottom: 20px;
+  }
+
+  .btn {
+    margin-bottom: .75rem;
+    font-size: 13px;
+  }
+  
+  .d-flex {
+    display: flex !important;
+  }
+  
+  .btn-block {
+    width: 100%;
+  }
+  
+  .social {
+    height: 56.6px;
+    width: auto;
+  }
+  
+  .btn-lg {
+    padding: 0.7rem 2.3rem;
+    line-height: 1.5;
+    border-radius: 1.5rem;
+  }
+  
+  .btn {
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+  }
+  
+  ul {
+    list-style: none;
+    text-align: center;
+  }
+  
+  .main-element {
+    padding-bottom: 15px;
+  }
+  
+  .signIn-elements li {
+    display: inline;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  .input-icons {
+    height: 50px;
+    margin-right: 15px;
+    width: auto;
+  }
+  
+  .icon {
+    height: 50px;
+  }
+  
+  .container {
+    background-color: rgba(255, 255, 255, 0.75);
+    align-items: center;
+    left: 50%;
+    width: 500px;
+    border-radius: 15%;
+    transform: translate(0, 50%);
+    }
+
+  * {
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  
+  @media(max-width:440px) {
+    .container {
+      width: auto
+    }
+  }
+  

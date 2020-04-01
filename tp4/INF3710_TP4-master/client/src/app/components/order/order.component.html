@@ -1,0 +1,45 @@
+<div class="container">
+  <mat-dialog-content>
+    <ul id="main-list">
+      <li>
+        <h1 mat-dialog-title id="title">Order</h1>
+      </li>
+      <li class="main-element">
+        <div id="authentication">
+          <form>
+            <ul class="order-elements">
+
+              <li><img class="input-icons" src="../../../assets/icons/order/credit-card.png" alt="credit card icon">
+              </li>
+              <li>
+                <select id="creditCard" (change)="ccChange($event)">
+                  <option *ngFor="let cc of data.cc">{{filter(cc.cardNumber)}}</option>
+                </select>
+              </li>
+            </ul>
+            <ul class="order-elements">
+              <li><img class="input-icons" src="../../../assets/icons/order/name.png" alt="first name icon"></li>
+              <li><input class="input-field" [(ngModel)]="firstName" type="text" name="username" placeholder="email"
+                  alt="email"></li>
+            </ul>
+            <ul class="order-elements">
+              <li><img class="input-icons" src="../../../assets/icons/order/name.png" alt="last name icon"></li>
+              <li><input class="input-field" [(ngModel)]="lastName" type="text" name="password" placeholder="password"
+                  alt="password"></li>
+            </ul>
+            <ul class="order-elements">
+              <li><img class="input-icons" src="../../../assets/icons/order/key.png" alt="key icon"></li>
+              <li>
+                <textarea matInput placeholder="Enter the card's CCV" [(ngModel)]='ccv'></textarea>
+              </li>
+            </ul>
+          </form>
+        </div>
+      </li>
+      <li class="main-element">
+        <button type="button" class="btn btn-primary btn-sm" (click)="submit()">Submit</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="close()">Close</button>
+      </li>
+    </ul>
+  </mat-dialog-content>
+</div>

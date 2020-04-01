@@ -42,7 +42,7 @@ export class DatabaseService {
             Select *
             FROM ${DB_NAME}.${Tables.M}
             WHERE email = '${username}'
-            AND password = '${password}';`);
+            AND password = netflixpoly.crypt('${password}', password);`);
     }
     
     addMovie(

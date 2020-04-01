@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StreamingpurchaseComponent } from './streamingpurchase.component';
+import { OrderComponent } from './order.component';
 
 describe('StreamingpurchaseComponent', () => {
-  let component: StreamingpurchaseComponent;
-  let fixture: ComponentFixture<StreamingpurchaseComponent>;
+  let component: OrderComponent;
+  let fixture: ComponentFixture<OrderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StreamingpurchaseComponent ]
+      declarations: [ OrderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StreamingpurchaseComponent);
+    fixture = TestBed.createComponent(OrderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

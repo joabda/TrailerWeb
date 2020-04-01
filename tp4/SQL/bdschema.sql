@@ -8,7 +8,7 @@ CREATE DOMAIN NETFLIXPOLY.sex AS VARCHAR
 
 CREATE TABLE IF NOT EXISTS  NETFLIXPOLY.Member (
 	email				VARCHAR(30)						NOT NULL,
-	password			VARCHAR(30)						NOT NULL,
+	password			VARCHAR(60)						NOT NULL,
 	firstName			VARCHAR(30)						NOT NULL,
 	lastName			VARCHAR(30)						NOT NULL,
 	street				VARCHAR(30)						NOT NULL,

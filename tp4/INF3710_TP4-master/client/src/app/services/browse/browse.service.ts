@@ -79,4 +79,8 @@ export class BrowseService {
     .toPromise()
     .catch( () => false )
   }
+
+  orderMovieDVD(movieID: number, dateOfOrder: Date): void {
+    
+  }
 }

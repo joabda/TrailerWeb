@@ -4,13 +4,14 @@ import { Movie } from 'src/app/interfaces/movie';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data/data.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { TrailerComponent } from '../trailer/trailer.component';
 import { TITLE } from 'src/app/classes/constants';
 import { filter } from 'rxjs/operators';
-import { StreamingpurchaseComponent } from '../streamingpurchase/streamingpurchase.component';
+import { OrderComponent } from '../order/order.component';
 import { CreditCard } from 'src/app/interfaces/cc';
+import { OrderType } from 'src/app/enum/order-type';
 
 @Component({
     selector: "app-browse",
@@ -39,7 +40,7 @@ export class BrowseComponent implements OnInit {
         }
     }
 
-    async onPlayClick(event: MatButton): Promise<void> {
+    async onClick(event: MatButton, type: OrderType): Promise<void> {
         const movie = this.findMovie(
             (event._elementRef.nativeElement as HTMLButtonElement)
                 .getAttribute(TITLE) as unknown as string
@@ -49,7 +50,7 @@ export class BrowseComponent implements OnInit {
                 if (res !== null && res.valueOf() === 1) {
                     this.playMovie(movie);
                 } else {
-                    this.orderMovie(movie);
+                    this.orderMovie(movie, type);
                 }
             });
         } else {
@@ -57,30 +58,36 @@ export class BrowseComponent implements OnInit {
         }
     }
 
-    private orderMovie(movie: Movie): void {
+    private orderMovie(movie: Movie, type: OrderType): void {
         this.service.creditCards().subscribe(res => {
             if (res !== null) {
-                const creditCards: CreditCard[] = res;
-                const reference = this.dialog.open(StreamingpurchaseComponent, {
-                    data: {
-                        title: movie.title,
-                        cc: creditCards
-                    },
-                    width: '100%',
-                    height: '800px'
-                });
+                const reference = this.openOrderDialog(movie.title, res);
                 reference.afterClosed().pipe(
                     filter(stopTime => stopTime)
                 ).subscribe(stopTime => {
-                    console.log(stopTime);
                     if (stopTime.buy) {
-                        this.service.orderMovieStreaming({
-                            movieID: movie.id,
-                            dateOfOrder: new Date()
-                        });
+                        if(type === OrderType.Streaming) {
+                            this.service.orderMovieStreaming({
+                                movieID: movie.id,
+                                dateOfOrder: new Date()
+                            });
+                        } else {
+                            this.service.orderMovieDVD( movie.id, new Date());
+                        }
                     }
                 });
             }
+        });
+    }
+
+    private openOrderDialog(title: string, ccs: CreditCard[]): MatDialogRef<OrderComponent> {
+        return this.dialog.open(OrderComponent, {
+            data: {
+                title: title,
+                cc: ccs
+            },
+            // width: '100%',
+            // height: '800px'
         });
     }
 

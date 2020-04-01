@@ -4,11 +4,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreditCard } from 'src/app/interfaces/cc';
 
 @Component({
-  selector: 'app-streamingpurchase',
-  templateUrl: './streamingpurchase.component.html',
-  styleUrls: ['./streamingpurchase.component.css']
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.css']
 })
-export class StreamingpurchaseComponent {
+export class OrderComponent {
 
   firstName: string = '';
   lastName: string = '';
@@ -17,7 +17,7 @@ export class StreamingpurchaseComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private ref: MatDialogRef<StreamingpurchaseComponent>,
+    private ref: MatDialogRef<OrderComponent>,
     private snacks: MatSnackBar
   ) { 
     this.ccNumber =  this.data.cc[0].cardNumber;
@@ -39,10 +39,10 @@ export class StreamingpurchaseComponent {
       }
     }
     if(
-      card           !== null         &&
-      this.firstName === card.firstName &&
-      this.lastName  === card.lastName && 
-      this.ccv       === card.cvc.toString()
+      card                          !== null            &&
+      this.firstName.toLowerCase()  === card.firstName  &&
+      this.lastName.toLowerCase()   === card.lastName   && 
+      this.ccv                      === card.cvc.toString()
     ) {
       this.ref.close({buy: true});
     } else {

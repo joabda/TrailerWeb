@@ -1,11 +1,12 @@
 -- Members
-INSERT INTO NETFLIXPOLY.Member VALUES ('email1@gmail.com', 'abcd-asdf-asdf-ae42', 'Jean',   'Lebeau',       'rue du gouverneur',        '301', 'H7P 9H7', 'Laval',      'QC', 'Canada');
-INSERT INTO NETFLIXPOLY.Member VALUES ('email2@gmail.com', 'abce-asdf-asdf-ae42', 'Marie',  'Antoinette',   '90e avenue',               '590', 'H7W 6H7', 'Laval',      'QC', 'Canada');
-INSERT INTO NETFLIXPOLY.Member VALUES ('email3@gmail.com', 'abcf-agdf-asdf-ae42', 'Maude',  'Saint-Paul',   'boulevard saint-martin',   '200', 'H7W 8L7', 'Laval',      'QC', 'Canada');
-INSERT INTO NETFLIXPOLY.Member VALUES ('email4@gmail.com', 'abcg-asdf-a3df-ae42', 'Calvin', 'Klein',        'edouard mont-petit',       '908', 'H3R 9H7', 'Montreal',   'QC', 'Canada');
-INSERT INTO NETFLIXPOLY.Member VALUES ('email5@gmail.com', 'abc1-a1df-asdf-ae42', 'Hugo',   'Boss',         'rue cavendish',            '100', 'H4P 9H7', 'Montreal',   'QC', 'Canada');
-INSERT INTO NETFLIXPOLY.Member VALUES ('email6@gmail.com', 'abc2-asdf-asdf-a442', 'Nina',   'Ricci',        'boulevard sainte rose',    '604', 'H3P 8H7', 'Montreal',   'QC', 'Canada');
-INSERT INTO NETFLIXPOLY.Member VALUES ('email7@gmail.com', 'abc3-asdf-asdf-ae42', 'Yves',   'Rocher',       'rue mille',                '307', 'H2N 3N7', 'Montreal',   'QC', 'Canada');
+CREATE EXTENSION pgcrypto; -- Enables pgcrypto
+INSERT INTO NETFLIXPOLY.Member VALUES ('email1@gmail.com', crypt('password1', gen_salt('bf')), 'Jean',   'Lebeau',       'rue du gouverneur',        '301', 'H7P 9H7', 'Laval',      'QC', 'Canada');
+INSERT INTO NETFLIXPOLY.Member VALUES ('email2@gmail.com', crypt('password2', gen_salt('bf')), 'Marie',  'Antoinette',   '90e avenue',               '590', 'H7W 6H7', 'Laval',      'QC', 'Canada');
+INSERT INTO NETFLIXPOLY.Member VALUES ('email3@gmail.com', crypt('password3', gen_salt('bf')), 'Maude',  'Saint-Paul',   'boulevard saint-martin',   '200', 'H7W 8L7', 'Laval',      'QC', 'Canada');
+INSERT INTO NETFLIXPOLY.Member VALUES ('email4@gmail.com', crypt('password4', gen_salt('bf')), 'Calvin', 'Klein',        'edouard mont-petit',       '908', 'H3R 9H7', 'Montreal',   'QC', 'Canada');
+INSERT INTO NETFLIXPOLY.Member VALUES ('email5@gmail.com', crypt('password5', gen_salt('bf')), 'Hugo',   'Boss',         'rue cavendish',            '100', 'H4P 9H7', 'Montreal',   'QC', 'Canada');
+INSERT INTO NETFLIXPOLY.Member VALUES ('email6@gmail.com', crypt('password6', gen_salt('bf')), 'Nina',   'Ricci',        'boulevard sainte rose',    '604', 'H3P 8H7', 'Montreal',   'QC', 'Canada');
+INSERT INTO NETFLIXPOLY.Member VALUES ('email7@gmail.com', crypt('password7', gen_salt('bf')), 'Yves',   'Rocher',       'rue mille',                '307', 'H2N 3N7', 'Montreal',   'QC', 'Canada');
 
 -- Subscribed Members
 INSERT INTO NETFLIXPOLY.SubscribedMember VALUES ('email1@gmail.com', 100,   '2019-12-04', '2020-12-04');
