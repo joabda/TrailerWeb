@@ -1,5 +1,5 @@
 <div class="container">
-  <!-- <mat-dialog-content> -->
+  <mat-dialog-content>
     <ul id="main-list">
       <li>
         <h1 mat-dialog-title id="title">Sign In</h1>
@@ -17,6 +17,13 @@
               <li><input class="input-field" [(ngModel)]="password" type="text" name="password" placeholder="password"
                   alt="password"></li>
             </ul>
+            <ul class="signIn-elements">
+              <li><img class="input-icons" src="../../../assets/icons/signIn/admin.png" alt="password icon"></li>
+              <li style="margin-left: 140px;">
+                <input type="checkbox" id="admin" name="admin" value="Admin" [(ngModel)]="admin">
+                <label for="admin">Admin</label><br>
+              </li>
+            </ul>
           </form>
         </div>
       </li>
@@ -25,5 +32,5 @@
         <button class="btn btn-block btn-lg btn-submit" (click)="onSubmit()">Sign In</button>
       </li>
     </ul>
-  <!-- </mat-dialog-content> -->
+  </mat-dialog-content>
 </div>

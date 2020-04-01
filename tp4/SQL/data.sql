@@ -1,5 +1,10 @@
+-- Enables pgcrypto
+CREATE EXTENSION pgcrypto; 
+
+-- Administrators 
+INSERT INTO NETFLIXPOLY.Administrator VALUES ('admin@netflixpoly.com', crypt('password1', gen_salt('bf')));
+
 -- Members
-CREATE EXTENSION pgcrypto; -- Enables pgcrypto
 INSERT INTO NETFLIXPOLY.Member VALUES ('email1@gmail.com', crypt('password1', gen_salt('bf')), 'Jean',   'Lebeau',       'rue du gouverneur',        '301', 'H7P 9H7', 'Laval',      'QC', 'Canada');
 INSERT INTO NETFLIXPOLY.Member VALUES ('email2@gmail.com', crypt('password2', gen_salt('bf')), 'Marie',  'Antoinette',   '90e avenue',               '590', 'H7W 6H7', 'Laval',      'QC', 'Canada');
 INSERT INTO NETFLIXPOLY.Member VALUES ('email3@gmail.com', crypt('password3', gen_salt('bf')), 'Maude',  'Saint-Paul',   'boulevard saint-martin',   '200', 'H7W 8L7', 'Laval',      'QC', 'Canada');

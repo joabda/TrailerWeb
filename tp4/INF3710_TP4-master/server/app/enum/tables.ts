@@ -1,4 +1,5 @@
 export enum Tables {
+    A = 'administrator',
     M = 'member',
     SM = 'SubscribedMember',
     PPVM = 'PayPerViewMember',

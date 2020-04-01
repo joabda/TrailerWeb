@@ -6,6 +6,12 @@ CREATE SCHEMA netflixpoly;
 CREATE DOMAIN NETFLIXPOLY.sex AS VARCHAR
 	CHECK (VALUE IN ('M', 'F'));
 
+CREATE TABLE IF NOT EXISTS  NETFLIXPOLY.Administrator (
+	email				VARCHAR(30)						NOT NULL,
+	password			VARCHAR(60)						NOT NULL,
+	PRIMARY KEY (email)
+);
+
 CREATE TABLE IF NOT EXISTS  NETFLIXPOLY.Member (
 	email				VARCHAR(30)						NOT NULL,
 	password			VARCHAR(60)						NOT NULL,

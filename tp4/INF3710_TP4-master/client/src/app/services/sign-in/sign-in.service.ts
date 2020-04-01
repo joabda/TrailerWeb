@@ -22,6 +22,15 @@ export class SignInService{
       .catch((e: HttpErrorResponse) => {localStorage.setItem(Token.id, "")});
   }
 
+  public async loginAdmin(toAuthenticate: Logins): Promise<any> {
+    return this.http.post<any>(`${API_URL}admins`, toAuthenticate)
+    .toPromise()
+    .then(
+      (result) => this.setSession(result)
+    )
+    .catch((e: HttpErrorResponse) => {localStorage.setItem(Token.id, "")});
+  }
+
   private setSession(authResult: any): void {
     const expiresAt = moment().add(authResult.expiresIn, "minute");
     localStorage.setItem(Token.id, authResult.idToken);

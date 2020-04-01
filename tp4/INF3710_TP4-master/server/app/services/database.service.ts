@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: 'tp4',
+        database: 'postgres',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -37,10 +37,10 @@ export class DatabaseService {
         return this.pool.query(`SELECT * FROM ${DB_NAME}.${tableName};`);
     }
 
-    verifyUser(username: string, password: string): Promise<pg.QueryResult> {
+    verifyUser(username: string, password: string, tableName: string): Promise<pg.QueryResult> {
         return this.pool.query(`
             Select *
-            FROM ${DB_NAME}.${Tables.M}
+            FROM ${DB_NAME}.${tableName}
             WHERE email = '${username}'
             AND password = netflixpoly.crypt('${password}', password);`);
     }

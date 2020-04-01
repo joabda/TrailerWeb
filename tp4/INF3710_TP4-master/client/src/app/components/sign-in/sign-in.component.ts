@@ -13,6 +13,7 @@ export class SignInComponent {
 
   username: string;
   password: string;
+  admin   : boolean;
 
   constructor(
     private router: Router,
@@ -22,12 +23,21 @@ export class SignInComponent {
       localStorage.setItem(Token.id, '');
       this.username = "email1@gmail.com";
       this.password = "abcd-asdf-asdf-ae42";
+      this.admin = false;
   }
 
   async onSubmit(): Promise<void> {
-    await this.service.login({username: this.username, password: this.password});
+    if(this.admin) {
+      this.service.loginAdmin({username: this.username, password: this.password});
+    } else {
+      await this.service.login({username: this.username, password: this.password});
+    }
     if(localStorage.getItem(Token.id) !== '') {
-      this.router.navigate(['browse']);
+      if(this.admin) {
+        this.router.navigate(['manage']);
+      } else {
+        this.router.navigate(['browse']);
+      }
     } else {
       this.snacks.open(
         'Wrong username or password.', 

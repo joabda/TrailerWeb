@@ -22,7 +22,7 @@ export class DatabaseController {
         const RSA_PRIVATE_KEY = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
 
         router.post("/createSchema",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.createSchema().then((result: pg.QueryResult) => {
                     res.json(result);
                 }).catch((e: Error) => {
@@ -31,7 +31,7 @@ export class DatabaseController {
             });
 
         router.post("/populateDb",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.populateDb().then((result: pg.QueryResult) => {
                     res.json(result);
                 }).catch((e: Error) => {
@@ -40,7 +40,7 @@ export class DatabaseController {
             });
 
         router.get("/movies",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 if (this.isValid(req.header(TOKEN) as unknown as string)) {
                     // Send the request to the service and send the response
                     this.databaseService.getAllFromTable(Tables.Movie).then((result: pg.QueryResult) => {
@@ -66,7 +66,7 @@ export class DatabaseController {
             });
 
         router.post("/movies/insert",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 const title: string = req.body.title;
                 const category: string = req.body.category;
                 const productionDate: Date = req.body.productionDate;
@@ -82,7 +82,7 @@ export class DatabaseController {
             });
 
         router.put("/order/update",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (this.isValid(tokenString)) {
                     const id: number = req.body.title;
@@ -100,7 +100,7 @@ export class DatabaseController {
             });
 
         router.post("/order/validation",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (this.isValid(tokenString)) {
                     const id: number = req.body.id;
@@ -121,7 +121,7 @@ export class DatabaseController {
             });
 
         router.post("/order/insert",
-                    (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (this.isValid(tokenString)) {
                     const id: number = req.body.movieID;
@@ -141,7 +141,7 @@ export class DatabaseController {
         router.delete("/movie/insert");
 
         router.get("/participant",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 if (this.isValid(req.header(TOKEN) as unknown as string)) {
                     this.databaseService.getAllFromTable(Tables.Participant).then((result: pg.QueryResult) => {
                         const movies: Participant[] = result.rows.map((movie: any) => (
@@ -158,8 +158,30 @@ export class DatabaseController {
             });
 
         router.post("/users",
-                    (req: Request, res: Response, next: NextFunction) => {
-                this.databaseService.verifyUser(req.body.username, req.body.password)
+            (req: Request, res: Response, next: NextFunction) => {
+                this.databaseService.verifyUser(req.body.username, req.body.password, Tables.M)
+                    .then((result: pg.QueryResult) => {
+                        if (result.rowCount === 1) {
+                            const jwtBearerToken = jwt.sign({}, RSA_PRIVATE_KEY, {
+                                algorithm: 'RS256',
+                                expiresIn: 7200,
+                                subject: req.body.username as string
+                            });
+                            res.status(200).json({
+                                idToken: jwtBearerToken,
+                                expiresIn: 7200
+                            });
+                        } else {
+                            res.sendStatus(HTTP.Unauthorized);
+                        }
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                    });
+            });
+
+        router.post("/admins",
+            (req: Request, res: Response, next: NextFunction) => {
+                this.databaseService.verifyUser(req.body.username, req.body.password, Tables.A)
                     .then((result: pg.QueryResult) => {
                         if (result.rowCount === 1) {
                             const jwtBearerToken = jwt.sign({}, RSA_PRIVATE_KEY, {
@@ -180,7 +202,7 @@ export class DatabaseController {
             });
 
         router.get("/tables/:tableName",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 this.databaseService.getAllFromTable(req.params.tableName)
                     .then((result: pg.QueryResult) => {
                         res.json(result.rows);
@@ -190,7 +212,7 @@ export class DatabaseController {
             });
 
         router.get("/creditcards/",
-                   (req: Request, res: Response, next: NextFunction) => {
+            (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (this.isValid(tokenString)) {
                     this.databaseService.getCardsFor(this.decode(tokenString).user)
