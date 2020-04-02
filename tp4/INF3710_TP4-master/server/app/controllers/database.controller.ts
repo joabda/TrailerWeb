@@ -81,6 +81,22 @@ export class DatabaseController {
                 });
             });
 
+        router.put("/movies/delete",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (this.isValid(tokenString)) {
+                    const id: number = req.body.id;
+                    this.databaseService.deleteMovie(id).then((result: pg.QueryResult) => {
+                        res.sendStatus(HTTP.Accepted);
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                        res.sendStatus(HTTP.Error);
+                    });
+                } else {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
+            });
+
         router.put("/order/update",
             (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
@@ -137,8 +153,6 @@ export class DatabaseController {
                 }
             });
 
-        router.delete("/movie/insert");
-
         router.get("/participant",
             (req: Request, res: Response, next: NextFunction) => {
                 if (this.isValid(req.header(TOKEN) as unknown as string)) {
@@ -176,6 +190,36 @@ export class DatabaseController {
                     }).catch((e: Error) => {
                         console.error(e.stack);
                     });
+            });
+
+        router.put("/users/insert",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (this.isValid(tokenString)) {
+                    console.log('i am here');
+                    this.databaseService.addUser(
+                        req.body.email,
+                        req.body.password,
+                        req.body.firstName,
+                        req.body.lastName,
+                        req.body.adress,
+                        req.body.number,
+                        req.body.postalCode,
+                        req.body.city,
+                        req.body.state,
+                        req.body.country,
+                        req.body.isSubsc,
+                        req.body.fee,
+                        req.body.dateSubsc
+                    ).then((result: pg.QueryResult) => {
+                        res.sendStatus(HTTP.Accepted);
+                    }).catch((e: Error) => {
+                        console.error(e.stack);
+                        res.json(HTTP.Error);
+                    });
+                } else {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
             });
 
         router.post("/admins",

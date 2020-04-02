@@ -65,13 +65,15 @@ export class DatabaseService {
         return this.pool.query(queryText, values);
     }
 
-	deleteMovie(title: string): Promise<pg.QueryResult> {
-        const values: any[] = [
-            title,
-        ];
-        const queryText: string = `DELETE FROM ${DB_NAME}.${Tables.Movie} WHERE title = $1;`;
-        return this.pool.query(queryText, values);
+	deleteMovie(id: number): Promise<pg.QueryResult> {
+        return this.pool.query(`
+            DELETE 
+            FROM ${DB_NAME}.${Tables.Movie} 
+            WHERE idmovie = ${id};
+        `);
     }
+
+    
     
     updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `

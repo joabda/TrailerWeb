@@ -88,9 +88,7 @@ export class BrowseComponent implements OnInit {
             data: {
                 title: title,
                 cc: ccs
-            },
-            // width: '100%',
-            // height: '800px'
+            }
         });
     }
 

@@ -1,5 +1,5 @@
 import {CdkStepperModule} from "@angular/cdk/stepper";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -32,6 +32,10 @@ import { ToolbarComponent } from "./components/toolbar/toolbar.component";
 import { TrailerComponent } from "./components/trailer/trailer.component";
 import { DataService } from "./services/data/data.service";
 import { ManageComponent } from './components/manage/manage.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from "@angular/material/sort";
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogService } from "./services/confirmation-dialog/confirmation-dialog.service";
 
 @NgModule({
   declarations: [
@@ -44,8 +48,11 @@ import { ManageComponent } from './components/manage/manage.component';
     TrailerComponent,
     OrderComponent,
     ManageComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
+    MatSortModule,
+    MatTableModule,
     MatInputModule,
     CdkStepperModule,
     ReactiveFormsModule,
@@ -80,7 +87,11 @@ import { ManageComponent } from './components/manage/manage.component';
     }),
     BrowserAnimationsModule
   ],
-  providers: [DataService],
+  providers: [
+    DataService, 
+    DatePipe,
+    ConfirmationDialogService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
