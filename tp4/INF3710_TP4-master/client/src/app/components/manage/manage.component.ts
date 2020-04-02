@@ -77,7 +77,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
   getCurrentDate(): string {
     return this.dateConverter.transform(new Date(), 'yyyy-MM-dd') as string;
   }
-  
+
   memberTypeChange(event: Event): void {
     if((event.target as HTMLOptionElement).value === 's') {
       this.user.isSubsc = true;
@@ -87,11 +87,10 @@ export class ManageComponent implements OnInit, AfterViewInit {
   }
 
   addMovie(): void {
-    this.service.addUser(this.user);
   }
 
   addUser(): void {
-
+    this.service.addUser(this.user);
   }
 
   deleteMovie(id: number, title: string): void {
