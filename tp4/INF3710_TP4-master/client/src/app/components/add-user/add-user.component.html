@@ -1,0 +1,131 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h3>Register a New User</h3>
+            <form name="form" (ngSubmit)="f.form.valid && addUser()" #f="ngForm" novalidate>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" name="firstName" [(ngModel)]="user.firstName"
+                        #lastName="ngModel" required firstName />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.firstName.length === 0">First Name is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" [(ngModel)]="user.lastName"
+                        #lastName="ngModel" required lastName />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.lastName.length === 0">Last Name is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" name="email" [(ngModel)]="user.email"
+                        #email="ngModel" required email />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.email.length === 0">Email is required</div>
+                        <div *ngIf="!emailRegEx.test(user.email)">Email must be a valid email address</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="text" class="form-control" name="password" [(ngModel)]="user.password"
+                        #password="ngModel" required password />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.password.length === 0">Password is required</div>
+                        <div *ngIf="user.password.length < 6">Password must be at least 6 characters</div>
+                        <div *ngIf="!specialCharRegEx.test(user.password)">Password must contain at least
+                            one special character</div>
+                        <div *ngIf="!upperCaseRegEx.test(user.password)">Password must contain at least one
+                            upper case character</div>
+                        <div *ngIf="!numberRegEx.test(user.password)">Password must contain at least one
+                            number</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="adress">Adress</label>
+                    <input type="text" class="form-control" name="adress" [(ngModel)]="user.adress"
+                        #adress="ngModel" required adress />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.adress.length === 0">Adress is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="number">Number</label>
+                    <input type="text" class="form-control" name="number" [(ngModel)]="user.number"
+                        #number="ngModel" required number />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="!positiveDigitsRegEx.test(user.number)">Number must be a valid house
+                            number</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" class="form-control" name="postalCode" [(ngModel)]="user.postalCode"
+                        #postalCode="ngModel" required postalCode />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.postalCode.length === 0">Postal Code is required</div>
+                        <div *ngIf="!canadianPostalCodeRegEx.test(user.postalCode)">Postal Code must be a
+                            valid postal code</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control" name="city" [(ngModel)]="user.city"
+                        #city="ngModel" required city />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.city.length === 0">City is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="province">Province</label>
+                    <select type="select" class="form-control" name="province" [(ngModel)]="user.state"
+                        #province="ngModel" required province>
+                        <option *ngFor="let state of states">{{state}}</option>
+                    </select>
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.state.length === 0">Province is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <label type="text" class="form-control" name="country" value="Canada" required
+                        country>Canada</label>
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="user.country.length === 0">Country is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="subscription">Subscription</label>
+                    <select type="select" class="form-control" name="subscription"
+                        (change)="memberTypeChange($event)" [(ngModel)]="user.isSubsc"
+                        #subscription="ngModel" required subscription>
+                        <option value="ppw">Pay Per View</option>
+                        <option value="s">Subscribed </option>
+                    </select>
+                </div>
+                <div *ngIf="user.isSubsc">
+                    <div class="form-group">
+                        <label for="fee">Subscription Fee</label>
+                        <input type="number" min="1" class="form-control" name="fee" [(ngModel)]="user.fee"
+                            #fee="ngModel" required fee />
+                        <div class="error" *ngIf="f.submitted">
+                            <div *ngIf="user.fee.valueOf() <= 0">Fee is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="user.isSubsc">
+                    <div class="form-group">
+                        <label for="endDate">Subscription End Date</label>
+                        <input type="date" [min]="getCurrentDate()" class="form-control" name="endDate"
+                            [(ngModel)]="user.dateSubsc" #endDate="ngModel" required endDate />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

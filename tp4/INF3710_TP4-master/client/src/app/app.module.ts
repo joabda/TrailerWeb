@@ -36,6 +36,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from "@angular/material/sort";
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from "./services/confirmation-dialog/confirmation-dialog.service";
+import { AddUserComponent } from './components/add-user/add-user.component';
+import { AddMovieComponent } from './components/add-movie/add-movie.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { ConfirmationDialogService } from "./services/confirmation-dialog/confir
     OrderComponent,
     ManageComponent,
     ConfirmationDialogComponent,
+    AddUserComponent,
+    AddMovieComponent,
   ],
   imports: [
     MatSortModule,

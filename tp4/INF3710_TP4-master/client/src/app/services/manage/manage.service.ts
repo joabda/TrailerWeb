@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Movie } from 'src/app/interfaces/movie';
 import { API_URL } from 'src/app/classes/constants';
 import { Token } from 'src/app/enum/token';
 import { User } from 'src/app/interfaces/user';
+import { Movie } from 'src/app/interfaces/movie';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +23,12 @@ export class ManageService {
 
   deleteMovie(idMovie: number): void {
     this.http.put<any>(
-      `${API_URL}movies/delete`, 
+      `${API_URL}movies/delete`,
       {
-        id          : idMovie,
+        id: idMovie,
       },
-      { 
-        headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string) 
+      {
+        headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string)
       }
     );
   }
@@ -36,10 +36,10 @@ export class ManageService {
   addUser(toAdd: User): void {
     console.log('sending request');
     this.http.put<any>(
-      `${API_URL}users/insert`, 
+      `${API_URL}users/insert`,
       toAdd,
-      { 
-        headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string) 
+      {
+        headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string)
       }
     );
   }

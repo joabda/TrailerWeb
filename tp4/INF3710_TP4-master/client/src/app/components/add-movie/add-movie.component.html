@@ -1,0 +1,234 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h3>Register a New Movie</h3>
+            <form name="form" (ngSubmit)="f.form.valid && addMovie()" #f="ngForm" novalidate>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" name="title" [(ngModel)]="movie.title" #title="ngModel"
+                        required title />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="movie.title.length === 0">Title is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select type="select" class="form-control" name="category" [(ngModel)]="movie.category"
+                        #category="ngModel" required category>
+                        <option *ngFor="let category of categories">{{category}}</option>
+                    </select>
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="movie.category.length === 0">Category is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="releaseDate">Release Date</label>
+                    <input type="date" [min]="getCurrentDate()" class="form-control" name="releaseDate"
+                        [(ngModel)]="movie.productionDate" #releaseDate="ngModel" required releaseDate />
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration (s)</label>
+                    <input type="number" min="1" class="form-control" name="duration" [(ngModel)]="movie.duration"
+                        #duration="ngModel" required duration />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="movie.duration.valueOf() <= 0">Duration is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dvdPrice">DVD Price ($)</label>
+                    <input type="number" min="1" class="form-control" name="dvdPrice" [(ngModel)]="movie.dvdPrice"
+                        #dvdPrice="ngModel" required dvdPrice />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="movie.dvdPrice.valueOf() <= 0">DVD Price is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="streamingFee">Streaming Fee ($)</label>
+                    <input type="number" min="1" class="form-control" name="streamingFee"
+                        [(ngModel)]="movie.streamingFee" #streamingFee="ngModel" required streamingFee />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="movie.streamingFee.valueOf() <= 0">Streaming Fee is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="movieURL">Movie URL</label>
+                    <input type="text" class="form-control" name="movieURL" [(ngModel)]="movie.movieURL"
+                        #movieURL="ngModel" required movieURL />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="movie.movieURL.length === 0">Movie URL is required</div>
+                        <div *ngIf="!urlRegEx.test(movie.movieURL)">Valid Movie URL is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="imageURL">Image URL</label>
+                    <input type="text" class="form-control" name="imageURL" [(ngModel)]="movie.imageURL"
+                        #imageURL="ngModel" required imageURL />
+                    <div class="error" *ngIf="f.submitted">
+                        <div *ngIf="movie.imageURL.length === 0">Image URL is required</div>
+                        <div *ngIf="!urlRegEx.test(movie.imageURL)">Valid Image URL is required</div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <form name="form" (ngSubmit)="f2.form.valid && addParticipant()" #f2="ngForm" novalidate>
+                    <div class="form-group">
+                        <label for="pName">Participant's Name</label>
+                        <input type="text" class="form-control" name="pName" [(ngModel)]="currentParticipant.name"
+                            #pName="ngModel" required pName />
+                        <div class="error" *ngIf="f2.submitted">
+                            <div *ngIf="currentParticipant.name.length === 0">Name is required for a Participant</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateBirtj">Date Of Birth</label>
+                        <input type="date" [min]="getCurrentDate()" class="form-control" name="dateBirtj"
+                            [(ngModel)]="currentParticipant.dateOfbirth" #dateBirtj="ngModel" required dateBirtj />
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Nationality</label>
+                        <select type="select" class="form-control" name="country"
+                            [(ngModel)]="currentParticipant.nationality" #country="ngModel" required country>
+                            <option *ngFor="let country of allCountries">{{country}}</option>
+                        </select>
+                        <div class="error" *ngIf="f2.submitted">
+                            <div *ngIf="currentParticipant.nationality.length === 0">Nationality is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sexe">Sexe</label>
+                        <select type="select" class="form-control" name="sexe" [(ngModel)]="currentParticipant.sex"
+                            #sexe="ngModel" required sexe>
+                            <option>M</option>
+                            <option>F</option>
+                        </select>
+                        <div class="error" *ngIf="f2.submitted">
+                            <div *ngIf="currentParticipant.sex.length === 0">Sexe is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select type="select" class="form-control" name="role" [(ngModel)]="currentParticipant.role"
+                            #role="ngModel" required role>
+                            <option *ngFor="let role of roles">{{role}}</option>
+                        </select>
+                        <div class="error" *ngIf="f2.submitted">
+                            <div *ngIf="currentParticipant.role.length === 0">Role is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="salary">Salary ($)</label>
+                        <input type="number" min="1" class="form-control" name="salary"
+                            [(ngModel)]="currentParticipant.salary" #salary="ngModel" required salary />
+                        <div class="error" *ngIf="f2.submitted">
+                            <div *ngIf="currentParticipant.salary.valueOf() <= 0">Salary is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary">Add Participant</button>
+                    </div>
+                    <div class="form-group">
+                        <table mat-table #tableParticipant [dataSource]="movie.participants" matSort
+                            class="mat-elevation-z8">
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="role">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+                                <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="delete">
+                                <th mat-header-cell *matHeaderCellDef> Delete </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-icon-button color="warn" (click)="deleteParticipant(element.name)">
+                                        <mat-icon class="mat-18">delete</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </div>
+                </form>
+                <br>
+                <br>
+                <br>
+                <form name="form" (ngSubmit)="f3.form.valid && addCeremony()" #f3="ngForm" novalidate>
+                    <div class="form-group">
+                        <label for="hName">Host's Name</label>
+                        <input type="text" class="form-control" name="hName" [(ngModel)]="currentCeremony.host"
+                            #hName="ngModel" required hName />
+                        <div class="error" *ngIf="f3.submitted">
+                            <div *ngIf="currentCeremony.host.length === 0">Name is required for a Host</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ceremDate">Ceremony's Date</label>
+                        <input type="date" [min]="getCurrentDate()" class="form-control" name="ceremDate"
+                            [(ngModel)]="currentCeremony.date" #ceremDate="ngModel" required ceremDate />
+                    </div>
+                    <div class="form-group">
+                        <label for="cLocation">Ceremony's Location</label>
+                        <input type="text" class="form-control" name="cLocation" [(ngModel)]="currentCeremony.location"
+                            #cLocation="ngModel" required cLocation />
+                        <div class="error" *ngIf="f3.submitted">
+                            <div *ngIf="currentCeremony.location.length === 0">Location is required for a Ceremony</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nomCat">Category of Nomination</label>
+                        <select type="select" class="form-control" name="nomCat" [(ngModel)]="currentCeremony.category"
+                            #nomCat="ngModel" required nomCat>
+                            <option *ngFor="let country of allCountries">{{country}}</option>
+                        </select>
+                        <div class="error" *ngIf="f3.submitted">
+                            <div *ngIf="currentCeremony.category.length === 0">Category is required for a Ceremony</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="winner">Winner</label>
+                        <select type="select" class="form-control" name="winner" (change)="winnerChange($event)"
+                            [(ngModel)]="currentCeremony.winner" #winner="ngModel" required winner>
+                            <option value="w">False</option>
+                            <option value="f">True</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary">Add Ceremony</button>
+                    </div>
+                    <div class="form-group">
+                        <table mat-table [dataSource]="movie.participants" matSort class="mat-elevation-z8">
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="role">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+                                <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="delete">
+                                <th mat-header-cell *matHeaderCellDef> Delete </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-icon-button color="warn" (click)="deleteParticipant(element.name)">
+                                        <mat-icon class="mat-18">delete</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </div>
+                </form>
+                <div class="form-group">
+                    <button class="btn btn-primary">Add Movie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
