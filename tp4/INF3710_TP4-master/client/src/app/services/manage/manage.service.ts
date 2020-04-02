@@ -4,6 +4,7 @@ import { API_URL } from 'src/app/classes/constants';
 import { Token } from 'src/app/enum/token';
 import { User } from 'src/app/interfaces/user';
 import { Movie } from 'src/app/interfaces/movie';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -33,14 +34,15 @@ export class ManageService {
     );
   }
 
-  addUser(toAdd: User): void {
-    console.log('sending request');
-    this.http.put<any>(
-      `${API_URL}users/insert`,
-      toAdd,
-      {
-        headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string)
-      }
+  addUser(toAdd: User): Observable<any> {
+    return (
+      this.http.post<any>(`${API_URL}users/insert`,
+        toAdd,
+        {
+          headers: new HttpHeaders().set('Authorization',
+            localStorage.getItem(Token.id) as unknown as string)
+        }
+      )
     );
   }
 }

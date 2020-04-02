@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -17,7 +17,7 @@ import { BrowseComponent } from "../browse/browse.component";
     templateUrl: "./search.component.html",
     styleUrls: ["./search.component.css"]
 })
-export class SearchComponent extends BrowseComponent {
+export class SearchComponent extends BrowseComponent implements OnInit {
 
     public filteredMovies: Observable<string[]>;
     public titles: string[];
@@ -31,12 +31,11 @@ export class SearchComponent extends BrowseComponent {
     public movies: Movie[];
 
     public constructor(protected snacks: MatSnackBar,
-                       protected router: Router,
-                       protected browserService: BrowseService,
-                       public dataService: DataService,
-                       public dialog: MatDialog) {
+        protected router: Router,
+        protected browserService: BrowseService,
+        public dataService: DataService,
+        public dialog: MatDialog) {
         super(snacks, router, browserService, dataService, dialog);
-        this.movies = dataService.getMovies();
         this.titles = dataService.getTitles();
         this.categories = ALL_CATEGORIES;
         this.filteredMovies = this.titleControl.valueChanges
@@ -44,6 +43,13 @@ export class SearchComponent extends BrowseComponent {
                 startWith(""),
                 map((state) => state ? this._filterStates(state) : this.titles.slice())
             );
+    }
+
+    async ngOnInit(): Promise<void> {
+        const result = await this.service.getMovies();
+        if (result.valueOf() !== false) {
+            this.movies = result as unknown as Movie[];
+        }
     }
 
     private _filterStates(value: string): string[] {
@@ -55,7 +61,7 @@ export class SearchComponent extends BrowseComponent {
 
     public getMovie(): void {
         console.log(this.title);
-        this.movie = this.movies.find((movie) => movie.title.toLowerCase() === this.title );
+        this.movie = this.movies.find((movie) => movie.title.toLowerCase() === this.title);
         console.log(this.movie);
         // this.movieFound = this.movie ? true : false;
         if (!this.movie) {

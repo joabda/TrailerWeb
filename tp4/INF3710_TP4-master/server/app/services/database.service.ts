@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: 'tp4',
+        database: 'postgres',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -44,10 +44,10 @@ export class DatabaseService {
             WHERE email = '${username}'
             AND password = netflixpoly.crypt('${password}', password);`);
     }
-    
+
     addMovie(
-        title:          string,
-        category:       string,
+        title: string,
+        category: string,
         productionDate: Date,
         duration: number,
         dvdPrice: number,
@@ -65,7 +65,7 @@ export class DatabaseService {
         return this.pool.query(queryText, values);
     }
 
-	deleteMovie(id: number): Promise<pg.QueryResult> {
+    deleteMovie(id: number): Promise<pg.QueryResult> {
         return this.pool.query(`
             DELETE 
             FROM ${DB_NAME}.${Tables.Movie} 
@@ -73,8 +73,8 @@ export class DatabaseService {
         `);
     }
 
-    
-    
+
+
     updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
             UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};
@@ -95,7 +95,7 @@ export class DatabaseService {
             INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
         `);
         return this.pool.query(`
-            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (select max(idorder) from netflixpoly.order), 0);
+            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (SELECT max(idorder) from netflixpoly.order), 0);
         `);
     }
 
@@ -114,34 +114,48 @@ export class DatabaseService {
     }
 
     // Users
-    addUser(
-        email:          string,
-        password:       string,
-        firstName:      string,
-        lastName:       string,
-        street:         string,
-        appartmentNo:   number,
-        postalCode:     string,
-        city:           string,
-        state:          string,
-        country:        string,
-        subscribed:     boolean,
-        fee ?:          number,
-        endDate ?:      Date
+    async addUser(
+        email: string,
+        password: string,
+        firstName: string,
+        lastName: string,
+        street: string,
+        appartmentNo: number,
+        postalCode: string,
+        city: string,
+        state: string,
+        country: string,
+        subscribed: boolean,
+        fee?: number,
+        endDate?: string
     ): Promise<pg.QueryResult> {
-        let values: any[] = [
-            email, password, firstName, lastName, street, appartmentNo, postalCode, city, state, country, subscribed
-        ];
+        let values: any[] = [];
+        await this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.M} VALUES('${email}', ${DB_NAME}.crypt('${password}', ${DB_NAME}.gen_salt('bf')), '${firstName}',
+                '${lastName}', '${street}', ${appartmentNo}, '${postalCode}', 
+                '${city}', '${state}', '${country}');
+        `);
         if (subscribed) {
             values.push(fee);
             values.push(endDate);
+            console.log("DATE: " + endDate);
         }
-        const queryText = `INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM}
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10
-                ${subscribed ? '$11, $12' : ''}
-                );
-        `;
+        return this.pool.query(`INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM} 
+            VALUES('${email}', ${subscribed ? (`${fee}, '${this.getCurrentDate()}' ,'${endDate}'`) : 0});`
+        );
+    }
 
-        return this.pool.query(queryText, values);
+    private getCurrentDate(): string {
+        let d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+        return [year, month, day].join('-');
     }
 }
