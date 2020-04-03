@@ -28,7 +28,6 @@ export class SearchComponent extends BrowseComponent {
 
     public title: string;
     public movie: Movie | undefined;
-    public movies: Movie[];
 
     public constructor(protected snacks: MatSnackBar,
                        protected router: Router,
@@ -36,7 +35,6 @@ export class SearchComponent extends BrowseComponent {
                        public dataService: DataService,
                        public dialog: MatDialog) {
         super(snacks, router, browserService, dataService, dialog);
-        this.movies = dataService.getMovies();
         this.titles = dataService.getTitles();
         this.categories = ALL_CATEGORIES;
         this.filteredMovies = this.titleControl.valueChanges
@@ -57,7 +55,6 @@ export class SearchComponent extends BrowseComponent {
         console.log(this.title);
         this.movie = this.movies.find((movie) => movie.title.toLowerCase() === this.title );
         console.log(this.movie);
-        // this.movieFound = this.movie ? true : false;
         if (!this.movie) {
             this.snacks.open(
                 "No movie found.",

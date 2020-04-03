@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { BrowseService } from 'src/app/services/browse/browse.service';
-import { Movie } from 'src/app/interfaces/movie';
+import { MatButton } from '@angular/material/button';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { DataService } from 'src/app/services/data/data.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatButton } from '@angular/material/button';
-import { TrailerComponent } from '../trailer/trailer.component';
-import { TITLE } from 'src/app/classes/constants';
 import { filter } from 'rxjs/operators';
-import { OrderComponent } from '../order/order.component';
-import { CreditCard } from 'src/app/interfaces/cc';
+import { TITLE } from 'src/app/classes/constants';
 import { OrderType } from 'src/app/enum/order-type';
+import { CreditCard } from 'src/app/interfaces/cc';
+import { Movie } from 'src/app/interfaces/movie';
+import { BrowseService } from 'src/app/services/browse/browse.service';
+import { DataService } from 'src/app/services/data/data.service';
+import { OrderComponent } from '../order/order.component';
+import { TrailerComponent } from '../trailer/trailer.component';
 
 @Component({
     selector: "app-browse",
@@ -20,8 +20,8 @@ import { OrderType } from 'src/app/enum/order-type';
 })
 export class BrowseComponent implements OnInit {
 
-    movies: Movie[];
-    constructor(
+    public movies: Movie[];
+    public constructor(
         protected snacks: MatSnackBar,
         protected router: Router,
         protected service: BrowseService,
@@ -32,7 +32,7 @@ export class BrowseComponent implements OnInit {
     async ngOnInit() {
         const result = await this.service.getMovies();
         if (result.valueOf() === false) {
-            this.openSnack('Please Sign In First');
+            this.openSnack("Please Sign In First");
             this.router.navigate([""]);
         } else {
             this.data.setMovies(result as unknown as Movie[]);
@@ -40,13 +40,13 @@ export class BrowseComponent implements OnInit {
         }
     }
 
-    async onClick(event: MatButton, type: OrderType): Promise<void> {
+    public async onClick(event: MatButton, type: OrderType): Promise<void> {
         const movie = this.findMovie(
             (event._elementRef.nativeElement as HTMLButtonElement)
                 .getAttribute(TITLE) as unknown as string
         );
         if (movie !== undefined) {
-            this.service.isOrdered(movie.id).subscribe(async res => {
+            this.service.isOrdered(movie.id).subscribe(async (res) => {
                 if (res !== null && res.valueOf() != -1) {
                     console.log(res);
                     console.log((res as any).stoppedat);
@@ -57,19 +57,19 @@ export class BrowseComponent implements OnInit {
                 }
             });
         } else {
-            this.openSnack('Sorry your movie couldn\'t be found');
+            this.openSnack("Sorry your movie couldn't be found");
         }
     }
 
     private orderMovie(movie: Movie, type: OrderType): void {
-        this.service.creditCards().subscribe(res => {
+        this.service.creditCards().subscribe((res) => {
             if (res !== null) {
                 const reference = this.openOrderDialog(movie.title, res);
                 reference.afterClosed().pipe(
-                    filter(stopTime => stopTime)
-                ).subscribe(stopTime => {
+                    filter((stopTime) => stopTime)
+                ).subscribe((stopTime) => {
                     if (stopTime.buy) {
-                        if(type === OrderType.Streaming) {
+                        if (type === OrderType.Streaming) {
                             this.service.orderMovieStreaming({
                                 movieID: movie.id,
                                 dateOfOrder: new Date()
@@ -96,18 +96,18 @@ export class BrowseComponent implements OnInit {
         const reference = this.dialog.open(TrailerComponent, {
             data: {
                 title: movie.title,
-                id: movie.url.slice(0, movie.url.indexOf('?')),
+                id: movie.url.slice(0, movie.url.indexOf("?")),
                 start: currentTime
             },
-            width: '100%',
-            height: '800px'
+            width: "100%",
+            height: "800px"
         });
         reference.afterClosed().pipe(
-            filter(stopTime => stopTime)
-        ).subscribe(stopTime => {
-            const newURL = `${movie.url.slice(0, movie.url.indexOf('=') + 1)}${stopTime}`;
+            filter((stopTime) => stopTime)
+        ).subscribe((stopTime) => {
+            const newURL = `${movie.url.slice(0, movie.url.indexOf("=") + 1)}${stopTime}`;
             this.service.changeCurrentTime(idorder, stopTime);
-            for (let element of this.movies) {
+            for (const element of this.movies) {
                 if (movie.title === element.title) {
                     element.url = newURL;
                 }
@@ -121,8 +121,8 @@ export class BrowseComponent implements OnInit {
             "",
             {
                 duration: 3000,
-                verticalPosition: 'top',
-                horizontalPosition: 'center'
+                verticalPosition: "top",
+                horizontalPosition: "center"
             }
         );
     }
