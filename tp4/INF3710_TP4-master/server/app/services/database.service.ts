@@ -21,33 +21,33 @@ export class DatabaseService {
 
     private pool: pg.Pool = new pg.Pool(this.connectionConfig);
 
-    constructor() {
+    public constructor() {
         this.pool.connect();
     }
 
-    createSchema(): Promise<pg.QueryResult> {
+    public async createSchema(): Promise<pg.QueryResult> {
         return this.pool.query(SCHEMA);
     }
 
-    populateDb(): Promise<pg.QueryResult> {
+    public async populateDb(): Promise<pg.QueryResult> {
         return this.pool.query(DATA);
     }
 
-    getAllFromTable(tableName: string): Promise<pg.QueryResult> {
+    public async getAllFromTable(tableName: string): Promise<pg.QueryResult> {
         return this.pool.query(`SELECT * FROM ${DB_NAME}.${tableName};`);
     }
 
-    verifyUser(username: string, password: string, tableName: string): Promise<pg.QueryResult> {
+    public async verifyUser(username: string, password: string, tableName: string): Promise<pg.QueryResult> {
         return this.pool.query(`
             Select *
             FROM ${DB_NAME}.${tableName}
             WHERE email = '${username}'
             AND password = netflixpoly.crypt('${password}', password);`);
     }
-    
-    addMovie(
-        title:          string,
-        category:       string,
+
+    public async addMovie(
+        title: string,
+        category: string,
         productionDate: Date,
         duration: number,
         dvdPrice: number,
@@ -65,32 +65,30 @@ export class DatabaseService {
         return this.pool.query(queryText, values);
     }
 
-	deleteMovie(id: number): Promise<pg.QueryResult> {
+    public async deleteMovie(id: number): Promise<pg.QueryResult> {
         return this.pool.query(`
-            DELETE 
-            FROM ${DB_NAME}.${Tables.Movie} 
+            DELETE
+            FROM ${DB_NAME}.${Tables.Movie}
             WHERE idmovie = ${id};
         `);
     }
 
-    
-    
-    updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
+    public async updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
             UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};
 `;
         return this.pool.query(queryText);
     }
 
-    getCardsFor(user: string): Promise<pg.QueryResult> {
+    public async getCardsFor(user: string): Promise<pg.QueryResult> {
         return this.pool.query(`
-            SELECT * 
+            SELECT *
             FROM ${DB_NAME}.${Tables.CC}
             WHERE ownerid = '${user}';
         `);
     }
 
-    async addStreamingOrder(movieID: number, memberID: string, dateOfOrder: string): Promise<pg.QueryResult> {
+    public async addStreamingOrder(movieID: number, memberID: string, dateOfOrder: string): Promise<pg.QueryResult> {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
         `);
@@ -99,37 +97,37 @@ export class DatabaseService {
         `);
     }
 
-    validateOrder(movieid: number, user: string): Promise<pg.QueryResult> {
+    public async validateOrder(movieid: number, user: string): Promise<pg.QueryResult> {
         return this.pool.query(`
-            SELECT * 
+            SELECT *
             FROM ${DB_NAME}.${Tables.OStream}
             WHERE idorder = (
                 SELECT DISTINCT idorder
                 FROM ${DB_NAME}.${Tables.Order}
                 WHERE movieid = ${movieid}
-                AND clientid = '${user}' 
+                AND clientid = '${user}'
             );
             `
         );
     }
 
     // Users
-    addUser(
-        email:          string,
-        password:       string,
-        firstName:      string,
-        lastName:       string,
-        street:         string,
-        appartmentNo:   number,
-        postalCode:     string,
-        city:           string,
-        state:          string,
-        country:        string,
-        subscribed:     boolean,
-        fee ?:          number,
-        endDate ?:      Date
+    public async addUser(
+        email: string,
+        password: string,
+        firstName: string,
+        lastName: string,
+        street: string,
+        appartmentNo: number,
+        postalCode: string,
+        city: string,
+        state: string,
+        country: string,
+        subscribed: boolean,
+        fee?: number,
+        endDate?: Date
     ): Promise<pg.QueryResult> {
-        let values: any[] = [
+        const values: any[] = [
             email, password, firstName, lastName, street, appartmentNo, postalCode, city, state, country, subscribed
         ];
         if (subscribed) {
