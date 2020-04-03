@@ -38,6 +38,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { ConfirmationDialogService } from "./services/confirmation-dialog/confirmation-dialog.service";
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { AddMovieComponent } from './components/add-movie/add-movie.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { AddMovieComponent } from './components/add-movie/add-movie.component';
     ConfirmationDialogComponent,
     AddUserComponent,
     AddMovieComponent,
+    LoadingComponent,
   ],
   imports: [
     MatSortModule,

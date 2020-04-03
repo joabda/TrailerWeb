@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CANADIAN_PROVINCES, DEFAULT_USER } from 'src/app/classes/constants';
 import { User } from 'src/app/interfaces/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ManageService } from 'src/app/services/manage/manage.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-add-user',
@@ -21,6 +22,8 @@ export class AddUserComponent {
   canadianPostalCodeRegEx = new RegExp(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/);
   states = CANADIAN_PROVINCES;
   user: User;
+  loading: boolean;
+  @ViewChild(NgForm, { static: true }) form : NgForm;
 
 
   constructor(
@@ -29,7 +32,8 @@ export class AddUserComponent {
     private dateConverter: DatePipe,
     private service: ManageService,
   ) {
-    this.user = DEFAULT_USER;
+    this.loading = false;
+    this.user = this.cloneUser(DEFAULT_USER);
     this.user.dateSubsc = this.getCurrentDate();
   }
 
@@ -46,12 +50,69 @@ export class AddUserComponent {
   }
 
   addUser(): void {
+    if(!this.valid()) {
+      this.openSnack(`Please correct the form before submitting!`);
+      return ;
+    }
+    this.loading = true;
     this.service.addUser(this.user)
-    .toPromise()
-    .then()
-    .catch( error => {
-      console.log('Error adding user');
-      console.log(error) 
-    });
+      .toPromise()
+      .then( error => {
+        this.loading = false;
+        if(error === 409) {
+          this.openSnack(`Email ${this.user.email} has already been used.`);
+        } else {
+          this.user = this.cloneUser(DEFAULT_USER);
+          this.form.reset();
+          this.openSnack(`User has been added.`);
+        }
+      })
+      .catch( () => {
+          this.loading = false;
+          this.openSnack(`Error adding user ${this.user.firstName}.`)
+      });
+  }
+
+  private cloneUser(toClone: User): User {
+    return {
+      email       : toClone.email,
+      password    : toClone.password,
+      firstName   : toClone.firstName,
+      lastName    : toClone.lastName,
+      adress      : toClone.adress,
+      number      : toClone.number,
+      postalCode  : toClone.postalCode,
+      city        : toClone.city,
+      state       : toClone.state,
+      country     : toClone.country,
+      isSubsc     : toClone.isSubsc,
+      fee         : toClone.fee,
+      dateSubsc   : toClone.dateSubsc
+    };
+  }
+
+  private valid(): boolean {
+    return (
+      this.emailRegEx.test(this.user.email) &&
+      this.specialCharRegEx.test(this.user.password) &&
+      this.upperCaseRegEx.test(this.user.password) &&
+      this.numberRegEx.test(this.user.password) &&
+      this.user.password.length >= 6 &&
+      this.positiveDigitsRegEx.test(this.user.number) &&
+      this.canadianPostalCodeRegEx.test(this.user.postalCode)
+    );
+  }
+
+
+  private openSnack(message: string) {
+    this.snacks.open(
+      message,
+      "",
+      {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center'
+      }
+    );
   }
 }

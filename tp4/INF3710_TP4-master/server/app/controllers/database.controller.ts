@@ -231,9 +231,11 @@ export class DatabaseController {
                     req.body.fee,
                     req.body.dateSubsc
                 ).then((result: pg.QueryResult) => {
-                    res.sendStatus(HTTP.Accepted);
+                    res.json(HTTP.Accepted);
                 }).catch((e: Error) => {
-                    console.error(e.stack);
+                    if(e.message.indexOf('duplicate key') !== -1 ) {
+                        res.json(HTTP.Exists);
+                    }
                     res.json(HTTP.Error);
                 });
             });
