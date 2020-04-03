@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: 'postgres',
+        database: 'tp4',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -48,21 +48,40 @@ export class DatabaseService {
     addMovie(
         title: string,
         category: string,
-        productionDate: Date,
+        productionDate: string,
         duration: number,
         dvdPrice: number,
-        streamingFee: number): Promise<pg.QueryResult> {
+        streamingFee: number,
+        movieURL: string,
+        imageURL: string): Promise<pg.QueryResult> {
         const values: any[] = [
             title,
             category,
             productionDate,
             duration,
             dvdPrice,
-            streamingFee
+            streamingFee,
+            movieURL,
+            imageURL
         ];
-        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6);`;
+        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $, $8);`;
+        this.pool.query(queryText, values);
+        return this.pool.query(`SELECT max(idmovie) FROM ${DB_NAME}.${Tables.Movie};`)
+    }
 
-        return this.pool.query(queryText, values);
+    async addCeremony(
+        date        :   string,
+        location    :   string,
+        host        :   string,
+        winner      :   boolean,
+        category    :   string,
+        movieID     :   number
+
+    ): Promise<pg.QueryResult> {
+        await this.pool.query(`INSERT INTO ${DB_NAME}.${Tables.Oscars} VALUES('${date}', '${location}', '${host}');`);
+        return this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Nomination} VALUES('${date}', ${movieID}, ${winner}, '${category}');
+        `);
     }
 
     deleteMovie(id: number): Promise<pg.QueryResult> {
@@ -95,7 +114,7 @@ export class DatabaseService {
             INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
         `);
         return this.pool.query(`
-            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (SELECT max(idorder) from netflixpoly.order), 0);
+            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (SELECT max(idorder) FROM ${DB_NAME}.${Tables.Order}), 0);
         `);
     }
 
@@ -111,6 +130,18 @@ export class DatabaseService {
             );
             `
         );
+    }
+
+    async addParticipant(name: string, dateOfBirth: string, nationality: string, 
+        sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
+        await this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
+            '${nationality}', '${sex}');
+        `);
+        return this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Role} VALUES(${movieID},
+                (SELECT max(idparticipant) FROM ${DB_NAME}.${Tables.Participant}), '${role}', ${salary});
+        `);
     }
 
     // Users

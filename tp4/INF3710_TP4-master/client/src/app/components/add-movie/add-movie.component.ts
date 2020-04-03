@@ -11,6 +11,7 @@ import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Oscar } from 'src/app/interfaces/oscar';
 import { NominationCategory } from 'src/app/enum/nomination-category';
+import { ManageService } from 'src/app/services/manage/manage.service';
 
 @Component({
   selector: 'app-add-movie',
@@ -37,6 +38,7 @@ export class AddMovieComponent {
   constructor(
     private dateConverter: DatePipe,
     private confirmationDialogService: ConfirmationDialogService,
+    private service: ManageService,
   ) { 
     this.movie = DEFAULT_MOVIE;
     this.currentParticipant = this.cloneParticipant(DEFAULT_PARTICIPANT);
@@ -48,7 +50,26 @@ export class AddMovieComponent {
     this.dataSource.sort = this.sort;
   }
 
-  addMovie(): void {
+  async addMovie(): Promise<void> {
+    console.log('called');
+    await this.service.addMovie(
+      this.movie.title, 
+      this.movie.category,
+      this.movie.productionDate,
+      this.movie.duration,
+      this.movie.dvdPrice,
+      this.movie.streamingFee,
+      this.movie.movieURL,
+      this.movie.imageURL
+    ).subscribe( res => {
+      for(const participant of this.movie.participants) {
+        this.service.addParticipant(participant, (res as any).movieid);
+      }
+      for(const ceremony of this.movie.honors) {
+        this.service.addCeremony(ceremony, (res as any).movieid);
+      }
+    })
+
   }
 
   getCurrentDate(): string {

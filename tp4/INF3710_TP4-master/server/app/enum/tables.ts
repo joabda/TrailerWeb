@@ -10,6 +10,6 @@ export enum Tables {
     OStream = 'Streaming',
     Participant = 'Participant',
     Role = 'Participation',
-    Oscard = 'Oscars',
+    Oscars = 'Oscars',
     Nomination = 'Nomination'
 }

@@ -68,12 +68,15 @@ export class DatabaseController {
             (req: Request, res: Response, next: NextFunction) => {
                 const title: string = req.body.title;
                 const category: string = req.body.category;
-                const productionDate: Date = req.body.productionDate;
+                const productionDate: string = req.body.productionDate;
                 const duration: number = req.body.duration;
                 const dvdPrice: number = req.body.dvdPrice;
                 const streamingFee: number = req.body.streamingFee;
-                this.databaseService.addMovie(title, category, productionDate, duration, dvdPrice, streamingFee).then((result: pg.QueryResult) => {
-                    res.json(result.rowCount);
+                const movieURL: string = req.body.movieURL;
+                const imageURL: string = req.body.imageURL;
+                this.databaseService.addMovie(title, category, productionDate, duration, dvdPrice, streamingFee, movieURL, imageURL)
+                .then((result: pg.QueryResult) => {
+                    res.json(result);
                 }).catch((e: Error) => {
                     console.error(e.stack);
                     res.json(-1);
@@ -161,6 +164,49 @@ export class DatabaseController {
                     res.json(movies);
                 }).catch((e: Error) => {
                     console.error(e.stack);
+                });
+            });
+
+            router.post("/participants/insert",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (!this.isValid(tokenString)) {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
+                this.databaseService.addParticipant(
+                    req.body.name,
+                    req.body.dateOfBirth,
+                    req.body.nationality,
+                    req.body.sex,
+                    req.body.role,
+                    req.body.salary,
+                    req.body.movieID
+                ).then((result: pg.QueryResult) => {
+                    res.sendStatus(HTTP.Accepted);
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                    res.json(HTTP.Error);
+                });
+            });
+
+            router.post("/cetemony/insert",
+            (req: Request, res: Response, next: NextFunction) => {
+                const tokenString = req.header(TOKEN) as unknown as string;
+                if (!this.isValid(tokenString)) {
+                    res.sendStatus(HTTP.Unauthorized);
+                }
+                this.databaseService.addCeremony(
+                    req.body.date,
+                    req.body.location,
+                    req.body.host,
+                    req.body.winner,
+                    req.body.category,
+                    req.body.movieID
+                ).then((result: pg.QueryResult) => {
+                    res.sendStatus(HTTP.Accepted);
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                    res.json(HTTP.Error);
                 });
             });
 
