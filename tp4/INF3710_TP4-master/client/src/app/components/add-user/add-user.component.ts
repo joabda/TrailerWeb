@@ -46,6 +46,12 @@ export class AddUserComponent {
   }
 
   addUser(): void {
-    this.service.addUser(this.user);
+    this.service.addUser(this.user)
+    .toPromise()
+    .then()
+    .catch( error => {
+      console.log('Error adding user');
+      console.log(error) 
+    });
   }
 }

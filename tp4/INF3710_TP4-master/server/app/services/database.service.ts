@@ -48,21 +48,40 @@ export class DatabaseService {
     public async addMovie(
         title: string,
         category: string,
-        productionDate: Date,
+        productionDate: string,
         duration: number,
         dvdPrice: number,
-        streamingFee: number): Promise<pg.QueryResult> {
+        streamingFee: number,
+        movieURL: string,
+        imageURL: string): Promise<pg.QueryResult> {
         const values: any[] = [
             title,
             category,
             productionDate,
             duration,
             dvdPrice,
-            streamingFee
+            streamingFee,
+            movieURL,
+            imageURL
         ];
-        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6);`;
+        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $, $8);`;
+        this.pool.query(queryText, values);
+        return this.pool.query(`SELECT max(idmovie) FROM ${DB_NAME}.${Tables.Movie};`)
+    }
 
-        return this.pool.query(queryText, values);
+    public async  addCeremony(
+        date: string,
+        location: string,
+        host: string,
+        winner: boolean,
+        category: string,
+        movieID: number
+
+    ): Promise<pg.QueryResult> {
+        await this.pool.query(`INSERT INTO ${DB_NAME}.${Tables.Oscars} VALUES('${date}', '${location}', '${host}');`);
+        return this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Nomination} VALUES('${date}', ${movieID}, ${winner}, '${category}');
+        `);
     }
 
     public async deleteMovie(id: number): Promise<pg.QueryResult> {
@@ -72,6 +91,8 @@ export class DatabaseService {
             WHERE idmovie = ${id};
         `);
     }
+
+
 
     public async updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
@@ -93,7 +114,7 @@ export class DatabaseService {
             INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
         `);
         return this.pool.query(`
-            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (select max(idorder) from netflixpoly.order), 0);
+            INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (SELECT max(idorder) FROM ${DB_NAME}.${Tables.Order}), 0);
         `);
     }
 
@@ -111,8 +132,20 @@ export class DatabaseService {
         );
     }
 
+    public async  addParticipant(name: string, dateOfBirth: string, nationality: string,
+        sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
+        await this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
+            '${nationality}', '${sex}');
+        `);
+        return this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Role} VALUES(${movieID},
+                (SELECT max(idparticipant) FROM ${DB_NAME}.${Tables.Participant}), '${role}', ${salary});
+        `);
+    }
+
     // Users
-    public async addUser(
+    public async  addUser(
         email: string,
         password: string,
         firstName: string,
@@ -125,21 +158,35 @@ export class DatabaseService {
         country: string,
         subscribed: boolean,
         fee?: number,
-        endDate?: Date
+        endDate?: string
     ): Promise<pg.QueryResult> {
-        const values: any[] = [
-            email, password, firstName, lastName, street, appartmentNo, postalCode, city, state, country, subscribed
-        ];
+        let values: any[] = [];
+        await this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.M} VALUES('${email}', ${DB_NAME}.crypt('${password}', ${DB_NAME}.gen_salt('bf')), '${firstName}',
+                '${lastName}', '${street}', ${appartmentNo}, '${postalCode}', 
+                '${city}', '${state}', '${country}');
+        `);
         if (subscribed) {
             values.push(fee);
             values.push(endDate);
+            console.log("DATE: " + endDate);
         }
-        const queryText = `INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM}
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10
-                ${subscribed ? '$11, $12' : ''}
-                );
-        `;
+        return this.pool.query(`INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM} 
+            VALUES('${email}', ${subscribed ? (`${fee}, '${this.getCurrentDate()}' ,'${endDate}'`) : 0});`
+        );
+    }
 
-        return this.pool.query(queryText, values);
+    private getCurrentDate(): string {
+        let d = new Date(),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+        return [year, month, day].join('-');
     }
 }

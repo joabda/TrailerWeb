@@ -12,6 +12,16 @@ export const ALL_CATEGORIES = [
     Category.Thriller
 ];
 
+export const ALL_NOMINATIONS = [
+    NominationCategory.Actor,
+    NominationCategory.Actress,
+    NominationCategory.International,
+    NominationCategory.Makeup,
+    NominationCategory.OrginalSong,
+    NominationCategory.Soung,
+    NominationCategory.VE
+];
+
 export const TITLE = 'title';
 
 export const YOUTUBE_API = 'http://youtube.com/iframe_api';
@@ -48,9 +58,9 @@ export const DEFAULT_USER = {
 };
 
 export const DEFAULT_MOVIE = {
-    title: 'string',
-    category: Category.Action,
-    productionDate: 'string',
+    title: '',
+    category: Category.None,
+    productionDate: '',
     duration: 0,
     dvdPrice: 0,
     streamingFee: 0,
@@ -65,7 +75,7 @@ export const DEFAULT_PARTICIPANT = {
     dateOfbirth: '',
     nationality: '',
     sex: '',
-    role: Role.Actor,
+    role: Role.None,
     salary: 0
 };
 
@@ -79,5 +89,5 @@ export const DEFAULT_CEREMONY = {
     location    :   '',
     host        :   '',
     winner      :   false,
-    category    :   NominationCategory.Actress
+    category    :   NominationCategory.None
 }

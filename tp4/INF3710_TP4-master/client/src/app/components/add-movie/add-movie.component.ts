@@ -1,15 +1,17 @@
 import { DatePipe } from "@angular/common";
-import { Component, ViewChild } from "@angular/core";
+import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
-import { ALL_CATEGORIES, ALL_ROLES, DEFAULT_CEREMONY, DEFAULT_MOVIE, DEFAULT_PARTICIPANT } from "src/app/classes/constants";
+import { ALL_CATEGORIES, ALL_NOMINATIONS, ALL_ROLES, DEFAULT_CEREMONY, DEFAULT_MOVIE, DEFAULT_PARTICIPANT } from "src/app/classes/constants";
 import { ALL_COUNTRIES } from "src/app/classes/countries";
 import { Category } from "src/app/enum/category";
+import { NominationCategory } from "src/app/enum/nomination-category";
 import { Role } from "src/app/enum/role";
 import { FormMovie } from "src/app/interfaces/form-movie";
 import { Oscar } from "src/app/interfaces/oscar";
 import { Participant } from "src/app/interfaces/participant";
 import { ConfirmationDialogService } from "src/app/services/confirmation-dialog/confirmation-dialog.service";
+import { ManageService } from "src/app/services/manage/manage.service";
 
 @Component({
     selector: "app-add-movie",
@@ -19,6 +21,7 @@ import { ConfirmationDialogService } from "src/app/services/confirmation-dialog/
 export class AddMovieComponent {
 
     public allCountries: string[];
+    public allCategories: NominationCategory[];
     public roles: Role[];
     public movie: FormMovie;
     public currentParticipant: Participant;
@@ -27,24 +30,46 @@ export class AddMovieComponent {
     urlRegEx = new RegExp(/^(https?|ftp|torrent|image|irc):\/\/(-\.)?([^\s\/?\.#-]+\.?)+(\/[^\s]*)?$/i);
 
     public displayedColumns: string[] = ["name", "role", "delete"];
+    public displayedColumns2: string[] = ["host", "date", "delete"];
     dataSource = new MatTableDataSource();
     @ViewChild(MatSort, { static: true }) public sort: MatSort;
-    @ViewChild(MatTable) public tables!: MatTable<any>;
+    @ViewChildren(MatTable) public tables: QueryList<MatTable<any>>;
 
     public constructor(
         private dateConverter: DatePipe,
         private confirmationDialogService: ConfirmationDialogService,
+        private service: ManageService,
     ) {
         this.movie = DEFAULT_MOVIE;
         this.currentParticipant = this.cloneParticipant(DEFAULT_PARTICIPANT);
-        this.currentCeremony = DEFAULT_CEREMONY;
+        this.currentCeremony = this.cloneCeremony(DEFAULT_CEREMONY);
         this.categories = ALL_CATEGORIES;
         this.allCountries = ALL_COUNTRIES;
         this.roles = ALL_ROLES;
+        this.allCategories = ALL_NOMINATIONS;;
         this.dataSource.sort = this.sort;
     }
 
-    public addMovie(): void {
+    public async addMovie(): Promise<void> {
+        console.log("called");
+        this.service.addMovie(
+            this.movie.title,
+            this.movie.category,
+            this.movie.productionDate,
+            this.movie.duration,
+            this.movie.dvdPrice,
+            this.movie.streamingFee,
+            this.movie.movieURL,
+            this.movie.imageURL
+        ).subscribe((res) => {
+            for (const participant of this.movie.participants) {
+                this.service.addParticipant(participant, (res as any).movieid);
+            }
+            for (const ceremony of this.movie.honors) {
+                this.service.addCeremony(ceremony, (res as any).movieid);
+            }
+        });
+
     }
 
     public getCurrentDate(): string {
@@ -60,10 +85,9 @@ export class AddMovieComponent {
     }
 
     public addParticipant(): void {
-        console.log("Adding participant");
         this.movie.participants.push(this.cloneParticipant(this.currentParticipant));
         this.currentParticipant = this.cloneParticipant(DEFAULT_PARTICIPANT);
-        this.tables.renderRows();
+        this.tables.first.renderRows();
     }
 
     public cloneParticipant(toClone: Participant): Participant {
@@ -78,9 +102,19 @@ export class AddMovieComponent {
     }
 
     public addCeremony(): void {
-        this.movie.honors.push(this.currentCeremony);
-        this.currentCeremony = DEFAULT_CEREMONY;
-        this.tables.renderRows();
+        this.movie.honors.push(this.cloneCeremony(this.currentCeremony));
+        this.currentCeremony = this.cloneCeremony(DEFAULT_CEREMONY);
+        this.tables.last.renderRows();
+    }
+
+    public cloneCeremony(toClone: Oscar): Oscar {
+        return {
+            date: toClone.date,
+            location: toClone.location,
+            host: toClone.host,
+            winner: toClone.winner,
+            category: toClone.category
+        };
     }
 
     public deleteParticipant(name: string): void {
@@ -90,7 +124,7 @@ export class AddMovieComponent {
                     for (let i: number = 0; i < this.movie.participants.length; ++i) {
                         if (this.movie.participants[i].name === name) {
                             this.movie.participants.splice(i, 1);
-                            this.tables.renderRows();
+                            this.tables.first.renderRows();
 
                             return;
                         }
@@ -99,4 +133,19 @@ export class AddMovieComponent {
             });
     }
 
+    public deleteNomination(date: string): void {
+        this.confirmationDialogService.confirm("Please confirm!", `Do you really want to delete ${name}'s Ceremony ?`)
+            .then((confirmation) => {
+                if (confirmation) {
+                    for (let i: number = 0; i < this.movie.participants.length; ++i) {
+                        if (this.movie.honors[i].date === date) {
+                            this.movie.honors.splice(i, 1);
+                            this.tables.last.renderRows();
+
+                            return;
+                        }
+                    }
+                }
+            });
+    }
 }
