@@ -31,3 +31,23 @@ img {
     width: 95%;
     height: 400px;
 }
+
+.field {
+    padding-top: 0.4%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #dfd5d5;
+}
+
+.searchIcon {
+    cursor: grabbing;
+}
+
+.movie-cover {
+    cursor: grabbing;
+}
+
+mat-form-field {
+    width: 300px;
+}

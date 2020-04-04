@@ -3,7 +3,7 @@ import { MatButton } from '@angular/material/button';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, startWith, map } from 'rxjs/operators';
 import { TITLE } from 'src/app/classes/constants';
 import { OrderType } from 'src/app/enum/order-type';
 import { CreditCard } from 'src/app/interfaces/cc';
@@ -12,6 +12,9 @@ import { BrowseService } from 'src/app/services/browse/browse.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { OrderComponent } from '../order/order.component';
 import { TrailerComponent } from '../trailer/trailer.component';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { MovieDetailsComponent } from '../movie-details/movie-details.component';
 
 @Component({
     selector: "app-browse",
@@ -21,13 +24,26 @@ import { TrailerComponent } from '../trailer/trailer.component';
 export class BrowseComponent implements OnInit {
 
     public movies: Movie[];
+    public searchedMovies: Movie[];
+
+    titleControl = new FormControl();
+    categoryControl = new FormControl();
+
+    public filteredMovies: Observable<string[]>;
+    public titles: string[];
+    // public categories: Category[];
+
+    public title: string;
+    public movie: Movie | undefined;
+
     public constructor(
         protected snacks: MatSnackBar,
         protected router: Router,
         protected service: BrowseService,
         public data: DataService,
         public dialog: MatDialog
-    ) { }
+    ) { 
+    }
 
     async ngOnInit() {
         const result = await this.service.getMovies();
@@ -37,7 +53,21 @@ export class BrowseComponent implements OnInit {
         } else {
             this.data.setMovies(result as unknown as Movie[]);
             this.movies = result as unknown as Movie[];
+            this.titles = this.data.getTitles();
+            this.filteredMovies = this.titleControl.valueChanges
+            .pipe(
+                startWith(""),
+                map((state) => state ? this._filterStates(state) : this.titles.slice())
+            );
+            this.searchedMovies = this.movies;
         }
+    }
+
+    private _filterStates(value: string): string[] {
+        const filterValue = value.toLowerCase();
+        this.title = filterValue;
+
+        return this.titles.filter((title) => title.toLowerCase().indexOf(filterValue) === 0);
     }
 
     public async onClick(event: MatButton, type: OrderType): Promise<void> {
@@ -135,5 +165,31 @@ export class BrowseComponent implements OnInit {
         }
 
         return undefined;
+    }
+
+    private filteTitles(element: string) {
+        return element.toLowerCase().startsWith(this.title);
+    }
+
+    public searchMovie():void {
+        if (!this.titleControl.value || this.titleControl.value.length === 0) {
+            this.searchedMovies = this.movies;
+            this.titleControl.setValue("");
+            this.title = "";
+            return;
+        }
+        const searchTitles = this.titles.filter((element) => this.filteTitles(element));
+        this.searchedMovies = new Array();
+        for (let title of searchTitles) {
+            this.searchedMovies.push(this.movies.find((movie) =>  movie.title === title) as Movie);
+        }
+    }
+
+    public displayInfos(movie: Movie): void {
+        this.dialog.open(MovieDetailsComponent, {
+            data: movie,
+            width: "100%",
+            height: "800px"
+        });
     }
 }

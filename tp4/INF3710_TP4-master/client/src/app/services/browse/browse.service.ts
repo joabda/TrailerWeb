@@ -6,6 +6,8 @@ import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
 import { Movie } from "src/app/interfaces/movie";
 import { OrderStreaming } from "src/app/interfaces/order-streaming";
+import { Participant } from "src/app/interfaces/participant";
+import { Participation } from "src/app/interfaces/participation";
 
 @Injectable({
     providedIn: "root"
@@ -18,6 +20,22 @@ export class BrowseService {
     public async getMovies(): Promise<Movie[] | boolean> {
         return (
             this.http.get<Movie[]>(`${API_URL}movies`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+                .toPromise()
+                .catch(() => false)
+        );
+    }
+
+    public async getParticipants(): Promise<Participant[] | boolean> {
+        return (
+            this.http.get<Participant[]>(`${API_URL}participant`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+                .toPromise()
+                .catch(() => false)
+        );
+    }
+
+    public async getParticipations(): Promise<Participation[] | boolean> {
+        return (
+            this.http.get<Participation[]>(`${API_URL}participation`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
                 .toPromise()
                 .catch(() => false)
         );

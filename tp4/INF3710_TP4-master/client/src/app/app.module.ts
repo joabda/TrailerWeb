@@ -25,7 +25,6 @@ import { AppComponent } from "./app.component";
 import { appRoutingModule } from "./app.routing";
 import { BrowseComponent } from "./components/browse/browse.component";
 import { HomeComponent } from "./components/home/home.component";
-import { SearchComponent } from "./components/search/search.component";
 import { SignInComponent } from "./components/sign-in/sign-in.component";
 import { OrderComponent } from "./components/order/order.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
@@ -38,6 +37,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { ConfirmationDialogService } from "./services/confirmation-dialog/confirmation-dialog.service";
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { AddMovieComponent } from './components/add-movie/add-movie.component';
+import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
 
 @NgModule({
   declarations: [
@@ -46,13 +46,13 @@ import { AddMovieComponent } from './components/add-movie/add-movie.component';
     SignInComponent,
     BrowseComponent,
     ToolbarComponent,
-    SearchComponent,
     TrailerComponent,
     OrderComponent,
     ManageComponent,
     ConfirmationDialogComponent,
     AddUserComponent,
     AddMovieComponent,
+    MovieDetailsComponent,
   ],
   imports: [
     MatSortModule,

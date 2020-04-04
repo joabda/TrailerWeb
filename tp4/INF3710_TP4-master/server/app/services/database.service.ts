@@ -92,8 +92,6 @@ export class DatabaseService {
         `);
     }
 
-
-
     public async updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
             UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};
