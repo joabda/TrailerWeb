@@ -3,6 +3,7 @@
         <div class="col-md-8 offset-md-2">
             <h3>Register a New Movie</h3>
             <form name="form" (ngSubmit)="f.form.valid && addMovie()" #f="ngForm" novalidate>
+                <app-loading *ngIf="loading"></app-loading>
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" name="title" [(ngModel)]="movie.title" #title="ngModel"

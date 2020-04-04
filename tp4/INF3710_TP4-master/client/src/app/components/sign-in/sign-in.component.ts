@@ -33,6 +33,7 @@ export class SignInComponent {
       await this.service.login({username: this.username, password: this.password});
     }
     if(localStorage.getItem(Token.id) !== '') {
+      console.log(localStorage.getItem(Token.id));
       if(this.admin) {
         console.log('admin');
         this.router.navigate(['manage']);

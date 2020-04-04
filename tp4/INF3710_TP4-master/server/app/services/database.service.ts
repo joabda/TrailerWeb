@@ -64,7 +64,7 @@ export class DatabaseService {
             movieURL,
             imageURL
         ];
-        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $, $8);`;
+        const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8);`;
         this.pool.query(queryText, values);
         return this.pool.query(`SELECT max(idmovie) FROM ${DB_NAME}.${Tables.Movie};`)
     }

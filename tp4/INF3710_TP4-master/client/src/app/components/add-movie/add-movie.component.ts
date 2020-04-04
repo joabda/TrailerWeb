@@ -12,6 +12,8 @@ import { MatSort } from '@angular/material/sort';
 import { Oscar } from 'src/app/interfaces/oscar';
 import { NominationCategory } from 'src/app/enum/nomination-category';
 import { ManageService } from 'src/app/services/manage/manage.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-add-movie',
@@ -32,14 +34,18 @@ export class AddMovieComponent {
   displayedColumns : string[] = ['name', 'role', 'delete'];
   displayedColumns2: string[] = ['host', 'date', 'delete'];
   dataSource = new MatTableDataSource();
+  loading: boolean;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChildren(NgForm) forms: QueryList<NgForm>;
   @ViewChildren(MatTable) tables : QueryList<MatTable<any>>;
 
   constructor(
     private dateConverter: DatePipe,
     private confirmationDialogService: ConfirmationDialogService,
     private service: ManageService,
+    private snacks: MatSnackBar
   ) { 
+    this.loading = false;
     this.movie = DEFAULT_MOVIE;
     this.currentParticipant = this.cloneParticipant(DEFAULT_PARTICIPANT);
     this.currentCeremony = this.cloneCeremony(DEFAULT_CEREMONY);
@@ -51,7 +57,12 @@ export class AddMovieComponent {
   }
 
   async addMovie(): Promise<void> {
-    console.log('called');
+    console.log(this.movie);
+    if(!this.valid()) {
+      this.openSnack(`Please correct the form before submitting!`);
+      return ;
+    }
+    this.loading = true;
     await this.service.addMovie(
       this.movie.title, 
       this.movie.category,
@@ -61,15 +72,43 @@ export class AddMovieComponent {
       this.movie.streamingFee,
       this.movie.movieURL,
       this.movie.imageURL
-    ).subscribe( res => {
+    )
+    .toPromise()
+    .then( res => {
+      if(res === 500) {
+        this.loading = false;
+        this.openSnack('Error couldn\'t add movie');
+      }
+      if(this.movie.honors.length === 0 && this.movie.participants.length === 0 ){
+        this.loading = false;
+        this.forms.first.resetForm();
+      }
       for(const participant of this.movie.participants) {
-        this.service.addParticipant(participant, (res as any).movieid);
+        console.log(participant)
+        const obs = this.service.addParticipant(participant, (res as any).movieid);
+        if(this.movie.honors.length === 0 && participant === this.movie.participants[this.movie.participants.length - 1]) {
+          console.log('last participant and no honor');
+          obs.subscribe( () => {
+            this.forms.first.resetForm();
+            this.loading = false
+          })
+        }
       }
       for(const ceremony of this.movie.honors) {
-        this.service.addCeremony(ceremony, (res as any).movieid);
+        console.log(ceremony);
+        const obs = this.service.addCeremony(ceremony, (res as any).movieid);
+        if(ceremony === this.movie.honors[this.movie.honors.length-1]) {
+          console.log('last honor');
+          obs.subscribe( () => {
+            this.forms.first.resetForm();
+            this.loading = false
+          })
+        }
       }
-    })
-
+    }).catch( () => {
+      this.loading = false;
+      this.openSnack('Error couldn\'t add movie');
+    });
   }
 
   getCurrentDate(): string {
@@ -89,6 +128,7 @@ export class AddMovieComponent {
     this.movie.participants.push(this.cloneParticipant(this.currentParticipant));
     this.currentParticipant = this.cloneParticipant(DEFAULT_PARTICIPANT);
     this.tables.first.renderRows();
+    this.forms.toArray()[1].resetForm();
   }
 
   cloneParticipant(toClone: Participant): Participant {
@@ -102,10 +142,14 @@ export class AddMovieComponent {
     };
   }
 
-  addCeremony(): void {
+  async addCeremony(): Promise<void> {
+    console.log('sending')
+    await this.service.addCeremony(this.cloneCeremony(this.currentCeremony), 1);
+    console.log('should have been sent');
     this.movie.honors.push(this.cloneCeremony(this.currentCeremony));
     this.currentCeremony = this.cloneCeremony(DEFAULT_CEREMONY);
     this.tables.last.renderRows();
+    this.forms.last.resetForm();
   }
 
   cloneCeremony(toClone: Oscar): Oscar {
@@ -146,5 +190,23 @@ export class AddMovieComponent {
         }
       }
     });
+  }
+
+  private valid(): boolean {
+    return (
+      true
+    );
+  }
+
+  private openSnack(message: string) {
+    this.snacks.open(
+      message,
+      "",
+      {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center'
+      }
+    );
   }
 }

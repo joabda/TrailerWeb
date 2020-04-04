@@ -75,12 +75,11 @@ export class DatabaseController {
                 const movieURL: string = req.body.movieURL;
                 const imageURL: string = req.body.imageURL;
                 this.databaseService.addMovie(title, category, productionDate, duration, dvdPrice, streamingFee, movieURL, imageURL)
-                .then((result: pg.QueryResult) => {
-                    res.json(result);
-                }).catch((e: Error) => {
-                    console.error(e.stack);
-                    res.json(-1);
-                });
+                    .then((result: pg.QueryResult) => {
+                        res.json(result);
+                    }).catch((e: Error) => {
+                        res.json(HTTP.Error);
+                    });
             });
 
         router.put("/movies/delete",
@@ -167,7 +166,7 @@ export class DatabaseController {
                 });
             });
 
-            router.post("/participants/insert",
+        router.post("/participants/insert",
             (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (!this.isValid(tokenString)) {
@@ -189,12 +188,13 @@ export class DatabaseController {
                 });
             });
 
-            router.post("/cetemony/insert",
+        router.post("/ceremony/insert",
             (req: Request, res: Response, next: NextFunction) => {
-                const tokenString = req.header(TOKEN) as unknown as string;
-                if (!this.isValid(tokenString)) {
-                    res.sendStatus(HTTP.Unauthorized);
-                }
+                // const tokenString = req.header(TOKEN) as unknown as string;
+                // if (!this.isValid(tokenString)) {
+                //     res.sendStatus(HTTP.Unauthorized);
+                // }
+                console.log(req.body);
                 this.databaseService.addCeremony(
                     req.body.date,
                     req.body.location,
@@ -233,7 +233,7 @@ export class DatabaseController {
                 ).then((result: pg.QueryResult) => {
                     res.json(HTTP.Accepted);
                 }).catch((e: Error) => {
-                    if(e.message.indexOf('duplicate key') !== -1 ) {
+                    if (e.message.indexOf('duplicate key') !== -1) {
                         res.json(HTTP.Exists);
                     }
                     res.json(HTTP.Error);

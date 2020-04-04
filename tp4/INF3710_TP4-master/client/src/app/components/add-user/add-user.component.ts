@@ -63,8 +63,8 @@ export class AddUserComponent {
           this.openSnack(`Email ${this.user.email} has already been used.`);
         } else {
           this.user = this.cloneUser(DEFAULT_USER);
-          this.form.reset();
           this.openSnack(`User has been added.`);
+          this.form.resetForm();
         }
       })
       .catch( () => {

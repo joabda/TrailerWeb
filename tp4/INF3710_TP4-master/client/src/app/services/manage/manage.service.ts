@@ -81,7 +81,14 @@ export class ManageService {
   addCeremony(toAdd: Oscar, movieID: number): Observable<any> {
     return (
       this.http.post<any>(`${API_URL}ceremony/insert`,
-        {toAdd, movieID: movieID},
+        {
+          date: toAdd.date,
+          location: toAdd.location,
+          host: toAdd.host,
+          winner: toAdd.winner,
+          category: toAdd.category,
+          movieID: movieID
+        },
         {
           headers: new HttpHeaders().set('Authorization',
             localStorage.getItem(Token.id) as unknown as string)
