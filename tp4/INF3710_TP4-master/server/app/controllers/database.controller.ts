@@ -40,7 +40,7 @@ export class DatabaseController {
 
         router.get("/movies", (req: Request, res: Response, next: NextFunction) => {
             if (!this.isValid(req.header(TOKEN) as unknown as string)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             // Send the request to the service and send the response
             this.databaseService.getAllFromTable(Tables.Movie).then((result: pg.QueryResult) => {
@@ -64,7 +64,7 @@ export class DatabaseController {
 
         router.get("/participant", (req: Request, res: Response, next: NextFunction) => {
             if (!this.isValid(req.header(TOKEN) as unknown as string)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.getAllFromTable(Tables.Participant).then((result: pg.QueryResult) => {
                 const participants: Participant[] = result.rows.map((participant: any) => (
@@ -83,7 +83,7 @@ export class DatabaseController {
 
         router.get("/participation", (req: Request, res: Response, next: NextFunction) => {
             if (!this.isValid(req.header(TOKEN) as unknown as string)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.getAllFromTable(Tables.Participation).then((result: pg.QueryResult) => {
                 const participations: Participation[] = result.rows.map((participation: any) => (
@@ -120,26 +120,26 @@ export class DatabaseController {
         router.put("/movies/delete", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             const id: number = req.body.id;
             this.databaseService.deleteMovie(id).then((result: pg.QueryResult) => {
-                res.sendStatus(HTTP.Accepted);
+                res.json(HTTP.Accepted);
             }).catch((e: Error) => {
                 console.error(e.stack);
-                res.sendStatus(HTTP.Error);
+                res.json(HTTP.Error);
             });
         });
 
         router.put("/order/update", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             const id: number = req.body.id;
             const stoppedAt: number = req.body.stoppedAt;
             this.databaseService.updateURL(id, stoppedAt).then((result: pg.QueryResult) => {
-                res.sendStatus(HTTP.Accepted);
+                res.json(HTTP.Accepted);
             }).catch((e: Error) => {
                 console.error(e.stack);
                 res.json(-1);
@@ -149,7 +149,7 @@ export class DatabaseController {
         router.post("/order/validation", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.validateOrder(req.body.id, this.decode(tokenString).user)
                 .then((result: pg.QueryResult) => {
@@ -167,24 +167,24 @@ export class DatabaseController {
         router.post("/order/insert", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.addStreamingOrder(
                 req.body.movieID,
                 this.decode(tokenString).user,
                 req.body.dateOfOrder)
                 .then((result: pg.QueryResult) => {
-                    res.sendStatus(HTTP.Accepted);
+                    res.json(HTTP.Accepted);
                 }).catch((e: Error) => {
                     console.error(e.stack);
-                    res.sendStatus(HTTP.Error);
+                    res.json(HTTP.Error);
                 });
         });
 
         router.post("/participants/insert", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.addParticipant(
                 req.body.name,
@@ -195,7 +195,7 @@ export class DatabaseController {
                 req.body.salary,
                 req.body.movieID
             ).then((result: pg.QueryResult) => {
-                res.sendStatus(HTTP.Accepted);
+                res.json(HTTP.Accepted);
             }).catch((e: Error) => {
                 console.error(e.stack);
                 res.json(HTTP.Error);
@@ -205,7 +205,7 @@ export class DatabaseController {
         router.post("/cetemony/insert", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.addCeremony(
                 req.body.date,
@@ -215,7 +215,7 @@ export class DatabaseController {
                 req.body.category,
                 req.body.movieID
             ).then((result: pg.QueryResult) => {
-                res.sendStatus(HTTP.Accepted);
+                res.json(HTTP.Accepted);
             }).catch((e: Error) => {
                 console.error(e.stack);
                 res.json(HTTP.Error);
@@ -225,7 +225,7 @@ export class DatabaseController {
         router.post("/users/insert", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.addUser(
                 req.body.email,
@@ -242,7 +242,7 @@ export class DatabaseController {
                 req.body.fee,
                 req.body.dateSubsc
             ).then((result: pg.QueryResult) => {
-                res.sendStatus(HTTP.Accepted);
+                res.json(HTTP.Accepted);
             }).catch((e: Error) => {
                 console.error(e.stack);
                 res.json(HTTP.Error);
@@ -263,7 +263,7 @@ export class DatabaseController {
                             expiresIn: 7200
                         });
                     } else {
-                        res.sendStatus(HTTP.Unauthorized);
+                        res.json(HTTP.Unauthorized);
                     }
                 }).catch((e: Error) => {
                     console.error(e.stack);
@@ -274,7 +274,7 @@ export class DatabaseController {
             (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (!this.isValid(tokenString)) {
-                    res.sendStatus(HTTP.Unauthorized);
+                    res.json(HTTP.Unauthorized);
                 }
                 this.databaseService.addParticipant(
                     req.body.name,
@@ -285,7 +285,7 @@ export class DatabaseController {
                     req.body.salary,
                     req.body.movieID
                 ).then((result: pg.QueryResult) => {
-                    res.sendStatus(HTTP.Accepted);
+                    res.json(HTTP.Accepted);
                 }).catch((e: Error) => {
                     console.error(e.stack);
                 });
@@ -305,7 +305,7 @@ export class DatabaseController {
                             expiresIn: 7200
                         });
                     } else {
-                        res.sendStatus(HTTP.Unauthorized);
+                        res.json(HTTP.Unauthorized);
                     }
                 }).catch((e: Error) => {
                     console.error(e.stack);
@@ -316,7 +316,7 @@ export class DatabaseController {
             (req: Request, res: Response, next: NextFunction) => {
                 // const tokenString = req.header(TOKEN) as unknown as string;
                 // if (!this.isValid(tokenString)) {
-                //     res.sendStatus(HTTP.Unauthorized);
+                //     res.json(HTTP.Unauthorized);
                 // }
                 console.log(req.body);
                 this.databaseService.addCeremony(
@@ -327,7 +327,7 @@ export class DatabaseController {
                     req.body.category,
                     req.body.movieID
                 ).then((result: pg.QueryResult) => {
-                    res.sendStatus(HTTP.Accepted);
+                    res.json(HTTP.Accepted);
                 }).catch((e: Error) => {
                     console.error(e.stack);
                 });
@@ -346,7 +346,7 @@ export class DatabaseController {
             (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (!this.isValid(tokenString)) {
-                    res.sendStatus(HTTP.Unauthorized);
+                    res.json(HTTP.Unauthorized);
                 }
                 this.databaseService.addUser(
                     req.body.email,
@@ -375,7 +375,7 @@ export class DatabaseController {
         router.get("/creditcards/", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
-                res.sendStatus(HTTP.Unauthorized);
+                res.json(HTTP.Unauthorized);
             }
             this.databaseService.getCardsFor(this.decode(tokenString).user)
                 .then((result: pg.QueryResult) => {
@@ -391,7 +391,7 @@ export class DatabaseController {
                     res.json(ccs);
                 }).catch((e: Error) => {
                     console.error(e.stack);
-                    res.sendStatus(HTTP.Error);
+                    res.json(HTTP.Error);
                 });
         });
 

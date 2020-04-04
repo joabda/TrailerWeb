@@ -24,8 +24,8 @@ export class ManageService {
     );
   }
 
-  deleteMovie(idMovie: number): void {
-    this.http.put<any>(
+  deleteMovie(idMovie: number): Observable<any> {
+    return this.http.put<any>(
       `${API_URL}movies/delete`,
       {
         id: idMovie,

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Movie } from 'src/app/interfaces/movie';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ManageService } from 'src/app/services/manage/manage.service';
@@ -19,7 +19,9 @@ export class ManageComponent implements OnInit, AfterViewInit {
   movies: Movie[];
   displayedColumns: string[] = ['title', 'genre', 'production date', 'duration', 'dvd price', 'streaming fee', 'delete'];
   dataSource = new MatTableDataSource();
+  loading: boolean;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatTable) table: MatTable<any>;
 
   constructor(
     protected snacks: MatSnackBar,
@@ -29,6 +31,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
   ) {
     this.addingUser = false;
     this.addingMovie = false;
+    this.loading = false;
   }
 
   async ngOnInit(): Promise<void> {
@@ -47,11 +50,28 @@ export class ManageComponent implements OnInit, AfterViewInit {
   }
 
   deleteMovie(id: number, title: string): void {
-    console.log(id);
     this.confirmationDialogService.confirm('Please confirm!', `Do you really want to delete ${title} ?`)
       .then(confirmation => {
         if (confirmation) {
-          this.service.deleteMovie(id);
+          this.loading = true;
+          this.service.deleteMovie(id)
+          .toPromise()
+          .then( res => {
+            if(res === 200) {
+              this.openSnack('Movie has been deleted');
+              for(let i: number = 0; i < this.movies.length; ++i) {
+                if(this.movies[i].id === id){
+                  this.movies.splice(i, 1);
+                  this.table.renderRows();
+                  this.loading = false;
+                  break;
+                }
+              }
+            } else {
+              this.openSnack('Couldn\'t delete movie from Database, please try again later.');
+              this.loading = false;
+            }
+          });
         }
       });
   }
