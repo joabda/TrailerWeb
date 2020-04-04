@@ -1,24 +1,24 @@
-import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { FormMovie } from 'src/app/interfaces/form-movie';
-import { Category } from 'src/app/enum/category';
-import { ALL_CATEGORIES, DEFAULT_MOVIE, DEFAULT_PARTICIPANT, ALL_ROLES, DEFAULT_CEREMONY, ALL_NOMINATIONS } from 'src/app/classes/constants';
-import { DatePipe } from '@angular/common';
-import { Participant } from 'src/app/interfaces/participant';
-import { ALL_COUNTRIES } from 'src/app/classes/countries';
-import { Role } from 'src/app/enum/role';
-import { ConfirmationDialogService } from 'src/app/services/confirmation-dialog/confirmation-dialog.service';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { Oscar } from 'src/app/interfaces/oscar';
-import { NominationCategory } from 'src/app/enum/nomination-category';
-import { ManageService } from 'src/app/services/manage/manage.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgForm } from '@angular/forms';
+import { DatePipe } from "@angular/common";
+import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { MatSort } from "@angular/material/sort";
+import { MatTable, MatTableDataSource } from "@angular/material/table";
+import { ALL_CATEGORIES, ALL_NOMINATIONS, ALL_ROLES, DEFAULT_CEREMONY, DEFAULT_MOVIE, DEFAULT_PARTICIPANT } from "src/app/classes/constants";
+import { ALL_COUNTRIES } from "src/app/classes/countries";
+import { Category } from "src/app/enum/category";
+import { NominationCategory } from "src/app/enum/nomination-category";
+import { Role } from "src/app/enum/role";
+import { FormMovie } from "src/app/interfaces/form-movie";
+import { Oscar } from "src/app/interfaces/oscar";
+import { Participant } from "src/app/interfaces/participant";
+import { ConfirmationDialogService } from "src/app/services/confirmation-dialog/confirmation-dialog.service";
+import { ManageService } from "src/app/services/manage/manage.service";
+import { NgForm } from "@angular/forms";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-  selector: 'app-add-movie',
-  templateUrl: './add-movie.component.html',
-  styleUrls: ['./add-movie.component.css']
+    selector: "app-add-movie",
+    templateUrl: "./add-movie.component.html",
+    styleUrls: ["./add-movie.component.css"]
 })
 export class AddMovieComponent {
 

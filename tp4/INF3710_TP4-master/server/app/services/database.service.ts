@@ -21,23 +21,23 @@ export class DatabaseService {
 
     private pool: pg.Pool = new pg.Pool(this.connectionConfig);
 
-    constructor() {
+    public constructor() {
         this.pool.connect();
     }
 
-    createSchema(): Promise<pg.QueryResult> {
+    public async createSchema(): Promise<pg.QueryResult> {
         return this.pool.query(SCHEMA);
     }
 
-    populateDb(): Promise<pg.QueryResult> {
+    public async populateDb(): Promise<pg.QueryResult> {
         return this.pool.query(DATA);
     }
 
-    getAllFromTable(tableName: string): Promise<pg.QueryResult> {
+    public async getAllFromTable(tableName: string): Promise<pg.QueryResult> {
         return this.pool.query(`SELECT * FROM ${DB_NAME}.${tableName};`);
     }
 
-    verifyUser(username: string, password: string, tableName: string): Promise<pg.QueryResult> {
+    public async verifyUser(username: string, password: string, tableName: string): Promise<pg.QueryResult> {
         return this.pool.query(`
             Select *
             FROM ${DB_NAME}.${tableName}
@@ -45,7 +45,7 @@ export class DatabaseService {
             AND password = netflixpoly.crypt('${password}', password);`);
     }
 
-    addMovie(
+    public async addMovie(
         title: string,
         category: string,
         productionDate: string,
@@ -69,13 +69,13 @@ export class DatabaseService {
         return this.pool.query(`SELECT max(idmovie) FROM ${DB_NAME}.${Tables.Movie};`)
     }
 
-    async addCeremony(
-        date        :   string,
-        location    :   string,
-        host        :   string,
-        winner      :   boolean,
-        category    :   string,
-        movieID     :   number
+    public async  addCeremony(
+        date: string,
+        location: string,
+        host: string,
+        winner: boolean,
+        category: string,
+        movieID: number
 
     ): Promise<pg.QueryResult> {
         await this.pool.query(`INSERT INTO ${DB_NAME}.${Tables.Oscars} VALUES('${date}', '${location}', '${host}');`);
@@ -84,32 +84,30 @@ export class DatabaseService {
         `);
     }
 
-    deleteMovie(id: number): Promise<pg.QueryResult> {
+    public async deleteMovie(id: number): Promise<pg.QueryResult> {
         return this.pool.query(`
-            DELETE 
-            FROM ${DB_NAME}.${Tables.Movie} 
+            DELETE
+            FROM ${DB_NAME}.${Tables.Movie}
             WHERE idmovie = ${id};
         `);
     }
 
-
-
-    updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
+    public async updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
             UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};
 `;
         return this.pool.query(queryText);
     }
 
-    getCardsFor(user: string): Promise<pg.QueryResult> {
+    public async getCardsFor(user: string): Promise<pg.QueryResult> {
         return this.pool.query(`
-            SELECT * 
+            SELECT *
             FROM ${DB_NAME}.${Tables.CC}
             WHERE ownerid = '${user}';
         `);
     }
 
-    async addStreamingOrder(movieID: number, memberID: string, dateOfOrder: string): Promise<pg.QueryResult> {
+    public async addStreamingOrder(movieID: number, memberID: string, dateOfOrder: string): Promise<pg.QueryResult> {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
         `);
@@ -118,21 +116,21 @@ export class DatabaseService {
         `);
     }
 
-    validateOrder(movieid: number, user: string): Promise<pg.QueryResult> {
+    public async validateOrder(movieid: number, user: string): Promise<pg.QueryResult> {
         return this.pool.query(`
-            SELECT * 
+            SELECT *
             FROM ${DB_NAME}.${Tables.OStream}
             WHERE idorder = (
                 SELECT DISTINCT idorder
                 FROM ${DB_NAME}.${Tables.Order}
                 WHERE movieid = ${movieid}
-                AND clientid = '${user}' 
+                AND clientid = '${user}'
             );
             `
         );
     }
 
-    async addParticipant(name: string, dateOfBirth: string, nationality: string, 
+    public async  addParticipant(name: string, dateOfBirth: string, nationality: string,
         sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
@@ -145,7 +143,7 @@ export class DatabaseService {
     }
 
     // Users
-    async addUser(
+    public async  addUser(
         email: string,
         password: string,
         firstName: string,
@@ -178,9 +176,9 @@ export class DatabaseService {
 
     private getCurrentDate(): string {
         let d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
         if (month.length < 2) {
             month = '0' + month;
         }
