@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: 'tp4',
+        database: 'postgres',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
