@@ -64,7 +64,6 @@ export class AddMovieComponent implements OnInit{
   }
 
   async addMovie(): Promise<void> {
-    console.log(this.movie);
     if(!this.valid()) {
       this.openSnack(`Please correct the form before submitting!`);
       return ;
@@ -94,7 +93,6 @@ export class AddMovieComponent implements OnInit{
         this.forms.first.resetForm();
       }
       for(const participant of this.movie.participants) {
-        console.log(participant)
         this.service.addParticipant(participant, movieID).subscribe( res => {
           if(res === HTTP.Error) {
             if(this.movie.honors.length === 0 && participant === this.movie.participants[this.movie.participants.length - 1]) {
@@ -154,7 +152,6 @@ export class AddMovieComponent implements OnInit{
   }
 
   cloneParticipant(toClone: Participant): Participant {
-    console.log(toClone);
     return {
       name: toClone.name,
       dateOfbirth: toClone.dateOfbirth,

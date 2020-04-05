@@ -242,14 +242,6 @@ export class DatabaseController {
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
-            console.log(
-                req.body.date + ' ' + 
-                req.body.location+ ' ' + 
-                req.body.host+ ' ' + 
-                req.body.winner+ ' ' + 
-                req.body.category+ ' ' + 
-                req.body.movieID
-            )
             this.databaseService.addCeremony(
                 req.body.date,
                 req.body.location,

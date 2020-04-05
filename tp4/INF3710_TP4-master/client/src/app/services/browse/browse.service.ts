@@ -65,8 +65,6 @@ export class BrowseService {
     }
 
     public changeCurrentTime(id: number, stoppedAt: number): void {
-        console.log(id);
-        console.log(stoppedAt);
         this.http.put<Movie[]>(
             `${API_URL}order/update`,
             {

@@ -75,7 +75,6 @@ export class ManageService {
   }
 
   addParticipant(toAdd: Participant, movieID: number): Observable<any> {
-    console.log(toAdd);
     return (
       this.http.post<any>(`${API_URL}participants/insert`,
         {
@@ -113,7 +112,6 @@ export class ManageService {
   }
 
   addCeremony(toAdd: Oscar, movieID: number): Observable<any> {
-    console.log('movie id for ceremony' + movieID)
     return (
       this.http.post<any>(`${API_URL}ceremony/insert`,
         {

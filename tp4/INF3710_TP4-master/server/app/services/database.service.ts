@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: 'postgres',
+        database: 'tp4',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -173,7 +173,6 @@ export class DatabaseService {
         if (subscribed) {
             values.push(fee);
             values.push(endDate);
-            console.log("DATE: " + endDate);
         }
         return this.pool.query(`INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM} 
             VALUES('${email}', ${subscribed ? (`${fee}, '${this.getCurrentDate()}' ,'${endDate}'`) : 0});`

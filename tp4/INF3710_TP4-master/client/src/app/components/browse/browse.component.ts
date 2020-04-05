@@ -93,9 +93,6 @@ export class BrowseComponent implements OnInit, OnDestroy {
         if (movie !== undefined) {
             this.service.isOrdered(movie.id).subscribe(async (res) => {
                 if (res !== null && res.valueOf() != -1) {
-                    console.log(res);
-                    console.log((res as any).stoppedat);
-                    // const currentTime = await this.service.getStopTime(movie.id, );
                     this.playMovie(movie, (res as any).stoppedat, (res as any).idorder);
                 } else {
                     this.orderMovie(movie, type);
