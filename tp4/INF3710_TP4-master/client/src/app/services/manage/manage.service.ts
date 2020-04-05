@@ -7,6 +7,7 @@ import { Movie } from 'src/app/interfaces/movie';
 import { Observable } from 'rxjs';
 import { Participant } from 'src/app/interfaces/participant';
 import { Oscar } from 'src/app/interfaces/oscar';
+import { Actor } from 'src/app/interfaces/actor';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,13 @@ export class ManageService {
       this.http.get<Movie[]>(`${API_URL}movies`, { headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string) })
         .toPromise()
         .catch(() => false)
+    );
+  }
+
+  async getActors(): Promise<Actor[] | boolean> {
+    return (
+      this.http.get<Actor[]>(`${API_URL}actors`, { headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string) })
+        .toPromise()
     );
   }
 
@@ -49,14 +57,14 @@ export class ManageService {
     return (
       this.http.post<any>(`${API_URL}movies/insert`,
         {
-          title           : title,
-          category        : category,
-          productionDate  : productionDate,
-          duration        : duration,
-          dvdPrice        : dvdPrice,
-          streamingFee    : streamingFee,
-          movieURL        : movieURL,
-          imageURL        : imageURL
+          title: title,
+          category: category,
+          productionDate: productionDate,
+          duration: duration,
+          dvdPrice: dvdPrice,
+          streamingFee: streamingFee,
+          movieURL: movieURL,
+          imageURL: imageURL
         },
         {
           headers: new HttpHeaders().set('Authorization',
@@ -67,9 +75,35 @@ export class ManageService {
   }
 
   addParticipant(toAdd: Participant, movieID: number): Observable<any> {
+    console.log(toAdd);
     return (
       this.http.post<any>(`${API_URL}participants/insert`,
-        {toAdd, movieID: movieID},
+        {
+          name: toAdd.name,
+          dateOfbirth: toAdd.dateOfbirth,
+          nationality: toAdd.nationality,
+          sex: toAdd.sex,
+          role: toAdd.role,
+          salary: toAdd.salary,
+          movieID: movieID
+        },
+        {
+          headers: new HttpHeaders().set('Authorization',
+            localStorage.getItem(Token.id) as unknown as string)
+        }
+      )
+    );
+  }
+
+  addParticipation(participantID: number, role: string, salary: number, movieID: number): Observable<any> {
+    return (
+      this.http.post<any>(`${API_URL}participation/insert`,
+        {
+          participantID: participantID,
+          role: role,
+          salary: salary,
+          movieID: movieID
+        },
         {
           headers: new HttpHeaders().set('Authorization',
             localStorage.getItem(Token.id) as unknown as string)
@@ -79,6 +113,7 @@ export class ManageService {
   }
 
   addCeremony(toAdd: Oscar, movieID: number): Observable<any> {
+    console.log('movie id for ceremony' + movieID)
     return (
       this.http.post<any>(`${API_URL}ceremony/insert`,
         {

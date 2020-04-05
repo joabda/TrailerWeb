@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ManageService } from 'src/app/services/manage/manage.service';
 import { MatSort } from '@angular/material/sort';
 import { ConfirmationDialogService } from 'src/app/services/confirmation-dialog/confirmation-dialog.service';
+import { HTTP } from 'src/app/enum/http-codes';
 
 @Component({
   selector: 'app-manage',
@@ -57,7 +58,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
           this.service.deleteMovie(id)
           .toPromise()
           .then( res => {
-            if(res === 200) {
+            if(res === HTTP.Accepted) {
               this.openSnack('Movie has been deleted');
               for(let i: number = 0; i < this.movies.length; ++i) {
                 if(this.movies[i].id === id){

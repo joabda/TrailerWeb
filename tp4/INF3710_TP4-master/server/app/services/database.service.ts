@@ -86,7 +86,7 @@ export class DatabaseService {
 
     public async deleteMovie(id: number): Promise<pg.QueryResult> {
         return this.pool.query(`
-            DELETE
+            DELETE CASCADE
             FROM ${DB_NAME}.${Tables.Movie}
             WHERE idmovie = ${id};
         `);
@@ -130,7 +130,7 @@ export class DatabaseService {
         );
     }
 
-    public async  addParticipant(name: string, dateOfBirth: string, nationality: string,
+    public async addParticipant(name: string, dateOfBirth: string, nationality: string,
         sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
@@ -140,6 +140,10 @@ export class DatabaseService {
             INSERT INTO ${DB_NAME}.${Tables.Role} VALUES(${movieID},
                 (SELECT max(idparticipant) FROM ${DB_NAME}.${Tables.Participant}), '${role}', ${salary});
         `);
+    }
+
+    public async addParticipation(participantID: number, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
+        return this.pool.query(`INSERT INTO ${DB_NAME}.${Tables.Role} VALUES(${movieID}, ${participantID}, '${role}', ${salary});`);
     }
 
     // Users

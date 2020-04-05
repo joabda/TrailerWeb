@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { Component, QueryList, ViewChild, ViewChildren, OnInit } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { ALL_CATEGORIES, ALL_NOMINATIONS, ALL_ROLES, DEFAULT_CEREMONY, DEFAULT_MOVIE, DEFAULT_PARTICIPANT } from "src/app/classes/constants";
@@ -14,16 +14,19 @@ import { ConfirmationDialogService } from "src/app/services/confirmation-dialog/
 import { ManageService } from "src/app/services/manage/manage.service";
 import { NgForm } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { HTTP } from "src/app/enum/http-codes";
+import { Actor } from "src/app/interfaces/actor";
 
 @Component({
     selector: "app-add-movie",
     templateUrl: "./add-movie.component.html",
     styleUrls: ["./add-movie.component.css"]
 })
-export class AddMovieComponent {
+export class AddMovieComponent implements OnInit{
 
   allCountries: string[];
   allCategories: NominationCategory[];
+  allActors: Actor[];
   roles: Role[];
   movie: FormMovie;
   currentParticipant: Participant;
@@ -56,6 +59,10 @@ export class AddMovieComponent {
     this.dataSource.sort = this.sort;
   }
 
+  async ngOnInit(): Promise<void> {
+    this.allActors = await this.service.getActors() as Actor[];
+  }
+
   async addMovie(): Promise<void> {
     console.log(this.movie);
     if(!this.valid()) {
@@ -75,35 +82,40 @@ export class AddMovieComponent {
     )
     .toPromise()
     .then( res => {
-      if(res === 500) {
+      if(res === HTTP.Error) {
         this.loading = false;
         this.openSnack('Error couldn\'t add movie');
-      }
+        return ;
+      } 
+      const movieID = res.rows[0].max;
       if(this.movie.honors.length === 0 && this.movie.participants.length === 0 ){
         this.loading = false;
         this.forms.first.resetForm();
       }
       for(const participant of this.movie.participants) {
         console.log(participant)
-        const obs = this.service.addParticipant(participant, (res as any).movieid);
-        if(this.movie.honors.length === 0 && participant === this.movie.participants[this.movie.participants.length - 1]) {
-          console.log('last participant and no honor');
-          obs.subscribe( () => {
-            this.forms.first.resetForm();
-            this.loading = false
-          })
-        }
+        this.service.addParticipant(participant, movieID).subscribe( res => {
+          if(res === HTTP.Error) {
+            if(this.movie.honors.length === 0 && participant === this.movie.participants[this.movie.participants.length - 1]) {
+              this.forms.first.resetForm(DEFAULT_MOVIE);
+              this.loading = false
+            }
+            this.snacks.open('Sorry couldn\'t add participant ' + participant.name );
+          }
+        });
       }
       for(const ceremony of this.movie.honors) {
-        console.log(ceremony);
-        const obs = this.service.addCeremony(ceremony, (res as any).movieid);
-        if(ceremony === this.movie.honors[this.movie.honors.length-1]) {
-          console.log('last honor');
-          obs.subscribe( () => {
+        this.service.addCeremony(ceremony, movieID).subscribe( res => {
+          if(res === HTTP.Error) {
+            this.snacks.open('Sorry couldn\'t add ceremony and honor');
+          }
+          if(ceremony === this.movie.honors[this.movie.honors.length-1]) {
+            console.log('last honor');
             this.forms.first.resetForm();
             this.loading = false
-          })
-        }
+          }
+        })
+
       }
     }).catch( () => {
       this.loading = false;
@@ -125,13 +137,22 @@ export class AddMovieComponent {
   }
 
   addParticipant(): void {
-    this.movie.participants.push(this.cloneParticipant(this.currentParticipant));
-    this.currentParticipant = this.cloneParticipant(DEFAULT_PARTICIPANT);
-    this.tables.first.renderRows();
-    this.forms.toArray()[1].resetForm();
+    if(this.actorExists(this.currentParticipant.name) !== -1) {
+      this.confirmationDialogService.confirm('Participant Already Exists!', `Do you really want to add another ${this.currentParticipant.name} ?`)
+      .then((confirmation) => {
+        if(confirmation) {
+          this.movie.participants.push(this.cloneParticipant(this.currentParticipant));
+          this.resetTable();
+        }
+      });
+    } else {
+      this.movie.participants.push(this.cloneParticipant(this.currentParticipant));
+      this.resetTable()
+    }
   }
 
   cloneParticipant(toClone: Participant): Participant {
+    console.log(toClone);
     return {
       name: toClone.name,
       dateOfbirth: toClone.dateOfbirth,
@@ -143,9 +164,6 @@ export class AddMovieComponent {
   }
 
   async addCeremony(): Promise<void> {
-    console.log('sending')
-    await this.service.addCeremony(this.cloneCeremony(this.currentCeremony), 1);
-    console.log('should have been sent');
     this.movie.honors.push(this.cloneCeremony(this.currentCeremony));
     this.currentCeremony = this.cloneCeremony(DEFAULT_CEREMONY);
     this.tables.last.renderRows();
@@ -190,6 +208,21 @@ export class AddMovieComponent {
         }
       }
     });
+  }
+
+  private resetTable(): void {
+    this.currentParticipant = this.cloneParticipant(DEFAULT_PARTICIPANT);
+    this.tables.first.renderRows();
+    this.forms.toArray()[1].resetForm();
+  }
+
+  private actorExists(actorName: string): number {
+    for(const actor of this.allActors) {
+      if(actor.name.toLowerCase() === actorName.toLowerCase()) {
+        return actor.id;
+      }
+    }
+    return -1;
   }
 
   private valid(): boolean {
