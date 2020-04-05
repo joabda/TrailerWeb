@@ -4,6 +4,7 @@ import * as moment from "moment";
 import { API_URL } from "src/app/classes/constants";
 import { Token } from "src/app/enum/token";
 import { Logins } from "src/app/interfaces/logins";
+import { HTTP } from "src/app/enum/http-codes";
 
 @Injectable({
   providedIn: "root"
@@ -17,7 +18,11 @@ export class SignInService{
     return this.http.post<any>(`${API_URL}users`, toAuthenticate)
       .toPromise()
       .then(
-        (result) => this.setSession(result)
+        (result) => {
+          if(result !== HTTP.Unauthorized) {
+            this.setSession(result)
+          }
+        }
       )
       .catch((e: HttpErrorResponse) => {localStorage.setItem(Token.id, "")});
   }
@@ -26,7 +31,11 @@ export class SignInService{
     return this.http.post<any>(`${API_URL}admins`, toAuthenticate)
     .toPromise()
     .then(
-      (result) => this.setSession(result)
+      (result) => {
+        if(result !== HTTP.Unauthorized) {
+          this.setSession(result)
+        }
+      }
     )
     .catch((e: HttpErrorResponse) => {localStorage.setItem(Token.id, "")});
   }
