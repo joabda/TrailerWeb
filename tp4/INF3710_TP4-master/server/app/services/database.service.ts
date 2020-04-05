@@ -85,8 +85,10 @@ export class DatabaseService {
     }
 
     public async deleteMovie(id: number): Promise<pg.QueryResult> {
+        await this.pool.query(`DELETE FROM ${DB_NAME}.${Tables.Nomination} WHERE movieid = ${id};`);
+        await this.pool.query(`DELETE FROM ${DB_NAME}.${Tables.Participation} WHERE movieid = ${id};`);
         return this.pool.query(`
-            DELETE CASCADE
+            DELETE
             FROM ${DB_NAME}.${Tables.Movie}
             WHERE idmovie = ${id};
         `);

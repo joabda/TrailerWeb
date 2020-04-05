@@ -17,11 +17,11 @@ export class ManageService {
   constructor(
     private http: HttpClient) { }
 
-  async getMovies(): Promise<Movie[] | boolean> {
+  async getMovies(): Promise<Movie[] | number> {
     return (
       this.http.get<Movie[]>(`${API_URL}movies`, { headers: new HttpHeaders().set('Authorization', localStorage.getItem(Token.id) as unknown as string) })
         .toPromise()
-        .catch(() => false)
+        .catch(res => res)
     );
   }
 

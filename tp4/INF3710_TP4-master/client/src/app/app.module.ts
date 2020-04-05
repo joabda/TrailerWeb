@@ -39,6 +39,7 @@ import { AddUserComponent } from './components/add-user/add-user.component';
 import { AddMovieComponent } from './components/add-movie/add-movie.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { MovieDetailsComponent } from './components/movie-details/movie-details.
     MovieDetailsComponent,
   ],
   imports: [
+    MatPaginatorModule,
     MatSortModule,
     MatTableModule,
     MatInputModule,
