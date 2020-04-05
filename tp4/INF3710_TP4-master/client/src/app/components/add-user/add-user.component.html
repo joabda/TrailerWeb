@@ -3,7 +3,7 @@
         <div class="col-md-8 offset-md-2">
             <h3>Register a New User</h3>
             <form name="form" (ngSubmit)="f.form.valid && addUser()" #f="ngForm" novalidate>
-                <app-loading *ngIf="loading"></app-loading>
+                <app-loading *ngIf="loading" class="centered"></app-loading>
                 <div class="form-group">
                     <label for="firstName">First Name</label>
                     <input type="text" class="form-control" name="firstName" [(ngModel)]="user.firstName"

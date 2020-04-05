@@ -89,6 +89,7 @@ export class AddMovieComponent implements OnInit{
       } 
       const movieID = res.rows[0].max;
       if(this.movie.honors.length === 0 && this.movie.participants.length === 0 ){
+        this.snacks.open('Movie has been added');
         this.loading = false;
         this.forms.first.resetForm();
       }
@@ -97,6 +98,7 @@ export class AddMovieComponent implements OnInit{
         this.service.addParticipant(participant, movieID).subscribe( res => {
           if(res === HTTP.Error) {
             if(this.movie.honors.length === 0 && participant === this.movie.participants[this.movie.participants.length - 1]) {
+              this.snacks.open('Movie has been added');
               this.forms.first.resetForm(DEFAULT_MOVIE);
               this.loading = false
             }
@@ -110,7 +112,7 @@ export class AddMovieComponent implements OnInit{
             this.snacks.open('Sorry couldn\'t add ceremony and honor');
           }
           if(ceremony === this.movie.honors[this.movie.honors.length-1]) {
-            console.log('last honor');
+            this.snacks.open('Movie has been added');
             this.forms.first.resetForm();
             this.loading = false
           }
