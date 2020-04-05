@@ -10,11 +10,15 @@
             </div>
             <mat-divider></mat-divider>
             <h2 matSubheader>Tasks</h2>
-            <a mat-list-item (click)="addingMovie = !addingMovie; addingUser = false;">
+            <a mat-list-item (click)="addingMovie = false; addingUser = false;">
+                <mat-icon>home</mat-icon>
+                Home
+            </a>
+            <a mat-list-item (click)="addingMovie = true; addingUser = false;">
                 <mat-icon>movie</mat-icon>
                 Add Movie
             </a>
-            <a mat-list-item (click)="addingMovie = false; addingUser = !addingUser ;">
+            <a mat-list-item (click)="addingMovie = false; addingUser = true;">
                 <mat-icon>person</mat-icon>
                 Add User
             </a>

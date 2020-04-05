@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,15 +13,17 @@ import { DataService } from 'src/app/services/data/data.service';
 import { OrderComponent } from '../order/order.component';
 import { TrailerComponent } from '../trailer/trailer.component';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MovieDetailsComponent } from '../movie-details/movie-details.component';
+import { HotkeyService } from 'src/app/services/hotkeys/hotkey.service';
+import { Token } from 'src/app/enum/token';
 
 @Component({
     selector: "app-browse",
     templateUrl: "./browse.component.html",
     styleUrls: ["./browse.component.css"]
 })
-export class BrowseComponent implements OnInit {
+export class BrowseComponent implements OnInit, OnDestroy {
 
     public movies: Movie[];
     public searchedMovies: Movie[];
@@ -35,13 +37,15 @@ export class BrowseComponent implements OnInit {
 
     public title: string;
     public movie: Movie | undefined;
+    private subscriptions: Subscription[] = [];
 
     public constructor(
         protected snacks: MatSnackBar,
         protected router: Router,
         protected service: BrowseService,
         public data: DataService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private shortcuts: HotkeyService
     ) { 
     }
 
@@ -60,6 +64,17 @@ export class BrowseComponent implements OnInit {
                 map((state) => state ? this._filterStates(state) : this.titles.slice())
             );
             this.searchedMovies = this.movies;
+            this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'escape', description: 'Logging out' }).subscribe((event) => {
+                localStorage.setItem(Token.id, '');
+                this.router.navigate(['']);
+            }));
+        }
+    }
+
+    ngOnDestroy(): void {
+        for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
+            this.subscriptions[i].unsubscribe();
+            this.subscriptions.pop();
         }
     }
 
