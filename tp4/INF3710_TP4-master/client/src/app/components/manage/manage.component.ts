@@ -11,6 +11,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { HotkeyService } from 'src/app/services/hotkeys/hotkey.service';
 import { Subscription } from 'rxjs';
 import { Token } from 'src/app/enum/token';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-manage',
@@ -29,6 +30,7 @@ export class ManageComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) private paginator: MatPaginator;
   @ViewChild(MatSort) private sort: MatSort;
   @ViewChild(MatTable) private table: MatTable<any>;
+  @ViewChild(MatInput) private filter: MatInput;
 
   constructor(
     protected snacks: MatSnackBar,
@@ -68,6 +70,15 @@ export class ManageComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'escape', description: 'Logging out' }).subscribe((event) => {
         localStorage.setItem(Token.id, '');
         this.router.navigate(['']);
+      }));
+      this.subscriptions.push(this.shortcuts.addShortcut({ keys: '+', description: 'Show more movies' }).subscribe((event) => {
+        this.paginator._changePageSize(this.paginator.pageSize < 15 ? this.paginator.pageSize + 5 : this.paginator.pageSize);
+      }));
+      this.subscriptions.push(this.shortcuts.addShortcut({ keys: '-', description: 'Show less movies' }).subscribe((event) => {
+        this.paginator._changePageSize(this.paginator.pageSize > 5 ? this.paginator.pageSize - 5 : this.paginator.pageSize);
+      }));
+      this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'control.s', description: 'Filter movies' }).subscribe((event) => {
+        this.filter.focus();
       }));
     });
   }
