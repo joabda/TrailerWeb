@@ -33,14 +33,9 @@ SELECT *															-- Si plusieurs personnes ont le meme nombre, affiche les
 			FROM categoryCountByMember
 			GROUP BY category		
 	)
-	ORDER BY category
+	ORDER BY category;
 
--- SELECT category, firstName, lastName, COUNT(netflixpoly.Order.movieID) AS counter
--- 	FROM netflixpoly.Member, netflixpoly.Order, Movie
--- 	WHERE netflixpoly.Order.clientID = netflixpoly.Member.email
--- 	AND netflixpoly.Order.movieID = Movie.idMovie
--- 	GROUP BY category, firstName, lastName;
-
+	
 -- 4 Trouvez le nombre total de films groupés par réalisateur
 SELECT p.name, COUNT(m.idmovie) as numberOfMovies 
 	FROM netflixpoly.movie as m, netflixpoly.participant as p, netflixpoly.participation as ps
