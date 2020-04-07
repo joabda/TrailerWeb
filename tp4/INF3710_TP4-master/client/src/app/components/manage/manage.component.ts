@@ -77,7 +77,7 @@ export class ManageComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.shortcuts.addShortcut({ keys: '-', description: 'Show less movies' }).subscribe((event) => {
         this.paginator._changePageSize(this.paginator.pageSize > 5 ? this.paginator.pageSize - 5 : this.paginator.pageSize);
       }));
-      this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'control.s', description: 'Filter movies' }).subscribe((event) => {
+      this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'control.f', description: 'Filter movies' }).subscribe((event) => {
         this.filter.focus();
       }));
     });
