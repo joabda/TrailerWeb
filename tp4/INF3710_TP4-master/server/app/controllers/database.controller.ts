@@ -14,6 +14,7 @@ import { DatabaseService } from "../services/database.service";
 import Types from "../types";
 import { Participation } from "../interface/participation";
 import { Actor } from "../interface/actor";
+import { Nomination } from "../interface/nomination";
 
 @injectable()
 export class DatabaseController {
@@ -76,6 +77,25 @@ export class DatabaseController {
                         sex: participant.sex,
                     }));
                 res.json(participants);
+            }).catch((e: Error) => {
+                console.error(e.stack);
+                res.json(HTTP.Error);
+            });
+        });
+
+        router.get("/nominations", (req: Request, res: Response, next: NextFunction) => {
+            if (!this.isValid(req.header(TOKEN) as unknown as string)) {
+                res.json(HTTP.Unauthorized);
+            }
+            this.databaseService.getAllFromTable(Tables.Nomination).then((result: pg.QueryResult) => {
+                const nominations: Nomination[] = result.rows.map((nomination: any) => (
+                    {
+                        dateOfCeremony: nomination.dateofceremony,
+                        movieId: nomination.movieid,
+                        winner: nomination.winner,
+                        category: nomination.category,
+                    }));
+                res.json(nominations);
             }).catch((e: Error) => {
                 console.error(e.stack);
                 res.json(HTTP.Error);

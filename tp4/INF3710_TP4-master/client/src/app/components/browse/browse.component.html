@@ -1,19 +1,20 @@
 <app-toolbar id="toolbar"></app-toolbar>
 <div class="field">
-    <mat-form-field (keydown.enter)="searchMovie()">
+    <mat-form-field>
         <input
             matInput
             placeholder="Search for a movie"
             aria-label="title"
             [matAutocomplete]="auto"
             [formControl]="titleControl"
+            (input)="searchMovie()"
         >
         <mat-icon
             class="searchIcon"
             matSuffix
             (click)="searchMovie()"
         >search</mat-icon>
-        <mat-autocomplete #auto="matAutocomplete">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="searchMovie()">
             <mat-option
                 *ngFor="let title of filteredMovies | async"
                 [value]="title"

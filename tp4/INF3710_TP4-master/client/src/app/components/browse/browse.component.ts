@@ -183,7 +183,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
         return element.toLowerCase().startsWith(this.title);
     }
 
-    public searchMovie():void {
+    public searchMovie(): void {
+        console.log('yo');
         if (!this.titleControl.value || this.titleControl.value.length === 0) {
             this.searchedMovies = this.movies;
             this.titleControl.setValue("");
@@ -201,7 +202,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
         this.dialog.open(MovieDetailsComponent, {
             data: movie,
             width: "100%",
-            height: "800px"
+            height: "800px",
+            autoFocus: false
         });
     }
 }

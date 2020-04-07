@@ -1,32 +1,34 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Movie } from 'src/app/interfaces/movie';
-import { Participant } from 'src/app/interfaces/participant';
-import { Oscar } from 'src/app/interfaces/oscar';
-import { BrowseService } from 'src/app/services/browse/browse.service';
-import { Participation } from 'src/app/interfaces/participation';
+import { Component, Inject, OnInit } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Movie } from "src/app/interfaces/movie";
+import { Nomination } from "src/app/interfaces/nomination";
+import { Oscar } from "src/app/interfaces/oscar";
+import { Participant } from "src/app/interfaces/participant";
+import { Participation } from "src/app/interfaces/participation";
+import { BrowseService } from "src/app/services/browse/browse.service";
 
 export interface DatabaseParticipant {
-    id: number,
-    name: string,
-    dateOfbirth: string,
-    nationality: string,
-    sex: string,
+    id: number;
+    name: string;
+    dateOfbirth: string;
+    nationality: string;
+    sex: string;
 }
 
 @Component({
-    selector: 'app-movie-details',
-    templateUrl: './movie-details.component.html',
-    styleUrls: ['./movie-details.component.css']
+    selector: "app-movie-details",
+    templateUrl: "./movie-details.component.html",
+    styleUrls: ["./movie-details.component.css"]
 })
 export class MovieDetailsComponent implements OnInit {
-    movie: Movie;
-    databaseParticipant: DatabaseParticipant[];
-    participants: Participant[];
-    participations: Participation[];
-    oscars: Oscar[];
+    public movie: Movie;
+    public databaseParticipant: DatabaseParticipant[];
+    public participants: Participant[];
+    public participations: Participation[];
+    public nominations: Nomination[];
+    public oscars: Oscar[];
 
-    constructor(
+    public constructor(
         @Inject(MAT_DIALOG_DATA) data: Movie,
         private dialogRef: MatDialogRef<MovieDetailsComponent>,
         private browserService: BrowseService
@@ -34,18 +36,21 @@ export class MovieDetailsComponent implements OnInit {
         this.movie = data;
     }
 
-    async ngOnInit() {
+    public async ngOnInit(): Promise<void> {
         this.databaseParticipant = await this.browserService.getParticipants() as unknown as DatabaseParticipant[];
         this.participations = await this.browserService.getParticipations() as unknown as Participation[];
+        this.nominations = await this.browserService.getNominations() as unknown as Nomination[];
+        console.log(this.nominations);
         this.getAllParticipations();
         this.getAllParticipants();
+        this.getNominations();
     }
 
-    getAllParticipations(): void {
+    private getAllParticipations(): void {
         this.participations = this.participations.filter((participation) => participation.movieId === this.movie.id);
     }
 
-    getAllParticipants(): void {
+    private getAllParticipants(): void {
         this.participants = new Array();
         this.databaseParticipant.forEach((participant) => {
             this.participations.forEach((participation) => {
@@ -55,19 +60,25 @@ export class MovieDetailsComponent implements OnInit {
             });
         });
     }
-    createParticipant(participant: DatabaseParticipant, participation: Participation) {
+
+    private createParticipant(participant: DatabaseParticipant, participation: Participation): void {
         const res: Participant = {
             name: participant.name ,
             dateOfbirth: participant.dateOfbirth,
             nationality: participant.nationality,
             sex: participant.sex,
             role: participation.role,
-            salary: participation.salary  
-        }
+            salary: participation.salary
+        };
         this.participants.push(res);
     }
 
-    closeDialog(): void {
+    private getNominations(): void {
+        this.nominations = this.nominations.filter((nomination) => nomination.movieId === this.movie.id);
+        console.log(this.nominations);
+    }
+
+    public closeDialog(): void {
         this.dialogRef.close(true);
     }
 }

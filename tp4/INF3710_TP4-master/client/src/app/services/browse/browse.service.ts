@@ -8,6 +8,7 @@ import { Movie } from "src/app/interfaces/movie";
 import { OrderStreaming } from "src/app/interfaces/order-streaming";
 import { Participant } from "src/app/interfaces/participant";
 import { Participation } from "src/app/interfaces/participation";
+import { Nomination } from "src/app/interfaces/nomination";
 
 @Injectable({
     providedIn: "root"
@@ -27,7 +28,7 @@ export class BrowseService {
 
     public async getParticipants(): Promise<Participant[] | boolean> {
         return (
-            this.http.get<Participant[]>(`${API_URL}participant`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+            this.http.get<Participant[]>(`${API_URL}participants`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
                 .toPromise()
                 .catch(() => false)
         );
@@ -41,13 +42,21 @@ export class BrowseService {
         );
     }
 
+    public async getNominations(): Promise<Nomination[] | boolean> {
+        return (
+            this.http.get<Nomination[]>(`${API_URL}nominations`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+                .toPromise()
+                .catch(() => false)
+        );
+    }
+
     public isOrdered(id: number): Observable<number> {
         return (
             this.http.post<any>(`${API_URL}order/validation`,
-                                { id: id },
-                                {
+                { id: id },
+                {
                     headers: new HttpHeaders().set("Authorization",
-                                                   localStorage.getItem(Token.id) as unknown as string)
+                        localStorage.getItem(Token.id) as unknown as string)
                 }
             )
         );
@@ -56,9 +65,9 @@ export class BrowseService {
     public creditCards(): Observable<CreditCard[]> {
         return (
             this.http.get<CreditCard[]>(`${API_URL}creditcards`,
-                                        {
+                {
                     headers: new HttpHeaders().set("Authorization",
-                                                   localStorage.getItem(Token.id) as unknown as string)
+                        localStorage.getItem(Token.id) as unknown as string)
                 }
             )
         );
@@ -73,7 +82,7 @@ export class BrowseService {
             },
             {
                 headers: new HttpHeaders().set("Authorization",
-                                               localStorage.getItem(Token.id) as unknown as string)
+                    localStorage.getItem(Token.id) as unknown as string)
             }
         )
             .toPromise()
@@ -91,7 +100,7 @@ export class BrowseService {
             },
             {
                 headers: new HttpHeaders().set("Authorization",
-                                               localStorage.getItem(Token.id) as unknown as string)
+                    localStorage.getItem(Token.id) as unknown as string)
             }
         )
             .toPromise()

@@ -1,16 +1,36 @@
-<h1>{{movie.title}}</h1>  
-<h2><strong>Category : </strong>{{movie.category}}</h2> 
-<h2><strong>Production date : </strong>{{movie.productionDate | date:"mediumDate"}}</h2> 
-<h2><strong>Duration : </strong>{{movie.duration}} minutes</h2> 
-<h2><strong>DVD price : </strong>{{movie.dvdPrice}} $</h2> 
-<h2><strong>Streaming fee : </strong>{{movie.streamingFee}} $</h2> 
-<br/>
-<h3>Participants</h3> 
-<mat-card *ngFor="let res of participants">
-    <h4>{{res.name}}</h4>
-    <h4>{{res.dateOfbirth}}</h4>
-    <h4>{{res.nationality}}</h4>
-    <h4>{{res.sex}}</h4>
-    <h4>{{res.role}}</h4>
-    <h4>{{res.salary}}</h4>
-</mat-card>
+<h1>{{movie.title}}</h1>
+<h2><strong>Category : </strong>{{movie.category}}</h2>
+<h2><strong>Production date : </strong>{{movie.productionDate | date:"mediumDate"}}</h2>
+<h2><strong>Duration : </strong>{{movie.duration}} minutes</h2>
+<h2><strong>DVD price : </strong>{{movie.dvdPrice}} $</h2>
+<h2><strong>Streaming fee : </strong>{{movie.streamingFee}} $</h2>
+<h2><strong>Ocars nominations : </strong></h2>
+<div class="box">
+    <mat-card *ngFor="let nomi of nominations">
+        <h4><strong>Date : </strong>{{nomi.dateOfCeremony | date:"mediumDate"}}</h4>
+        <h4><strong>Category : </strong>{{nomi.category}}</h4>
+        <h4><strong>Winner : </strong>{{nomi.winner ? 'yes' : 'no'}}</h4>
+    </mat-card>
+</div>
+<br />
+<h2><strong>Participants : </strong></h2>
+<div class="box">
+    <mat-card *ngFor="let res of participants">
+        <mat-card-header>
+            <mat-card-title>{{res.name}}</mat-card-title>
+            <mat-card-subtitle>{{res.dateOfbirth | date:"mediumDate"}}</mat-card-subtitle>
+        </mat-card-header>
+        <h4><strong>Sex : </strong>{{res.sex}}</h4>
+        <h4><strong>Nationality : </strong>{{res.nationality}}</h4>
+        <h4><strong>Role : </strong>{{res.role}}</h4>
+        <h4><strong>Salary : </strong>{{res.salary}} $</h4>
+    </mat-card>
+</div>
+
+<button
+    mat-mini-fab
+    class="buttonClose"
+    (click)="closeDialog()"
+>
+    <mat-icon>clear</mat-icon>
+</button>
