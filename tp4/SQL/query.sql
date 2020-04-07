@@ -33,14 +33,9 @@ SELECT *															-- Si plusieurs personnes ont le meme nombre, affiche les
 			FROM categoryCountByMember
 			GROUP BY category		
 	)
-	ORDER BY category
+	ORDER BY category;
 
--- SELECT category, firstName, lastName, COUNT(netflixpoly.Order.movieID) AS counter
--- 	FROM netflixpoly.Member, netflixpoly.Order, Movie
--- 	WHERE netflixpoly.Order.clientID = netflixpoly.Member.email
--- 	AND netflixpoly.Order.movieID = Movie.idMovie
--- 	GROUP BY category, firstName, lastName;
-
+	
 -- 4 Trouvez le nombre total de films groupés par réalisateur
 SELECT p.name, COUNT(m.idmovie) as numberOfMovies 
 	FROM netflixpoly.movie as m, netflixpoly.participant as p, netflixpoly.participation as ps
@@ -50,17 +45,47 @@ SELECT p.name, COUNT(m.idmovie) as numberOfMovies
 	GROUP BY p.idparticipant;
 
 -- 5 Trouvez les noms des membres dont le coût total d’achat de DVD est plus élevé que la moyenne
--- SELECT firstName, lastName, SUM()
+DROP VIEW dvdTotal;
+CREATE VIEW dvdTotal AS
+SELECT clientid, dvdid, idmovie, (dvdprice + shippingfee) AS total_price, dateorder
+FROM orderdvd, netflixpoly.order as o, movie
+WHERE orderdvd.idorder = o.idorder
+AND o.movieid = movie.idmovie;
 
+SELECT DISTINCT m.firstname, m.lastname 
+FROM Member m, dvdTotal c, orderdvd d
+WHERE m.email = c.clientid AND c.dvdid = d.dvdid
+AND (
+	SELECT SUM(total_price) 
+	FROM dvdTotal
+) > ( 
+		(
+			SELECT SUM(total_price) 
+			FROM dvdTotal
+		) / (
+			SELECT COUNT(DISTINCT email) 
+			FROM Member
+		)
+);
 
 -- 6 Ordonnez et retournez les films en termes de quantité totale vendue (DVD) et en nombre de visionnements
--- 	SELECT title, COUNT(Streaming.idOrder) as nbVisionnement--, COUNT(OrderDVD.idOrder) as totalVendu
--- 		FROM Movie, Streaming, OrderDVD, netflixpoly.Order
--- 		WHERE netflixpoly.Order.idOrder = Streaming.idOrder
--- 		--OR netflixpoly.Order.idOrder = OrderDVD.idOrder
--- 		AND Movie.idMovie = netflixpoly.Order.movieId
--- 		GROUP By Movie.idMovie
--- 		ORDER BY title;
+SELECT title,
+(
+	SELECT COUNT(*) 
+	FROM Movie, Streaming, netflixpoly.Order as o
+	WHERE o.movieid = movie.idmovie
+	AND o.idorder = streaming.idorder
+	AND o.movieid = m.idmovie
+) AS numberOfView,
+(
+	SELECT COUNT(*) 
+	FROM Movie, orderdvd, netflixpoly.Order as o
+	WHERE o.movieid = movie.idmovie
+	AND o.idorder = orderdvd.idorder
+	AND o.movieid = m.idmovie
+) AS numberOfSale
+FROM Movie m
+ORDER BY numberOfSale, numberOfView;
 
 -- 7 Trouvez le titre et le prix des films qui n’ont jamais été commandés sous forme de DVD mais qui ont été visionnés plus de 10 fois
 SELECT title
