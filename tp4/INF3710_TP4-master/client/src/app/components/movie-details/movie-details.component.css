@@ -1,0 +1,22 @@
+.box {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+mat-card {
+    background-color: rgb(145, 145, 145);
+    width: 22%;
+    margin: 1%;
+    height: 20%;
+}
+
+.buttonClose {
+    position: absolute;
+    right: 12%;
+    top: 12%;
+    background-color: grey;
+}
+
+.nominations {
+    float: left;
+}
