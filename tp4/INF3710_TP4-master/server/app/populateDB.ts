@@ -1,7 +1,7 @@
 export const DATA: string = `
 SET search_path = netflixpoly;
 -- Enables pgcrypto
-DROP EXTENSION pgcrypto;
+DROP EXTENSION IF EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS pgcrypto; 
 
 -- Administrators 
@@ -180,4 +180,4 @@ INSERT INTO NETFLIXPOLY.Nomination VALUES ('2019-02-24', 7, false, 'Action');
 INSERT INTO NETFLIXPOLY.Nomination VALUES ('2019-02-24', 5, false, 'Drama');
 INSERT INTO NETFLIXPOLY.Nomination VALUES ('2018-03-04', 9, true,  'Foreign');
 INSERT INTO NETFLIXPOLY.Nomination VALUES ('2018-03-04', 4, true,  'Thriller');
-;`;
+`;
