@@ -47,7 +47,6 @@ export class MovieDetailsComponent implements OnInit {
         this.databaseParticipant = await this.browserService.getParticipants() as unknown as DatabaseParticipant[];
         this.participations = await this.browserService.getParticipations() as unknown as Participation[];
         this.nominations = await this.browserService.getNominations() as unknown as Nomination[];
-        console.log(this.nominations);
         this.getAllParticipations();
         this.getAllParticipants();
         this.getNominations();
@@ -82,7 +81,6 @@ export class MovieDetailsComponent implements OnInit {
 
     private getNominations(): void {
         this.nominations = this.nominations.filter((nomination) => nomination.movieId === this.movie.id);
-        console.log(this.nominations);
     }
 
     public async onClick(event: MatButton, type: OrderType): Promise<void> {

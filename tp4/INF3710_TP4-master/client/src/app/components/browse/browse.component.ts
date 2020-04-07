@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatButton } from "@angular/material/button";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -17,6 +17,7 @@ import { HotkeyService } from "src/app/services/hotkeys/hotkey.service";
 import { MovieDetailsComponent } from "../movie-details/movie-details.component";
 import { OrderComponent } from "../order/order.component";
 import { TrailerComponent } from "../trailer/trailer.component";
+import { MatInput } from "@angular/material/input";
 
 @Component({
     selector: "app-browse",
@@ -33,11 +34,11 @@ export class BrowseComponent implements OnInit, OnDestroy {
 
     public filteredMovies: Observable<string[]>;
     public titles: string[];
-    // public categories: Category[];
 
     public title: string;
     public movie: Movie | undefined;
     private subscriptions: Subscription[] = [];
+    @ViewChild(MatInput) private filter: MatInput;
 
     public constructor(
         protected snacks: MatSnackBar,
@@ -49,7 +50,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    async ngOnInit() {
+    async ngOnInit(): Promise<void> {
         const result = await this.service.getMovies();
         if (result.valueOf() === false) {
             this.openSnack("Please Sign In First");
@@ -59,16 +60,19 @@ export class BrowseComponent implements OnInit, OnDestroy {
             this.movies = result as unknown as Movie[];
             this.titles = this.data.getTitles();
             this.filteredMovies = this.titleControl.valueChanges
-            .pipe(
-                startWith(""),
-                map((state) => state ? this._filterStates(state) : this.titles.slice())
-            );
+                .pipe(
+                    startWith(""),
+                    map((state) => state ? this._filterStates(state) : this.titles.slice())
+                );
             this.searchedMovies = this.movies;
             this.subscriptions.push(this.shortcuts.addShortcut({ keys: "escape", description: "Logging out" }).subscribe((event) => {
                 localStorage.setItem(Token.id, "");
                 this.router.navigate([""]);
             }));
         }
+        this.subscriptions.push(this.shortcuts.addShortcut({ keys: "control.f", description: "Filter movies" }).subscribe((_event) => {
+            this.filter.focus();
+        }));
     }
 
     public ngOnDestroy(): void {
@@ -117,7 +121,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
                                 dateOfOrder: new Date()
                             });
                         } else {
-                            this.service.orderMovieDVD( movie.id, new Date());
+                            this.service.orderMovieDVD(movie.id, new Date());
                         }
                     }
                 });
@@ -157,7 +161,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
         });
     }
 
-    private openSnack(message: string) {
+    private openSnack(message: string): void {
         this.snacks.open(
             message,
             "",
@@ -179,12 +183,11 @@ export class BrowseComponent implements OnInit, OnDestroy {
         return undefined;
     }
 
-    private filteTitles(element: string) {
+    private filteTitles(element: string): boolean {
         return element.toLowerCase().startsWith(this.title);
     }
 
     public searchMovie(): void {
-        console.log("yo");
         if (!this.titleControl.value || this.titleControl.value.length === 0) {
             this.searchedMovies = this.movies;
             this.titleControl.setValue("");
@@ -192,10 +195,10 @@ export class BrowseComponent implements OnInit, OnDestroy {
 
             return;
         }
-        const searchTitles = this.titles.filter((element) => this.filteTitles(element));
+        const searchTitles: string[] = this.titles.filter((element) => this.filteTitles(element));
         this.searchedMovies = new Array();
         for (const title of searchTitles) {
-            this.searchedMovies.push(this.movies.find((movie) =>  movie.title === title) as Movie);
+            this.searchedMovies.push(this.movies.find((movie) => movie.title === title) as Movie);
         }
     }
 

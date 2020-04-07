@@ -113,7 +113,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     }
 
     private filterMoviesShortcut(): void {
-        this.subscriptions.push(this.shortcuts.addShortcut({ keys: "control.s", description: "Filter movies" }).subscribe((_event) => {
+        this.subscriptions.push(this.shortcuts.addShortcut({ keys: "control.f", description: "Filter movies" }).subscribe((_event) => {
             this.filter.focus();
         }));
     }

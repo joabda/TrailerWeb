@@ -5,6 +5,7 @@ import { API_URL } from "src/app/classes/constants";
 import { HTTP } from "src/app/enum/http-codes";
 import { Token } from "src/app/enum/token";
 import { Logins } from "src/app/interfaces/logins";
+import { Observable, concat } from "rxjs";
 
 @Injectable({
     providedIn: "root"
@@ -47,7 +48,8 @@ export class SignInService {
         localStorage.setItem(Token.admin, authResult.admin);
     }
 
-    /*private createAndPopulateDB(): Promise<any> {
-        // To implement
-    }*/
+    public createAndPopulateDB(): Observable<any> {
+        return concat(this.http.post<any>(`${API_URL}createSchema`, []),
+                      this.http.post<any>(`${API_URL}populateDb`, []));
+    }
 }

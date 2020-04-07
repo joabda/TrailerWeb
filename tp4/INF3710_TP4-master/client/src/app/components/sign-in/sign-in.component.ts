@@ -49,4 +49,10 @@ export class SignInComponent {
             );
         }
     }
+
+    public creatAndPopulateDB(): void { // Observable<any> {
+        this.service.createAndPopulateDB().subscribe((res: any) => {
+            console.log(res);
+        });
+    }
 }
