@@ -65,6 +65,13 @@ export class ManageComponent implements OnInit, OnDestroy {
         });
     }
 
+    public ngOnDestroy(): void {
+        for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
+          this.subscriptions[i].unsubscribe();
+          this.subscriptions.pop();
+        }
+    }
+
     private addMovieShortcut(): void {
         this.subscriptions.push(this.shortcuts.addShortcut({ keys: "control.m", description: "Add a movie" }).subscribe((_event) => {
             this.addingMovie = true;
@@ -109,13 +116,6 @@ export class ManageComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this.shortcuts.addShortcut({ keys: "control.s", description: "Filter movies" }).subscribe((_event) => {
             this.filter.focus();
         }));
-    }
-
-    public ngOnDestroy(): void {
-        for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
-            this.subscriptions[i].unsubscribe();
-            this.subscriptions.pop();
-        }
     }
 
     public deleteMovie(id: number, title: string): void {
