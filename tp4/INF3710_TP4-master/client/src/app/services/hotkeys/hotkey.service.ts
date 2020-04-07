@@ -1,9 +1,9 @@
 // Re-used from Log2990 project with the approval of all concerned parties
 
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
-import { EventManager } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
+import { DOCUMENT } from "@angular/common";
+import { Inject, Injectable } from "@angular/core";
+import { EventManager } from "@angular/platform-browser";
+import { Observable } from "rxjs";
 
 interface Options {
   // tslint:disable-next-line: no-any | Reason : Creates an error with typedef HTMLElement
@@ -13,21 +13,21 @@ interface Options {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 
 export class HotkeyService {
 
-    defaults: Partial<Options> = {
+    public defaults: Partial<Options> = {
       element: this.document
     };
 
-    constructor(
+    public constructor(
       public eventManager: EventManager,
       @Inject(DOCUMENT) private document: Document) {
     }
 
-    addShortcut(options: Partial<Options>): Observable<Event> {
+    public addShortcut(options: Partial<Options>): Observable<Event> {
       const merged = { ...this.defaults, ...options };
       const event = `keydown.${merged.keys}`;
 
@@ -40,6 +40,7 @@ export class HotkeyService {
           const dispose = this.eventManager.addEventListener(
             merged.element, event, handler
           );
+
           return () => {
             dispose();
           };

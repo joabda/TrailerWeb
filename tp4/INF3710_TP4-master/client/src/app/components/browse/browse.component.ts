@@ -1,22 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { filter, startWith, map } from 'rxjs/operators';
-import { TITLE } from 'src/app/classes/constants';
-import { OrderType } from 'src/app/enum/order-type';
-import { CreditCard } from 'src/app/interfaces/cc';
-import { Movie } from 'src/app/interfaces/movie';
-import { BrowseService } from 'src/app/services/browse/browse.service';
-import { DataService } from 'src/app/services/data/data.service';
-import { OrderComponent } from '../order/order.component';
-import { TrailerComponent } from '../trailer/trailer.component';
-import { FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { MovieDetailsComponent } from '../movie-details/movie-details.component';
-import { HotkeyService } from 'src/app/services/hotkeys/hotkey.service';
-import { Token } from 'src/app/enum/token';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { MatButton } from "@angular/material/button";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { Observable, Subscription } from "rxjs";
+import { filter, map, startWith } from "rxjs/operators";
+import { TITLE } from "src/app/classes/constants";
+import { OrderType } from "src/app/enum/order-type";
+import { Token } from "src/app/enum/token";
+import { CreditCard } from "src/app/interfaces/cc";
+import { Movie } from "src/app/interfaces/movie";
+import { BrowseService } from "src/app/services/browse/browse.service";
+import { DataService } from "src/app/services/data/data.service";
+import { HotkeyService } from "src/app/services/hotkeys/hotkey.service";
+import { MovieDetailsComponent } from "../movie-details/movie-details.component";
+import { OrderComponent } from "../order/order.component";
+import { TrailerComponent } from "../trailer/trailer.component";
 
 @Component({
     selector: "app-browse",
@@ -45,8 +45,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
         protected service: BrowseService,
         public data: DataService,
         public dialog: MatDialog,
-        private shortcuts: HotkeyService
-    ) { 
+        public shortcuts: HotkeyService
+    ) {
     }
 
     async ngOnInit() {
@@ -64,14 +64,14 @@ export class BrowseComponent implements OnInit, OnDestroy {
                 map((state) => state ? this._filterStates(state) : this.titles.slice())
             );
             this.searchedMovies = this.movies;
-            this.subscriptions.push(this.shortcuts.addShortcut({ keys: 'escape', description: 'Logging out' }).subscribe((event) => {
-                localStorage.setItem(Token.id, '');
-                this.router.navigate(['']);
+            this.subscriptions.push(this.shortcuts.addShortcut({ keys: "escape", description: "Logging out" }).subscribe((event) => {
+                localStorage.setItem(Token.id, "");
+                this.router.navigate([""]);
             }));
         }
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
             this.subscriptions[i].unsubscribe();
             this.subscriptions.pop();
@@ -184,16 +184,17 @@ export class BrowseComponent implements OnInit, OnDestroy {
     }
 
     public searchMovie(): void {
-        console.log('yo');
+        console.log("yo");
         if (!this.titleControl.value || this.titleControl.value.length === 0) {
             this.searchedMovies = this.movies;
             this.titleControl.setValue("");
             this.title = "";
+
             return;
         }
         const searchTitles = this.titles.filter((element) => this.filteTitles(element));
         this.searchedMovies = new Array();
-        for (let title of searchTitles) {
+        for (const title of searchTitles) {
             this.searchedMovies.push(this.movies.find((movie) =>  movie.title === title) as Movie);
         }
     }
@@ -201,7 +202,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     public displayInfos(movie: Movie): void {
         this.dialog.open(MovieDetailsComponent, {
             data: movie,
-            width: "100%",
+            width: "50%",
             height: "800px",
             autoFocus: false
         });

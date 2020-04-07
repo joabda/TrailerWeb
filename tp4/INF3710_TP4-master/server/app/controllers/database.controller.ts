@@ -6,15 +6,15 @@ import * as pg from "pg";
 import { TOKEN } from "../constants";
 import { HTTP } from "../enum/http-codes";
 import { Tables } from "../enum/tables";
+import { Actor } from "../interface/actor";
 import { CreditCard } from "../interface/cc";
 import { Movie } from "../interface/movie";
+import { Nomination } from "../interface/nomination";
 import { Participant } from "../interface/participant";
+import { Participation } from "../interface/participation";
 import { Token } from "../interface/token";
 import { DatabaseService } from "../services/database.service";
 import Types from "../types";
-import { Participation } from "../interface/participation";
-import { Actor } from "../interface/actor";
-import { Nomination } from "../interface/nomination";
 
 @injectable()
 export class DatabaseController {
@@ -326,7 +326,7 @@ export class DatabaseController {
         });
 
         router.post("/participants/insert",
-            (req: Request, res: Response, next: NextFunction) => {
+                    (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (!this.isValid(tokenString)) {
                     res.json(HTTP.Unauthorized);
@@ -377,7 +377,7 @@ export class DatabaseController {
         });
 
         router.post("/users/insert",
-            (req: Request, res: Response, next: NextFunction) => {
+                    (req: Request, res: Response, next: NextFunction) => {
                 const tokenString = req.header(TOKEN) as unknown as string;
                 if (!this.isValid(tokenString)) {
                     res.json(HTTP.Unauthorized);

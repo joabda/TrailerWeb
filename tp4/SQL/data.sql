@@ -1,6 +1,6 @@
 SET search_path = netflixpoly;
 -- Enables pgcrypto
-DROP EXTENSION pgcrypto;
+DROP EXTENSION IF EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS pgcrypto; 
 
 -- Administrators 
