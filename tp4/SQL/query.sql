@@ -18,8 +18,8 @@ SELECT category, title, MAX(dateOrder) AS lastViewing
 -- 3 Pour chaque genre de film, trouvez les noms et courriels des membres qui les ont téléchargés le  plus  souvent.  
 -- Par  exemple,  Amal  Z  est  le  membre  qui  a  téléchargé  le  plus  de documentaires animaliers
 DROP VIEW IF EXISTS categoryCountByMember;
-CREATE VIEW categoryCountByMember									 -- Obtenir le nb de films regardé par personne par cat
-	AS SELECT firstName, lastName, category, COUNT(title)
+CREATE VIEW categoryCountByMember									 -- Obtenir le nb de films regardé par personne par catégorie
+	AS SELECT firstName, lastName, email, category, COUNT(title)
 		FROM Movie, netflixpoly.Order, streaming, netflixpoly.Member
 		WHERE netflixpoly.Order.idOrder = streaming.idOrder 
 		AND netflixpoly.Order.clientID = netflixpoly.Member.email
@@ -109,10 +109,11 @@ CREATE VIEW mostViewedMovies
 		AND streaming.idorder = netflixpoly.Order.idorder
 		GROUP BY title, idMovie;
 		
-SELECT name, dateOfBirth, title --On garde l'age ou on en deduit l'année de naissance ?
+SELECT name, dateOfBirth, title
 	FROM Participant, Participation, mostViewedMovies
 	WHERE mostViewedMovies.idMovie = Participation.movieID
 	AND Participation.participantID = Participant.idParticipant
+	AND Participation.role = 'Actor'
 	AND mostViewedMovies.count >= (SELECT AVG(mostViewedMovies.count) FROM mostViewedMovies);
 	
 
@@ -124,12 +125,12 @@ CREATE VIEW nominationCount
 		WHERE Movie.idmovie = Nomination.movieid
 		GROUP BY title, idMovie;
 
-SELECT name, title
+SELECT name, title, nominationCount.count
 	FROM Participant, Participation, nominationCount
 	WHERE nominationCount.idMovie = Participation.movieID
 	AND Participation.participantID = Participant.idParticipant
 	AND Participation.role = 'Producer'
-	AND nominationCount.count >= (SELECT AVG(nominationCount.count) FROM nominationCount);
+	AND nominationCount.count >= (SELECT MAX(nominationCount.count) FROM nominationCount);
 
 -- 10 Trouvez le nom des réalisateurs qui ont été le plus souvent nominés aux oscars mais qui n’ont jamais gagné d’oscar
 DROP VIEW IF EXISTS nominationWithoutWinCount;
@@ -156,7 +157,7 @@ CREATE VIEW nominationWinCount
 		AND Nomination.winner = true
 		GROUP BY title, idMovie;
 
-SELECT title,  productionDate, name, count AS nbOscars
+SELECT title,  productionDate, name as participant, count AS nbOscars
 	FROM Participant, Participation, nominationWinCount
 	WHERE nominationWinCount.idMovie = Participation.movieID
 	AND Participation.participantID = Participant.idParticipant

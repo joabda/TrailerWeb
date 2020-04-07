@@ -80,14 +80,15 @@ INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email5@gmail.com', 10, '2019-05-
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email7@gmail.com', 10, '2019-04-24'); -- 27
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email4@gmail.com', 10, '2019-03-24'); -- 28
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email7@gmail.com', 10, '2019-02-24'); -- 29
+INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 5,  '2019-04-24'); -- 30 ----
+INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email5@gmail.com', 5,  '2019-03-24'); -- 31
+INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email3@gmail.com', 5,  '2019-02-24'); -- 32
 
--- IDs des deux tables susivantes reliés au IDs des orders
--- DVDid, comment on le relie à un film en particulier ?
 -- Order DVD
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (1, 2, 666); -- 666 temproraires
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (2, 1, 666); -- frais a calculer en fonction de la distance
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (3, 5, 666);
-INSERT INTO NETFLIXPOLY.OrderDVD VALUES (4, 7, 666); -- DVD IDs a changer
+INSERT INTO NETFLIXPOLY.OrderDVD VALUES (4, 7, 666);
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666); 
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666); 
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (7, 2, 666);
@@ -114,6 +115,9 @@ INSERT INTO NETFLIXPOLY.Streaming VALUES (26, 2.00);
 INSERT INTO NETFLIXPOLY.Streaming VALUES (27, 2.00);
 INSERT INTO NETFLIXPOLY.Streaming VALUES (28, 2.00);
 INSERT INTO NETFLIXPOLY.Streaming VALUES (29, 2.00);
+INSERT INTO NETFLIXPOLY.Streaming VALUES (30, 0.02); --
+INSERT INTO NETFLIXPOLY.Streaming VALUES (31, 0.02);
+INSERT INTO NETFLIXPOLY.Streaming VALUES (32, 0.02);
 
 -- Participant
 SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Participant', 'idparticipant')), 1, false);
