@@ -12,6 +12,7 @@ import { Participation } from "src/app/interfaces/participation";
 import { BrowseService } from "src/app/services/browse/browse.service";
 import { OrderComponent } from "../order/order.component";
 import { TrailerComponent } from "../trailer/trailer.component";
+import { HTTP } from "src/app/enum/http-codes";
 
 export interface DatabaseParticipant {
     id: number;
@@ -84,8 +85,8 @@ export class MovieDetailsComponent implements OnInit {
     }
 
     public async onClick(event: MatButton, type: OrderType): Promise<void> {
-        this.browserService.isOrdered(this.movie.id).subscribe(async (res) => {
-            if (res !== null && res.valueOf() != -1) {
+        this.browserService.isOrdered(this.movie.id, 'streaming').subscribe(async (res) => {
+            if (res !== null && res.valueOf() != HTTP.Error) {
                 this.playMovie(this.movie, (res as any).stoppedat, (res as any).idorder);
             } else {
                 this.orderMovie(this.movie, type);

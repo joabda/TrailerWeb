@@ -91,3 +91,7 @@ export const DEFAULT_CEREMONY = {
     winner      :   false,
     category    :   NominationCategory.None
 }
+
+export const POLYTECHNIQUE_POSTAL_CODE = 'H3T1J4';
+
+export const MAPS_API_KEY = 'AIzaSyBwnIPWbcvxyKd0inqjMZZocyCIDUKPGkE';

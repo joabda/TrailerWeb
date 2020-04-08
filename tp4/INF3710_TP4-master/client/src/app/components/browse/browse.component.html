@@ -52,12 +52,13 @@
                 mat-button
                 #play
                 title={{movie.title}}
-                (click)="onClick(play, 1)"
+                (click)="onClickStream(play)"
             >Play</button>
             <button
                 mat-button
+                #buy
                 title={{movie.title}}
-                (click)="onClick(play, 0)"
+                (click)="onClickBuy(buy)"
             >Buy DVD</button>
         </mat-card-actions>
     </mat-card>

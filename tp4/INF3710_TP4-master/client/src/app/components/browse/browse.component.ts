@@ -18,6 +18,8 @@ import { MovieDetailsComponent } from "../movie-details/movie-details.component"
 import { OrderComponent } from "../order/order.component";
 import { TrailerComponent } from "../trailer/trailer.component";
 import { MatInput } from "@angular/material/input";
+import { ConfirmationDialogService } from "src/app/services/confirmation-dialog/confirmation-dialog.service";
+import { HTTP } from "src/app/enum/http-codes";
 
 @Component({
     selector: "app-browse",
@@ -46,7 +48,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
         protected service: BrowseService,
         public data: DataService,
         public dialog: MatDialog,
-        public shortcuts: HotkeyService
+        public shortcuts: HotkeyService,
+        private confirmation: ConfirmationDialogService
     ) {
     }
 
@@ -75,7 +78,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public ngOnDestroy(): void {
+    ngOnDestroy(): void {
         for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
             this.subscriptions[i].unsubscribe();
             this.subscriptions.pop();
@@ -89,17 +92,17 @@ export class BrowseComponent implements OnInit, OnDestroy {
         return this.titles.filter((title) => title.toLowerCase().indexOf(filterValue) === 0);
     }
 
-    public async onClick(event: MatButton, type: OrderType): Promise<void> {
+    async onClickStream(event: MatButton): Promise<void> {
         const movie = this.findMovie(
             (event._elementRef.nativeElement as HTMLButtonElement)
                 .getAttribute(TITLE) as unknown as string
         );
         if (movie !== undefined) {
-            this.service.isOrdered(movie.id).subscribe(async (res) => {
+            this.service.isOrdered(movie.id, 'streaming').subscribe(async (res) => {
                 if (res !== null && res.valueOf() != -1) {
                     this.playMovie(movie, (res as any).stoppedat, (res as any).idorder);
                 } else {
-                    this.orderMovie(movie, type);
+                    this.orderMovie(movie, OrderType.Streaming);
                 }
             });
         } else {
@@ -107,10 +110,34 @@ export class BrowseComponent implements OnInit, OnDestroy {
         }
     }
 
+    async onClickBuy(event: MatButton): Promise<void> {
+        const movie = this.findMovie(
+            (event._elementRef.nativeElement as HTMLButtonElement)
+                .getAttribute(TITLE) as unknown as string
+        );
+        if (movie !== undefined) {
+            this.service.isOrdered(movie.id, 'dvd').subscribe( res => {
+                if (res !== null && res.valueOf() != HTTP.Error) {
+                    this.confirmation.confirm("You already ordered this movie as DVD", `Are you sure you want to order it again?`)
+                    .then((confirmation) => {
+                        if (confirmation) {
+                            this.orderMovie(movie, OrderType.DVD);
+                        }
+                    });
+                } else {
+                    this.orderMovie(movie, OrderType.DVD);
+                } 
+            });
+        } else {
+            this.openSnack("Sorry your movie couldn't be found");
+        }
+    }
+
     private orderMovie(movie: Movie, type: OrderType): void {
-        this.service.creditCards().subscribe((res) => {
+        this.service.creditCards().subscribe(async (res) => {
             if (res !== null) {
-                const reference = this.openOrderDialog(movie.title, res);
+                await this.service.getDistance();
+                const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : 10);
                 reference.afterClosed().pipe(
                     filter((stopTime) => stopTime)
                 ).subscribe((stopTime) => {
@@ -129,11 +156,13 @@ export class BrowseComponent implements OnInit, OnDestroy {
         });
     }
 
-    private openOrderDialog(title: string, ccs: CreditCard[]): MatDialogRef<OrderComponent> {
+    private openOrderDialog(title: string, ccs: CreditCard[], price: number, shipping: number = 0): MatDialogRef<OrderComponent> {
         return this.dialog.open(OrderComponent, {
             data: {
                 title: title,
-                cc: ccs
+                cc: ccs,
+                price: price,
+                shipping: shipping 
             }
         });
     }
@@ -179,7 +208,6 @@ export class BrowseComponent implements OnInit, OnDestroy {
                 return element;
             }
         }
-
         return undefined;
     }
 

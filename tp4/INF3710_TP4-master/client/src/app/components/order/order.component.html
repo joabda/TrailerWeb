@@ -33,6 +33,14 @@
                   alt="ccv input" [(ngModel)]='ccv'></textarea>
               </li>
             </ul>
+            <ul class="order-elements">
+              <li><label>Price: {{data.price}}$</label></li>
+            </ul>
+            <ul class="order-elements">
+              <ul class="order-elements">
+                <li><label>Shipping Fee: {{data.shipping}}$</label></li>
+              </ul>
+            </ul>
           </form>
         </div>
       </li>

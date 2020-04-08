@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: 'tp4',
+        database: 'postgres',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -84,6 +84,15 @@ export class DatabaseService {
         `);
     }
 
+    public async getPostalCode(email: string): Promise<pg.QueryResult> {
+        console.log('in postal')
+        return this.pool.query(`
+            SELECT postalcode
+            FROM ${DB_NAME}.${Tables.M}
+            WHERE email = '${email}';
+        `);
+    }
+
     public async deleteMovie(id: number): Promise<pg.QueryResult> {
         await this.pool.query(`DELETE FROM ${DB_NAME}.${Tables.Nomination} WHERE movieid = ${id};`);
         await this.pool.query(`DELETE FROM ${DB_NAME}.${Tables.Participation} WHERE movieid = ${id};`);
@@ -118,7 +127,7 @@ export class DatabaseService {
         `);
     }
 
-    public async validateOrder(movieid: number, user: string): Promise<pg.QueryResult> {
+    public async validateOrderStream(movieid: number, user: string): Promise<pg.QueryResult> {
         return this.pool.query(`
             SELECT *
             FROM ${DB_NAME}.${Tables.OStream}
@@ -127,8 +136,20 @@ export class DatabaseService {
                 FROM ${DB_NAME}.${Tables.Order}
                 WHERE movieid = ${movieid}
                 AND clientid = '${user}'
-            );
-            `
+            );`
+        );
+    }
+
+    public async validateOrderDVD(movieid: number, user: string): Promise<pg.QueryResult> {
+        return this.pool.query(`
+            SELECT *
+            FROM ${DB_NAME}.${Tables.ODVD}
+            WHERE idorder = (
+                SELECT DISTINCT idorder
+                FROM ${DB_NAME}.${Tables.Order}
+                WHERE movieid = ${movieid}
+                AND clientid = '${user}'
+            );`
         );
     }
 

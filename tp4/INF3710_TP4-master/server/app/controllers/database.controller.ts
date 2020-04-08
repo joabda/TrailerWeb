@@ -222,21 +222,39 @@ export class DatabaseController {
             });
         });
 
-        router.post("/order/validation", (req: Request, res: Response, next: NextFunction) => {
+        router.post("/order/streaming/validation", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
-            this.databaseService.validateOrder(req.body.id, this.decode(tokenString).user)
+            this.databaseService.validateOrderStream(req.body.id, this.decode(tokenString).user)
                 .then((result: pg.QueryResult) => {
                     if (result.rowCount === 1) {
                         res.json(result.rows[0]);
                     } else {
-                        res.json(-1);
+                        res.json(HTTP.Error);
                     }
                 }).catch((e: Error) => {
                     console.error(e.stack);
-                    res.json(-1);
+                    res.json(HTTP.Error);
+                });
+        });
+
+        router.post("/order/dvd/validation", (req: Request, res: Response, next: NextFunction) => {
+            const tokenString = req.header(TOKEN) as unknown as string;
+            if (!this.isValid(tokenString)) {
+                res.json(HTTP.Unauthorized);
+            }
+            this.databaseService.validateOrderDVD(req.body.id, this.decode(tokenString).user)
+                .then((result: pg.QueryResult) => {
+                    if (result.rowCount === 1) {
+                        res.json(result.rows[0]);
+                    } else {
+                        res.json(HTTP.Error);
+                    }
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                    res.json(HTTP.Error);
                 });
         });
 
@@ -271,6 +289,21 @@ export class DatabaseController {
                 req.body.movieID
             ).then((result: pg.QueryResult) => {
                 res.json(HTTP.Accepted);
+            }).catch((e: Error) => {
+                console.error(e.stack);
+                res.json(HTTP.Error);
+            });
+        });
+
+        router.get("/users/postalCode", (req: Request, res: Response, next: NextFunction) => {
+            const tokenString = req.header(TOKEN) as unknown as string;
+            console.log('in')
+            if (!this.isValid(tokenString)) {
+                res.json(HTTP.Unauthorized);
+            }
+            this.databaseService.getPostalCode(this.decode(tokenString).user)
+            .then((result: pg.QueryResult) => {
+                res.json(result.rows[0]);
             }).catch((e: Error) => {
                 console.error(e.stack);
                 res.json(HTTP.Error);

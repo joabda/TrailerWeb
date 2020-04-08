@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { API_URL } from "src/app/classes/constants";
+import { API_URL, MAPS_API_KEY, POLYTECHNIQUE_POSTAL_CODE } from "src/app/classes/constants";
 import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
 import { Movie } from "src/app/interfaces/movie";
@@ -50,9 +50,9 @@ export class BrowseService {
         );
     }
 
-    public isOrdered(id: number): Observable<number> {
+    public isOrdered(id: number, type: string): Observable<number> {
         return (
-            this.http.post<any>(`${API_URL}order/validation`,
+            this.http.post<any>(`${API_URL}order/${type}/validation`,
                 { id: id },
                 {
                     headers: new HttpHeaders().set("Authorization",
@@ -89,6 +89,44 @@ export class BrowseService {
             .catch(() => false);
     }
 
+    async getDistance(): Promise<number> {
+        let price = 0;
+        await this.http.get<{postalcode: string}>(`${API_URL}users/postalCode`,
+            {
+                headers: new HttpHeaders().set("Authorization",
+                    localStorage.getItem(Token.id) as unknown as string)
+            }
+        )
+        .subscribe( async res => {
+            let postalCode = this.formatPostalCode(res.postalcode);
+            let header = new HttpHeaders(
+                'Access-Control-Allow-Origin: *'
+            );
+            header.set('Access-Control-Allow-Origin', '*');
+			header.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+			header.set('Content-Type', 'application/json');
+			header.set('Accept', 'application/json');
+			header.set('Access-Control-Max-Age', '158000');
+			header.set('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Accept');
+            await this.http.get<any>(`https://maps.googleapis.com/maps/api/distancematrix/json?
+                key=${MAPS_API_KEY}
+                &units=metric
+                &origins=${POLYTECHNIQUE_POSTAL_CODE}
+                &destinations=${postalCode}`, 
+                {
+                    headers: header
+                }
+                )
+                .subscribe( result => {
+                    console.log(result);
+                    console.log(result.rows[0]);
+                    console.log(result.rows[0].elements);
+                    console.log(result.rows[0].elements.distance.text);
+                })
+        });
+        return price;
+    }
+
     public orderMovieStreaming(order: OrderStreaming): void {
         this.http.post<OrderStreaming>(
             `${API_URL}order/insert`,
@@ -109,5 +147,22 @@ export class BrowseService {
 
     public orderMovieDVD(movieID: number, dateOfOrder: Date): void {
 
+    }
+
+    private formatPostalCode(old: string): string {
+        const space = old.indexOf(' ');
+        let newString = old;
+        if(space !== -1) {
+            newString = old.slice(0, space) + old.slice(space + 1);
+        }
+        const dash = old.indexOf('-');
+        if(dash !== -1) {
+            newString = old.slice(0, dash) + old.slice(dash + 1);
+        }
+        const seperator = old.indexOf('/');
+        if(dash !== -1) {
+            newString = old.slice(0, seperator) + old.slice(seperator + 1);
+        }
+        return newString;
     }
 }
