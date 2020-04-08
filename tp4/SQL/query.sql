@@ -88,7 +88,7 @@ FROM Movie m
 ORDER BY numberOfSale, numberOfView;
 
 -- 7 Trouvez le titre et le prix des films qui n’ont jamais été commandés sous forme de DVD mais qui ont été visionnés plus de 10 fois
-SELECT title
+SELECT title, dvdPrice, streamingFee
 FROM netflixpoly.movie as m, netflixpoly.order as o, netflixpoly.streaming as s
 WHERE m.idmovie = o.movieid
 AND s.idorder = o.idorder
