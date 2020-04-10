@@ -6,7 +6,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { filter, map, startWith } from "rxjs/operators";
-import { TITLE } from "src/app/classes/constants";
+import { TITLE, PRICE_PER_KM } from "src/app/classes/constants";
 import { OrderType } from "src/app/enum/order-type";
 import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
@@ -136,7 +136,9 @@ export class BrowseComponent implements OnInit, OnDestroy {
     private orderMovie(movie: Movie, type: OrderType): void {
         this.service.creditCards().subscribe(async (res) => {
             if (res !== null) {
-                const shipping = await this.service.getPrice();
+                const distance = await this.service.getDistance();
+                const result: string = distance.rows[0].elements[0].distance.text;
+                const shipping = Number(result.substr(0, result.indexOf(' '))) * PRICE_PER_KM;
                 const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : shipping);
                 reference.afterClosed().pipe(
                     filter((stopTime) => stopTime)

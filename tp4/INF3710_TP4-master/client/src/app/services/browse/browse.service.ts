@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { API_URL, MAPS_API_KEY, POLYTECHNIQUE_POSTAL_CODE, PROXY, PRICE_PER_KM } from "src/app/classes/constants";
+import { API_URL, MAPS_API_KEY, POLYTECHNIQUE_POSTAL_CODE, PROXY } from "src/app/classes/constants";
 import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
 import { Movie } from "src/app/interfaces/movie";
@@ -89,24 +89,22 @@ export class BrowseService {
             .catch(() => false);
     }
 
-    async getPrice(): Promise<number> {
-        let price = 0;
-        await this.http.get<{postalcode: string}>(`${API_URL}users/postalCode`,
+    async getDistance(): Promise<any> {
+        const res = await this.getProstalCode();
+        let postalCode = this.formatPostalCode(res.postalcode);
+        return this.http.get<any>(`${PROXY}https://maps.googleapis.com/maps/api/distancematrix/json?key=${MAPS_API_KEY}&units=metric&origins=${POLYTECHNIQUE_POSTAL_CODE}&destinations=${postalCode}`
+        )
+            .toPromise();
+    }
+
+    private getProstalCode(): Promise<any> {
+        return this.http.get<{ postalcode: string }>(`${API_URL}users/postalCode`,
             {
                 headers: new HttpHeaders().set("Authorization",
                     localStorage.getItem(Token.id) as unknown as string)
             }
         )
-        .subscribe( async res => {
-            let postalCode = this.formatPostalCode(res.postalcode);
-            await this.http.get<any>(`${PROXY}https://maps.googleapis.com/maps/api/distancematrix/json?key=${MAPS_API_KEY}&units=metric&origins=${POLYTECHNIQUE_POSTAL_CODE}&destinations=${postalCode}`
-                )
-                .subscribe( result => {
-                    const res: string = result.rows[0].elements[0].distance.text;
-                    price = Number(res.substr(0, res.indexOf(' '))) * PRICE_PER_KM;
-                })
-        });
-        return price;
+            .toPromise();
     }
 
     public orderMovieStreaming(order: OrderStreaming): void {
@@ -134,15 +132,15 @@ export class BrowseService {
     private formatPostalCode(old: string): string {
         const space = old.indexOf(' ');
         let newString = old;
-        if(space !== -1) {
+        if (space !== -1) {
             newString = old.slice(0, space) + old.slice(space + 1);
         }
         const dash = old.indexOf('-');
-        if(dash !== -1) {
+        if (dash !== -1) {
             newString = old.slice(0, dash) + old.slice(dash + 1);
         }
         const seperator = old.indexOf('/');
-        if(dash !== -1) {
+        if (dash !== -1) {
             newString = old.slice(0, seperator) + old.slice(seperator + 1);
         }
         return newString;
