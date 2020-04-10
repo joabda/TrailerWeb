@@ -95,3 +95,7 @@ export const DEFAULT_CEREMONY = {
 export const POLYTECHNIQUE_POSTAL_CODE = 'H3T1J4';
 
 export const MAPS_API_KEY = 'AIzaSyBwnIPWbcvxyKd0inqjMZZocyCIDUKPGkE';
+
+export const PROXY = 'http://localhost:8080/';
+
+export const PRICE_PER_KM = 0.25;

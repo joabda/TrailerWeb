@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { API_URL, MAPS_API_KEY, POLYTECHNIQUE_POSTAL_CODE } from "src/app/classes/constants";
+import { API_URL, MAPS_API_KEY, POLYTECHNIQUE_POSTAL_CODE, PROXY, PRICE_PER_KM } from "src/app/classes/constants";
 import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
 import { Movie } from "src/app/interfaces/movie";
@@ -89,7 +89,7 @@ export class BrowseService {
             .catch(() => false);
     }
 
-    async getDistance(): Promise<number> {
+    async getPrice(): Promise<number> {
         let price = 0;
         await this.http.get<{postalcode: string}>(`${API_URL}users/postalCode`,
             {
@@ -99,29 +99,11 @@ export class BrowseService {
         )
         .subscribe( async res => {
             let postalCode = this.formatPostalCode(res.postalcode);
-            let header = new HttpHeaders(
-                'Access-Control-Allow-Origin: *'
-            );
-            header.set('Access-Control-Allow-Origin', '*');
-			header.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
-			header.set('Content-Type', 'application/json');
-			header.set('Accept', 'application/json');
-			header.set('Access-Control-Max-Age', '158000');
-			header.set('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Accept');
-            await this.http.get<any>(`https://maps.googleapis.com/maps/api/distancematrix/json?
-                key=${MAPS_API_KEY}
-                &units=metric
-                &origins=${POLYTECHNIQUE_POSTAL_CODE}
-                &destinations=${postalCode}`, 
-                {
-                    headers: header
-                }
+            await this.http.get<any>(`${PROXY}https://maps.googleapis.com/maps/api/distancematrix/json?key=${MAPS_API_KEY}&units=metric&origins=${POLYTECHNIQUE_POSTAL_CODE}&destinations=${postalCode}`
                 )
                 .subscribe( result => {
-                    console.log(result);
-                    console.log(result.rows[0]);
-                    console.log(result.rows[0].elements);
-                    console.log(result.rows[0].elements.distance.text);
+                    const res: string = result.rows[0].elements[0].distance.text;
+                    price = Number(res.substr(0, res.indexOf(' '))) * PRICE_PER_KM;
                 })
         });
         return price;

@@ -136,8 +136,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
     private orderMovie(movie: Movie, type: OrderType): void {
         this.service.creditCards().subscribe(async (res) => {
             if (res !== null) {
-                await this.service.getDistance();
-                const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : 10);
+                const shipping = await this.service.getPrice();
+                const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : shipping);
                 reference.afterClosed().pipe(
                     filter((stopTime) => stopTime)
                 ).subscribe((stopTime) => {
