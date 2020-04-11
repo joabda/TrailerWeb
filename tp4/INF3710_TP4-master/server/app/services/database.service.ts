@@ -105,8 +105,7 @@ export class DatabaseService {
 
     public async updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
-            UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};
-`;
+            UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};`;
         return this.pool.query(queryText);
     }
 
@@ -154,7 +153,7 @@ export class DatabaseService {
     }
 
     public async addParticipant(name: string, dateOfBirth: string, nationality: string,
-                                sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
+        sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
             '${nationality}', '${sex}');
