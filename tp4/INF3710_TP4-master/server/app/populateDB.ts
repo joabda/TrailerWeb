@@ -2,9 +2,9 @@ export const DATA: string = `
 SET search_path = netflixpoly;
 -- Enables pgcrypto
 DROP EXTENSION IF EXISTS pgcrypto;
-CREATE EXTENSION IF NOT EXISTS pgcrypto; 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- Administrators 
+-- Administrators
 INSERT INTO NETFLIXPOLY.Administrator VALUES ('admin@netflixpoly.com', crypt('password1', netflixpoly.gen_salt('bf')));
 
 -- Members
@@ -53,7 +53,7 @@ INSERT INTO NETFLIXPOLY.Movie VALUES (DEFAULT, 'Titanic',               'Drama',
 -- Order
 SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Order', 'idorder')), 1, false);
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email1@gmail.com', 4,  '2020-03-29'); -- 1
-INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 3,  '2020-01-30'); -- 2 
+INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 3,  '2020-01-30'); -- 2
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 4,  '2020-01-13'); -- 3
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email2@gmail.com', 5,  '2020-03-28'); -- 4
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email3@gmail.com', 1,  '2020-02-15'); -- 5
@@ -89,8 +89,8 @@ INSERT INTO NETFLIXPOLY.OrderDVD VALUES (1, 2, 666); -- 666 temproraires
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (2, 1, 666); -- frais a calculer en fonction de la distance
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (3, 5, 666);
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (4, 7, 666); -- DVD IDs a changer
-INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666); 
-INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666); 
+INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666);
+INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666);
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (7, 2, 666);
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (8, 2, 666);
 
@@ -171,7 +171,7 @@ INSERT INTO NETFLIXPOLY.Participation VALUES (9, 20,    'Actor', 	85000);
 
 -- Oscars
 INSERT INTO NETFLIXPOLY.Oscars VALUES ('2020-02-09', 'Los Angeles', ''); -- No host
-INSERT INTO NETFLIXPOLY.Oscars VALUES ('2019-02-24', 'Los Angeles', 'David Oyelowo'); 
+INSERT INTO NETFLIXPOLY.Oscars VALUES ('2019-02-24', 'Los Angeles', 'David Oyelowo');
 INSERT INTO NETFLIXPOLY.Oscars VALUES ('2018-03-04', 'Los Angeles', 'Jimmy Kimmel');
 
 -- Nomination

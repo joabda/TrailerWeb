@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { BrowseComponent } from './browse.component';
+import { BrowseComponent } from "./browse.component";
 
-describe('BrowseComponent', () => {
+describe("BrowseComponent", () => {
   let component: BrowseComponent;
   let fixture: ComponentFixture<BrowseComponent>;
 
@@ -19,7 +19,7 @@ describe('BrowseComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

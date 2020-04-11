@@ -20,7 +20,7 @@ export class SignInComponent {
         private service: SignInService,
         private snacks: MatSnackBar,
     ) {
-        localStorage.setItem(Token.id, '');
+        localStorage.setItem(Token.id, "");
         this.username = "email1@gmail.com";
         this.password = "password1";
         this.admin = false;
@@ -32,7 +32,7 @@ export class SignInComponent {
         } else {
             await this.service.login({ username: this.username, password: this.password });
         }
-        if (localStorage.getItem(Token.id) !== '') {
+        if (localStorage.getItem(Token.id) !== "") {
             if (this.admin) {
                 this.router.navigate(["manage"]);
             } else {

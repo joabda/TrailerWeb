@@ -2,24 +2,24 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatButton } from "@angular/material/button";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatInput } from "@angular/material/input";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { filter, map, startWith } from "rxjs/operators";
-import { TITLE, PRICE_PER_KM } from "src/app/classes/constants";
+import { PRICE_PER_KM, TITLE } from "src/app/classes/constants";
+import { HTTP } from "src/app/enum/http-codes";
 import { OrderType } from "src/app/enum/order-type";
 import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
 import { Movie } from "src/app/interfaces/movie";
 import { BrowseService } from "src/app/services/browse/browse.service";
+import { ConfirmationDialogService } from "src/app/services/confirmation-dialog/confirmation-dialog.service";
 import { DataService } from "src/app/services/data/data.service";
 import { HotkeyService } from "src/app/services/hotkeys/hotkey.service";
 import { MovieDetailsComponent } from "../movie-details/movie-details.component";
 import { OrderComponent } from "../order/order.component";
 import { TrailerComponent } from "../trailer/trailer.component";
-import { MatInput } from "@angular/material/input";
-import { ConfirmationDialogService } from "src/app/services/confirmation-dialog/confirmation-dialog.service";
-import { HTTP } from "src/app/enum/http-codes";
 
 @Component({
     selector: "app-browse",
@@ -31,8 +31,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
     public movies: Movie[];
     public searchedMovies: Movie[];
 
-    titleControl = new FormControl();
-    categoryControl = new FormControl();
+    public titleControl = new FormControl();
+    public categoryControl = new FormControl();
 
     public filteredMovies: Observable<string[]>;
     public titles: string[];
@@ -53,7 +53,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    async ngOnInit(): Promise<void> {
+    public async ngOnInit(): Promise<void> {
         const result = await this.service.getMovies();
         if (result.valueOf() === false) {
             this.openSnack("Please Sign In First");
@@ -78,7 +78,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
         }));
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         for (let i: number = this.subscriptions.length - 1; i >= 0; --i) {
             this.subscriptions[i].unsubscribe();
             this.subscriptions.pop();
@@ -92,13 +92,13 @@ export class BrowseComponent implements OnInit, OnDestroy {
         return this.titles.filter((title) => title.toLowerCase().indexOf(filterValue) === 0);
     }
 
-    async onClickStream(event: MatButton): Promise<void> {
+    public async onClickStream(event: MatButton): Promise<void> {
         const movie = this.findMovie(
             (event._elementRef.nativeElement as HTMLButtonElement)
                 .getAttribute(TITLE) as unknown as string
         );
         if (movie !== undefined) {
-            this.service.isOrdered(movie.id, 'streaming').subscribe(async (res) => {
+            this.service.isOrdered(movie.id, "streaming").subscribe(async (res) => {
                 if (res !== null && res.valueOf() != -1) {
                     this.playMovie(movie, (res as any).stoppedat, (res as any).idorder);
                 } else {
@@ -110,13 +110,13 @@ export class BrowseComponent implements OnInit, OnDestroy {
         }
     }
 
-    async onClickBuy(event: MatButton): Promise<void> {
+    public async onClickBuy(event: MatButton): Promise<void> {
         const movie = this.findMovie(
             (event._elementRef.nativeElement as HTMLButtonElement)
                 .getAttribute(TITLE) as unknown as string
         );
         if (movie !== undefined) {
-            this.service.isOrdered(movie.id, 'dvd').subscribe( res => {
+            this.service.isOrdered(movie.id, "dvd").subscribe( (res) => {
                 if (res !== null && res.valueOf() != HTTP.Error) {
                     this.confirmation.confirm("You already ordered this movie as DVD", `Are you sure you want to order it again?`)
                     .then((confirmation) => {
@@ -126,7 +126,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
                     });
                 } else {
                     this.orderMovie(movie, OrderType.DVD);
-                } 
+                }
             });
         } else {
             this.openSnack("Sorry your movie couldn't be found");
@@ -138,7 +138,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
             if (res !== null) {
                 const distance = await this.service.getDistance();
                 const result: string = distance.rows[0].elements[0].distance.text;
-                const shipping = Number(result.substr(0, result.indexOf(' '))) * PRICE_PER_KM;
+                const shipping = Number(result.substr(0, result.indexOf(" "))) * PRICE_PER_KM;
                 const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : shipping);
                 reference.afterClosed().pipe(
                     filter((stopTime) => stopTime)
@@ -164,7 +164,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
                 title: title,
                 cc: ccs,
                 price: price,
-                shipping: shipping 
+                shipping: shipping
             }
         });
     }
@@ -210,6 +210,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
                 return element;
             }
         }
+
         return undefined;
     }
 

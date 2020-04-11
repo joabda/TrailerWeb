@@ -1,37 +1,38 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Trailer } from 'src/app/interfaces/trailer';
-import { YOUTUBE_API } from 'src/app/classes/constants';
+import { Component, Inject, OnInit } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { YOUTUBE_API } from "src/app/classes/constants";
+import { Trailer } from "src/app/interfaces/trailer";
 
 @Component({
-  selector: 'app-trailer',
-  templateUrl: './trailer.component.html',
-  styleUrls: ['./trailer.component.css']
+  selector: "app-trailer",
+  templateUrl: "./trailer.component.html",
+  styleUrls: ["./trailer.component.css"]
 })
 export class TrailerComponent implements OnInit {
 
   public player: YT.Player;
 
-  constructor(
+  public constructor(
     @Inject(MAT_DIALOG_DATA) public data: Trailer,
-    private dialogRef: MatDialogRef<TrailerComponent>) { 
+    private dialogRef: MatDialogRef<TrailerComponent>) {
       dialogRef.beforeClosed().subscribe( () => this.close() );
   }
 
-  ngOnInit() {
-    if (window['YT']) {
+  public ngOnInit() {
+    if (window["YT"]) {
       this.startVideo();
+
       return;
     }
-    let tag = document.createElement('script');
+    const tag = document.createElement("script");
     tag.src = YOUTUBE_API;
-    const firstScriptTag = document.getElementsByTagName('script')[0] as HTMLScriptElement;
+    const firstScriptTag = document.getElementsByTagName("script")[0] as HTMLScriptElement;
     (firstScriptTag.parentNode as Node).insertBefore(tag, firstScriptTag);
-    window['onYouTubeIframeAPIReady'] = () => this.startVideo();
+    window["onYouTubeIframeAPIReady"] = () => this.startVideo();
   }
 
-  startVideo() {
-    this.player = new window['YT'].Player('player', {
+  public startVideo() {
+    this.player = new window["YT"].Player("player", {
       videoId: this.data.id,
       playerVars: {
         autoplay: 1,
@@ -44,12 +45,12 @@ export class TrailerComponent implements OnInit {
         playsinline: 1,
         start: this.data.start,
       },
-      width: '1080',
-      height: '600',
+      width: "1080",
+      height: "600",
     });
   }
 
-  close(): void {
+  public close(): void {
     this.dialogRef.close(Math.round(this.player.getCurrentTime()));
   }
 }

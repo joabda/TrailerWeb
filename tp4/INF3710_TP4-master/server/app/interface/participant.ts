@@ -1,7 +1,7 @@
 export interface Participant {
-    id: number,
-    name: string,
-    dateOfbirth: string,
-    nationality: string,
-    sex: string,
+    id: number;
+    name: string;
+    dateOfbirth: string;
+    nationality: string;
+    sex: string;
 }

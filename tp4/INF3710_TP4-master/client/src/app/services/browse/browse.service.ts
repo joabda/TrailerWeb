@@ -5,10 +5,10 @@ import { API_URL, MAPS_API_KEY, POLYTECHNIQUE_POSTAL_CODE, PROXY } from "src/app
 import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
 import { Movie } from "src/app/interfaces/movie";
+import { Nomination } from "src/app/interfaces/nomination";
 import { OrderStreaming } from "src/app/interfaces/order-streaming";
 import { Participant } from "src/app/interfaces/participant";
 import { Participation } from "src/app/interfaces/participation";
-import { Nomination } from "src/app/interfaces/nomination";
 
 @Injectable({
     providedIn: "root"
@@ -53,10 +53,10 @@ export class BrowseService {
     public isOrdered(id: number, type: string): Observable<number> {
         return (
             this.http.post<any>(`${API_URL}order/${type}/validation`,
-                { id: id },
-                {
+                                { id: id },
+                                {
                     headers: new HttpHeaders().set("Authorization",
-                        localStorage.getItem(Token.id) as unknown as string)
+                                                   localStorage.getItem(Token.id) as unknown as string)
                 }
             )
         );
@@ -65,9 +65,9 @@ export class BrowseService {
     public creditCards(): Observable<CreditCard[]> {
         return (
             this.http.get<CreditCard[]>(`${API_URL}creditcards`,
-                {
+                                        {
                     headers: new HttpHeaders().set("Authorization",
-                        localStorage.getItem(Token.id) as unknown as string)
+                                                   localStorage.getItem(Token.id) as unknown as string)
                 }
             )
         );
@@ -82,16 +82,17 @@ export class BrowseService {
             },
             {
                 headers: new HttpHeaders().set("Authorization",
-                    localStorage.getItem(Token.id) as unknown as string)
+                                               localStorage.getItem(Token.id) as unknown as string)
             }
         )
             .toPromise()
             .catch(() => false);
     }
 
-    async getDistance(): Promise<any> {
+    public async getDistance(): Promise<any> {
         const res = await this.getProstalCode();
-        let postalCode = this.formatPostalCode(res.postalcode);
+        const postalCode = this.formatPostalCode(res.postalcode);
+
         return this.http.get<any>(`${PROXY}https://maps.googleapis.com/maps/api/distancematrix/json?key=${MAPS_API_KEY}&units=metric&origins=${POLYTECHNIQUE_POSTAL_CODE}&destinations=${postalCode}`
         )
             .toPromise();
@@ -99,9 +100,9 @@ export class BrowseService {
 
     private getProstalCode(): Promise<any> {
         return this.http.get<{ postalcode: string }>(`${API_URL}users/postalCode`,
-            {
+                                                     {
                 headers: new HttpHeaders().set("Authorization",
-                    localStorage.getItem(Token.id) as unknown as string)
+                                               localStorage.getItem(Token.id) as unknown as string)
             }
         )
             .toPromise();
@@ -118,7 +119,7 @@ export class BrowseService {
             },
             {
                 headers: new HttpHeaders().set("Authorization",
-                    localStorage.getItem(Token.id) as unknown as string)
+                                               localStorage.getItem(Token.id) as unknown as string)
             }
         )
             .toPromise()
@@ -130,19 +131,20 @@ export class BrowseService {
     }
 
     private formatPostalCode(old: string): string {
-        const space = old.indexOf(' ');
+        const space = old.indexOf(" ");
         let newString = old;
         if (space !== -1) {
             newString = old.slice(0, space) + old.slice(space + 1);
         }
-        const dash = old.indexOf('-');
+        const dash = old.indexOf("-");
         if (dash !== -1) {
             newString = old.slice(0, dash) + old.slice(dash + 1);
         }
-        const seperator = old.indexOf('/');
+        const seperator = old.indexOf("/");
         if (dash !== -1) {
             newString = old.slice(0, seperator) + old.slice(seperator + 1);
         }
+
         return newString;
     }
 }

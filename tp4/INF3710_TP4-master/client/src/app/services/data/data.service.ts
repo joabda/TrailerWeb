@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
-import { Movie } from 'src/app/interfaces/movie';
+import { Injectable } from "@angular/core";
+import { Movie } from "src/app/interfaces/movie";
 
 @Injectable()
 export class DataService {
 
     private movies: Movie[];
 
-    constructor() { }
+    public constructor() { }
 
-    setMovies(movies: Movie[]): void {
+    public setMovies(movies: Movie[]): void {
         this.movies = movies;
     }
 
-    getTitles(): string[] {
+    public getTitles(): string[] {
         const titles: string[] = [];
         this.movies.forEach((movie) => titles.push(movie.title));
 

@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { ManageService } from './manage.service';
+import { ManageService } from "./manage.service";
 
-describe('ManageService', () => {
+describe("ManageService", () => {
   let service: ManageService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('ManageService', () => {
     service = TestBed.inject(ManageService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

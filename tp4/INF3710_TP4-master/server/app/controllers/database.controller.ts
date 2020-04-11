@@ -297,7 +297,7 @@ export class DatabaseController {
 
         router.get("/users/postalCode", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
-            console.log('in')
+            console.log('in');
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }

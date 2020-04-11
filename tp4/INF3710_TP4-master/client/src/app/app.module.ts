@@ -13,8 +13,11 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
+import {MatPaginatorModule} from "@angular/material/paginator";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatSortModule } from "@angular/material/sort";
+import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -23,23 +26,20 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
 import { AppComponent } from "./app.component";
 import { appRoutingModule } from "./app.routing";
+import { AddMovieComponent } from "./components/add-movie/add-movie.component";
+import { AddUserComponent } from "./components/add-user/add-user.component";
 import { BrowseComponent } from "./components/browse/browse.component";
+import { ConfirmationDialogComponent } from "./components/confirmation-dialog/confirmation-dialog.component";
 import { HomeComponent } from "./components/home/home.component";
-import { SignInComponent } from "./components/sign-in/sign-in.component";
+import { LoadingComponent } from "./components/loading/loading.component";
+import { ManageComponent } from "./components/manage/manage.component";
+import { MovieDetailsComponent } from "./components/movie-details/movie-details.component";
 import { OrderComponent } from "./components/order/order.component";
+import { SignInComponent } from "./components/sign-in/sign-in.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
 import { TrailerComponent } from "./components/trailer/trailer.component";
-import { DataService } from "./services/data/data.service";
-import { ManageComponent } from './components/manage/manage.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from "@angular/material/sort";
-import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from "./services/confirmation-dialog/confirmation-dialog.service";
-import { AddUserComponent } from './components/add-user/add-user.component';
-import { AddMovieComponent } from './components/add-movie/add-movie.component';
-import { LoadingComponent } from './components/loading/loading.component';
-import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { DataService } from "./services/data/data.service";
 
 @NgModule({
   declarations: [
@@ -96,7 +96,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     BrowserAnimationsModule
   ],
   providers: [
-    DataService, 
+    DataService,
     DatePipe,
     ConfirmationDialogService
   ],

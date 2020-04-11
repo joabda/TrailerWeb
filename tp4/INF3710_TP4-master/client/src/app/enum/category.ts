@@ -1,5 +1,5 @@
 export enum Category {
-    None = '',
+    None = "",
     Action = "action",
     Thriller = "thriller",
     Drama = "drama",

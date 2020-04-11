@@ -66,7 +66,7 @@ export class DatabaseService {
         ];
         const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8);`;
         this.pool.query(queryText, values);
-        return this.pool.query(`SELECT max(idmovie) FROM ${DB_NAME}.${Tables.Movie};`)
+        return this.pool.query(`SELECT max(idmovie) FROM ${DB_NAME}.${Tables.Movie};`);
     }
 
     public async  addCeremony(
@@ -85,7 +85,7 @@ export class DatabaseService {
     }
 
     public async getPostalCode(email: string): Promise<pg.QueryResult> {
-        console.log('in postal')
+        console.log('in postal');
         return this.pool.query(`
             SELECT postalcode
             FROM ${DB_NAME}.${Tables.M}
@@ -154,7 +154,7 @@ export class DatabaseService {
     }
 
     public async addParticipant(name: string, dateOfBirth: string, nationality: string,
-        sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
+                                sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
             '${nationality}', '${sex}');
@@ -185,17 +185,17 @@ export class DatabaseService {
         fee?: number,
         endDate?: string
     ): Promise<pg.QueryResult> {
-        let values: any[] = [];
+        const values: any[] = [];
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.M} VALUES('${email}', ${DB_NAME}.crypt('${password}', ${DB_NAME}.gen_salt('bf')), '${firstName}',
-                '${lastName}', '${street}', ${appartmentNo}, '${postalCode}', 
+                '${lastName}', '${street}', ${appartmentNo}, '${postalCode}',
                 '${city}', '${state}', '${country}');
         `);
         if (subscribed) {
             values.push(fee);
             values.push(endDate);
         }
-        return this.pool.query(`INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM} 
+        return this.pool.query(`INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM}
             VALUES('${email}', ${subscribed ? (`${fee}, '${this.getCurrentDate()}' ,'${endDate}'`) : 0});`
         );
     }

@@ -1,4 +1,4 @@
 export interface OrderStreaming {
-    movieID     :   number,
-    dateOfOrder :   Date
+    movieID:   number;
+    dateOfOrder:   Date;
 }
