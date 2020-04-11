@@ -86,20 +86,20 @@ export class BrowseComponent implements OnInit, OnDestroy {
     }
 
     private _filterStates(value: string): string[] {
-        const filterValue = value.toLowerCase();
+        const filterValue: string = value.toLowerCase();
         this.title = filterValue;
 
         return this.titles.filter((title) => title.toLowerCase().indexOf(filterValue) === 0);
     }
 
     public async onClickStream(event: MatButton): Promise<void> {
-        const movie = this.findMovie(
+        const movie: Movie | undefined = this.findMovie(
             (event._elementRef.nativeElement as HTMLButtonElement)
                 .getAttribute(TITLE) as unknown as string
         );
         if (movie !== undefined) {
             this.service.isOrdered(movie.id, "streaming").subscribe(async (res) => {
-                if (res !== null && res.valueOf() != -1) {
+                if (res !== null && res.valueOf() !== HTTP.Error) {
                     this.playMovie(movie, (res as any).stoppedat, (res as any).idorder);
                 } else {
                     this.orderMovie(movie, OrderType.Streaming);
@@ -111,7 +111,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     }
 
     public async onClickBuy(event: MatButton): Promise<void> {
-        const movie = this.findMovie(
+        const movie: Movie | undefined = this.findMovie(
             (event._elementRef.nativeElement as HTMLButtonElement)
                 .getAttribute(TITLE) as unknown as string
         );
@@ -133,7 +133,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
         }
     }
 
-    private orderMovie(movie: Movie, type: OrderType): void {
+    private orderMovie(movie: Movie, type: OrderType): void { //ICI
         this.service.creditCards().subscribe(async (res) => {
             if (res !== null) {
                 const distance = await this.service.getDistance();
@@ -170,7 +170,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     }
 
     private playMovie(movie: Movie, currentTime: number, idorder: number): void {
-        const reference = this.dialog.open(TrailerComponent, {
+        const reference: MatDialogRef<TrailerComponent> = this.dialog.open(TrailerComponent, {
             data: {
                 title: movie.title,
                 id: movie.url.slice(0, movie.url.indexOf("?")),
@@ -182,7 +182,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
         reference.afterClosed().pipe(
             filter((stopTime) => stopTime)
         ).subscribe((stopTime) => {
-            const newURL = `${movie.url.slice(0, movie.url.indexOf("=") + 1)}${stopTime}`;
+            const newURL: string = `${movie.url.slice(0, movie.url.indexOf("=") + 1)}${stopTime}`;
             this.service.changeCurrentTime(idorder, stopTime);
             for (const element of this.movies) {
                 if (movie.title === element.title) {

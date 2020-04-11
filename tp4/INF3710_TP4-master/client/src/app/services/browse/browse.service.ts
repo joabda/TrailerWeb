@@ -20,7 +20,8 @@ export class BrowseService {
 
     public async getMovies(): Promise<Movie[] | boolean> {
         return (
-            this.http.get<Movie[]>(`${API_URL}movies`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+            this.http.get<Movie[]>(`${API_URL}movies`,
+                                   { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
                 .toPromise()
                 .catch(() => false)
         );
@@ -28,7 +29,11 @@ export class BrowseService {
 
     public async getParticipants(): Promise<Participant[] | boolean> {
         return (
-            this.http.get<Participant[]>(`${API_URL}participants`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+            this.http.get<Participant[]>(`${API_URL}participants`,
+                                         {
+                    headers: new HttpHeaders().set("Authorization",
+                                                   localStorage.getItem(Token.id) as unknown as string)
+                })
                 .toPromise()
                 .catch(() => false)
         );
@@ -36,7 +41,11 @@ export class BrowseService {
 
     public async getParticipations(): Promise<Participation[] | boolean> {
         return (
-            this.http.get<Participation[]>(`${API_URL}participation`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+            this.http.get<Participation[]>(`${API_URL}participation`,
+                                           {
+                    headers: new HttpHeaders().set("Authorization",
+                                                   localStorage.getItem(Token.id) as unknown as string)
+                })
                 .toPromise()
                 .catch(() => false)
         );
@@ -44,7 +53,11 @@ export class BrowseService {
 
     public async getNominations(): Promise<Nomination[] | boolean> {
         return (
-            this.http.get<Nomination[]>(`${API_URL}nominations`, { headers: new HttpHeaders().set("Authorization", localStorage.getItem(Token.id) as unknown as string) })
+            this.http.get<Nomination[]>(`${API_URL}nominations`,
+                                        {
+                    headers: new HttpHeaders().set("Authorization",
+                                                   localStorage.getItem(Token.id) as unknown as string)
+                })
                 .toPromise()
                 .catch(() => false)
         );
@@ -98,7 +111,7 @@ export class BrowseService {
             .toPromise();
     }
 
-    private getProstalCode(): Promise<any> {
+    private async getProstalCode(): Promise<any> {
         return this.http.get<{ postalcode: string }>(`${API_URL}users/postalCode`,
                                                      {
                 headers: new HttpHeaders().set("Authorization",
