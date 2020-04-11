@@ -40,6 +40,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     public title: string;
     public movie: Movie | undefined;
     private subscriptions: Subscription[] = [];
+    isLoading: boolean;
     @ViewChild(MatInput) private filter: MatInput;
 
     public constructor(
@@ -51,6 +52,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
         public shortcuts: HotkeyService,
         private confirmation: ConfirmationDialogService
     ) {
+        this.isLoading = false;
     }
 
     public async ngOnInit(): Promise<void> {
@@ -116,14 +118,14 @@ export class BrowseComponent implements OnInit, OnDestroy {
                 .getAttribute(TITLE) as unknown as string
         );
         if (movie !== undefined) {
-            this.service.isOrdered(movie.id, "dvd").subscribe( (res) => {
+            this.service.isOrdered(movie.id, "dvd").subscribe((res) => {
                 if (res !== null && res.valueOf() != HTTP.Error) {
                     this.confirmation.confirm("You already ordered this movie as DVD", `Are you sure you want to order it again?`)
-                    .then((confirmation) => {
-                        if (confirmation) {
-                            this.orderMovie(movie, OrderType.DVD);
-                        }
-                    });
+                        .then((confirmation) => {
+                            if (confirmation) {
+                                this.orderMovie(movie, OrderType.DVD);
+                            }
+                        });
                 } else {
                     this.orderMovie(movie, OrderType.DVD);
                 }
@@ -136,24 +138,30 @@ export class BrowseComponent implements OnInit, OnDestroy {
     private orderMovie(movie: Movie, type: OrderType): void { //ICI
         this.service.creditCards().subscribe(async (res) => {
             if (res !== null) {
+                this.isLoading = true;
                 const distance = await this.service.getDistance();
-                const result: string = distance.rows[0].elements[0].distance.text;
-                const shipping = Number(result.substr(0, result.indexOf(" "))) * PRICE_PER_KM;
-                const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : shipping);
-                reference.afterClosed().pipe(
-                    filter((stopTime) => stopTime)
-                ).subscribe((stopTime) => {
-                    if (stopTime.buy) {
-                        if (type === OrderType.Streaming) {
-                            this.service.orderMovieStreaming({
-                                movieID: movie.id,
-                                dateOfOrder: new Date()
-                            });
-                        } else {
-                            this.service.orderMovieDVD(movie.id, new Date());
+                this.isLoading = false;
+                if (distance.rows[0].elements[0].status !== 'OK') {
+                    this.openSnack('Couldn\'t find route to your location sorry.');
+                } else {
+                    const result: string = distance.rows[0].elements[0].distance.text;
+                    const shipping = Number(result.substr(0, result.indexOf(" "))) * PRICE_PER_KM;
+                    const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : shipping);
+                    reference.afterClosed().pipe(
+                        filter((stopTime) => stopTime)
+                    ).subscribe((stopTime) => {
+                        if (stopTime.buy) {
+                            if (type === OrderType.Streaming) {
+                                this.service.orderMovieStreaming({
+                                    movieID: movie.id,
+                                    dateOfOrder: new Date()
+                                });
+                            } else {
+                                this.service.orderMovieDVD(movie.id, new Date());
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     }

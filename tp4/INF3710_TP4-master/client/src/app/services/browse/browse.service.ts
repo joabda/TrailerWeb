@@ -106,8 +106,7 @@ export class BrowseService {
         const res = await this.getProstalCode();
         const postalCode = this.formatPostalCode(res.postalcode);
 
-        return this.http.get<any>(`${PROXY}https://maps.googleapis.com/maps/api/distancematrix/json?key=${MAPS_API_KEY}&units=metric&origins=${POLYTECHNIQUE_POSTAL_CODE}&destinations=${postalCode}`
-        )
+        return this.http.get<any>(`${PROXY}https://maps.googleapis.com/maps/api/distancematrix/json?key=${MAPS_API_KEY}&units=metric&origins=${POLYTECHNIQUE_POSTAL_CODE}&destinations=${postalCode}`)
             .toPromise();
     }
 
