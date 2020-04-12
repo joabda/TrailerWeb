@@ -23,6 +23,16 @@ export class DatabaseService {
 
     public constructor() {
         this.pool.connect();
+        this.pool.query(`SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'netflixpoly';`)
+        .then(res => {
+            if(res.rowCount === 0) {
+                console.log('Creating Database');
+                this.createSchema();
+                this.populateDb();
+            } else {
+                console.log('Database already exists');
+            }
+        });
     }
 
     public async createSchema(): Promise<pg.QueryResult> {
