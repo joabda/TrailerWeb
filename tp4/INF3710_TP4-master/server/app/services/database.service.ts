@@ -12,7 +12,7 @@ export class DatabaseService {
     // A MODIFIER POUR VOTRE BD
     private connectionConfig: pg.ConnectionConfig = {
         user: "admin",
-        database: 'tp4',
+        database: 'postgres',
         password: "12345",
         port: 5432,
         host: "127.0.0.1",
@@ -27,8 +27,9 @@ export class DatabaseService {
         .then(res => {
             if(res.rowCount === 0) {
                 console.log('Creating Database');
-                this.createSchema();
-                this.populateDb();
+                this.createSchema().then( db => 
+                    this.populateDb().then( pop => console.log('Done'))
+                )
             } else {
                 console.log('Database already exists');
             }
