@@ -258,11 +258,20 @@ export class DatabaseController {
                 });
         });
 
-        router.post("/order/insert", (req: Request, res: Response, next: NextFunction) => {
+        router.post("/order/insert", async (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
+            const email = this.decode(tokenString).user;
+            this.databaseService.isPayPerView(email)
+            .then(resU => {
+                console.log('Result is here: ');
+                if(resU.rowCount === 1) {
+                    console.log('User is pay per view');
+                    this.databaseService.incrementMovieCount(email);
+                }
+            })
             this.databaseService.addStreamingOrder(
                 req.body.movieID,
                 this.decode(tokenString).user,

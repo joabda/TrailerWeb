@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS  NETFLIXPOLY.SubscribedMember (
 
 CREATE TABLE IF NOT EXISTS  NETFLIXPOLY.PayPerViewMember (
 	email				VARCHAR(320)					NOT NULL,
-	film_payPerView		NUMERIC,
+	film_payPerView		NUMERIC							NOT NULL,
 	PRIMARY KEY (email),
 	FOREIGN KEY (email) REFERENCES NETFLIXPOLY.Member(email)
 );

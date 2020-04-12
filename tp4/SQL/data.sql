@@ -22,19 +22,19 @@ INSERT INTO NETFLIXPOLY.SubscribedMember VALUES ('email3@gmail.com', 60,    '201
 INSERT INTO NETFLIXPOLY.SubscribedMember VALUES ('email4@gmail.com', 100,   '2019-01-04', '2021-01-04');
 
 -- Pay Per View Members
-INSERT INTO NETFLIXPOLY.PayPerViewMember VALUES ('email5@gmail.com', NULL);
+INSERT INTO NETFLIXPOLY.PayPerViewMember VALUES ('email5@gmail.com', 0);
 INSERT INTO NETFLIXPOLY.PayPerViewMember VALUES ('email6@gmail.com', 5);
 INSERT INTO NETFLIXPOLY.PayPerViewMember VALUES ('email7@gmail.com', 3);
 
 -- Credit Cards
-INSERT INTO NETFLIXPOLY.CreditCard VALUES ('5151909080876564',  'email1@gmail.com', 'Jean', 'Lebeau',       '2025-01-04', 555);
+INSERT INTO NETFLIXPOLY.CreditCard VALUES ('5151909080876564',  'email1@gmail.com', 'Jean',   'Lebeau',     '2025-01-04', 555);
 INSERT INTO NETFLIXPOLY.CreditCard VALUES ('4917194934861415',  'email2@gmail.com', 'Marie',  'Antoinette', '2024-09-01', 666);
 INSERT INTO NETFLIXPOLY.CreditCard VALUES ('6397436373151426',  'email3@gmail.com', 'Maude',  'Saint-Paul', '2025-12-08', 815);
 INSERT INTO NETFLIXPOLY.CreditCard VALUES ('3537624155758678',  'email4@gmail.com', 'Calvin', 'Klein',      '2022-11-15', 972);
 INSERT INTO NETFLIXPOLY.CreditCard VALUES ('5485667163502783',  'email5@gmail.com', 'Hugo',   'Boss',       '2024-08-19', 673);
 INSERT INTO NETFLIXPOLY.CreditCard VALUES ('6011605900024209',  'email6@gmail.com', 'Nina',   'Ricci',      '2024-04-20', 747);
 INSERT INTO NETFLIXPOLY.CreditCard VALUES ('0604177510135516',  'email7@gmail.com', 'Yves',   'Rocher',     '2023-10-13', 978);
-INSERT INTO NETFLIXPOLY.CreditCard VALUES ('348930913082441',   'email1@gmail.com', 'Jean', 'Lebeau',     '2022-06-04', 874);
+INSERT INTO NETFLIXPOLY.CreditCard VALUES ('348930913082441',   'email1@gmail.com', 'Jean',   'Lebeau',     '2022-06-04', 874);
 
 -- Movies
 SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Movie', 'idmovie')), 1, false);

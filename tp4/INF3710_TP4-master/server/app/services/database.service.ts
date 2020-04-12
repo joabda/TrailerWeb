@@ -45,6 +45,21 @@ export class DatabaseService {
             AND password = netflixpoly.crypt('${password}', password);`);
     }
 
+    async isPayPerView(id: string): Promise<pg.QueryResult> {
+        return this.pool.query(`
+            Select *
+            FROM ${DB_NAME}.${Tables.PPVM}
+            WHERE email = '${id}';`);
+    }
+
+    incrementMovieCount(id: string): void {
+        this.pool.query(`
+            UPDATE ${DB_NAME}.${Tables.PPVM} 
+                SET film_payPerView = film_payPerView + 1
+                WHERE email = '${id}';
+        `);
+    }
+
     public async addMovie(
         title: string,
         category: string,
