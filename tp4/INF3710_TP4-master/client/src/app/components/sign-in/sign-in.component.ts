@@ -21,8 +21,8 @@ export class SignInComponent {
         private snacks: MatSnackBar,
     ) {
         localStorage.setItem(Token.id, "");
-        this.username = "email1@gmail.com";
-        this.password = "password1";
+        this.username = "";
+        this.password = "";
         this.admin = false;
     }
 
