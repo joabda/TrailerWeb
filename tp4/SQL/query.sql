@@ -45,7 +45,7 @@ SELECT p.name, COUNT(m.idmovie) as numberOfMovies
 	GROUP BY p.idparticipant;
 
 -- 5 Trouvez les noms des membres dont le coût total d’achat de DVD est plus élevé que la moyenne
-DROP VIEW dvdTotal;
+DROP VIEW IF EXISTS dvdTotal;
 CREATE VIEW dvdTotal AS
 SELECT clientid, dvdid, idmovie, (dvdprice + shippingfee) AS total_price, dateorder
 FROM orderdvd, netflixpoly.order as o, movie
