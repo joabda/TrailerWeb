@@ -82,13 +82,11 @@ INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email7@gmail.com', 10, '2019-04-
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email4@gmail.com', 10, '2019-03-24'); -- 28
 INSERT INTO NETFLIXPOLY.Order VALUES (DEFAULT, 'email7@gmail.com', 10, '2019-02-24'); -- 29
 
--- IDs des deux tables susivantes reliés au IDs des orders
--- DVDid, comment on le relie à un film en particulier ?
 -- Order DVD
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (1, 2, 666); -- 666 temproraires
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (2, 1, 666); -- frais a calculer en fonction de la distance
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (3, 5, 666);
-INSERT INTO NETFLIXPOLY.OrderDVD VALUES (4, 7, 666); -- DVD IDs a changer
+INSERT INTO NETFLIXPOLY.OrderDVD VALUES (4, 7, 666);
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (5, 6, 666);
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (6, 2, 666);
 INSERT INTO NETFLIXPOLY.OrderDVD VALUES (7, 2, 666);

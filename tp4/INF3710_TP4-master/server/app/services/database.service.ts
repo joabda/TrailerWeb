@@ -24,16 +24,16 @@ export class DatabaseService {
     public constructor() {
         this.pool.connect();
         this.pool.query(`SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'netflixpoly';`)
-        .then(res => {
-            if(res.rowCount === 0) {
-                console.log('Creating Database');
-                this.createSchema().then( db => 
-                    this.populateDb().then( pop => console.log('Done'))
-                )
-            } else {
-                console.log('Database already exists');
-            }
-        });
+            .then((res) => {
+                if (res.rowCount === 0) {
+                    console.log('Creating Database');
+                    this.createSchema().then((db) =>
+                        this.populateDb().then((pop) => console.log('Done'))
+                    );
+                } else {
+                    console.log('Database already exists');
+                }
+            });
     }
 
     public async createSchema(): Promise<pg.QueryResult> {
@@ -56,16 +56,16 @@ export class DatabaseService {
             AND password = netflixpoly.crypt('${password}', password);`);
     }
 
-    async isPayPerView(id: string): Promise<pg.QueryResult> {
+    public async isPayPerView(id: string): Promise<pg.QueryResult> {
         return this.pool.query(`
             Select *
             FROM ${DB_NAME}.${Tables.PPVM}
             WHERE email = '${id}';`);
     }
 
-    incrementMovieCount(id: string): void {
+    public incrementMovieCount(id: string): void {
         this.pool.query(`
-            UPDATE ${DB_NAME}.${Tables.PPVM} 
+            UPDATE ${DB_NAME}.${Tables.PPVM}
                 SET film_payPerView = film_payPerView + 1
                 WHERE email = '${id}';
         `);
@@ -111,7 +111,6 @@ export class DatabaseService {
     }
 
     public async getPostalCode(email: string): Promise<pg.QueryResult> {
-        console.log('in postal');
         return this.pool.query(`
             SELECT postalcode
             FROM ${DB_NAME}.${Tables.M}
@@ -147,8 +146,19 @@ export class DatabaseService {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
         `);
+
         return this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.OStream} VALUES( (SELECT max(idorder) FROM ${DB_NAME}.${Tables.Order}), 0);
+        `);
+    }
+
+    public async addDvdOrder(movieID: number, memberID: string, dateOfOrder: string, fees: number): Promise<pg.QueryResult> {
+        await this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.Order} VALUES(DEFAULT, '${memberID}', ${movieID}, '${dateOfOrder}');
+        `);
+
+        return this.pool.query(`
+            INSERT INTO ${DB_NAME}.${Tables.ODVD} VALUES( (SELECT max(idorder) FROM ${DB_NAME}.${Tables.Order}), (SELECT max(dvdid) FROM ${DB_NAME}.${Tables.ODVD}), ${fees});
         `);
     }
 
@@ -157,7 +167,7 @@ export class DatabaseService {
             SELECT *
             FROM ${DB_NAME}.${Tables.OStream}
             WHERE idorder = (
-                SELECT DISTINCT idorder
+                SELECT DISTINCT ON (movieid) idorder
                 FROM ${DB_NAME}.${Tables.Order}
                 WHERE movieid = ${movieid}
                 AND clientid = '${user}'
@@ -170,7 +180,7 @@ export class DatabaseService {
             SELECT *
             FROM ${DB_NAME}.${Tables.ODVD}
             WHERE idorder = (
-                SELECT DISTINCT idorder
+                SELECT DISTINCT ON (clientid) idorder
                 FROM ${DB_NAME}.${Tables.Order}
                 WHERE movieid = ${movieid}
                 AND clientid = '${user}'
@@ -179,7 +189,7 @@ export class DatabaseService {
     }
 
     public async addParticipant(name: string, dateOfBirth: string, nationality: string,
-        sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
+                                sex: string, role: string, salary: number, movieID: number): Promise<pg.QueryResult> {
         await this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
             '${nationality}', '${sex}');

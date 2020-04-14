@@ -6,6 +6,7 @@ import { Token } from "src/app/enum/token";
 import { CreditCard } from "src/app/interfaces/cc";
 import { Movie } from "src/app/interfaces/movie";
 import { Nomination } from "src/app/interfaces/nomination";
+import { OrderDvd } from "src/app/interfaces/order-dvd";
 import { OrderStreaming } from "src/app/interfaces/order-streaming";
 import { Participant } from "src/app/interfaces/participant";
 import { Participation } from "src/app/interfaces/participation";
@@ -122,7 +123,7 @@ export class BrowseService {
 
     public orderMovieStreaming(order: OrderStreaming): void {
         this.http.post<OrderStreaming>(
-            `${API_URL}order/insert`,
+            `${API_URL}order/insert/streaming`,
             {
                 movieID: order.movieID,
                 dateOfOrder: `
@@ -138,8 +139,22 @@ export class BrowseService {
             .catch(() => false);
     }
 
-    public orderMovieDVD(movieID: number, dateOfOrder: Date): void {
-
+    public orderMovieDVD(movieID: number, dateOfOrder: Date, shippingfee: number): void {
+        this.http.post<OrderDvd>(
+            `${API_URL}order/insert/dvd`,
+            {
+                movieID: movieID,
+                dateOfOrder: `
+          ${dateOfOrder.getUTCFullYear()}-${(dateOfOrder.getUTCMonth() + 1)}-${String(dateOfOrder.getDate()).padStart(2, "0")}`,
+                shippingfee: shippingfee
+            },
+            {
+                headers: new HttpHeaders().set("Authorization",
+                                               localStorage.getItem(Token.id) as unknown as string)
+            }
+        )
+            .toPromise()
+            .catch(() => false);
     }
 
     private formatPostalCode(old: string): string {

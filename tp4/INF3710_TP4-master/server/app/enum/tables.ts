@@ -6,7 +6,7 @@ export enum Tables {
     CC = 'creditCard',
     Movie = 'movie',
     Order = 'order',
-    ODVD = 'orderDVD',
+    ODVD = 'orderdvd',
     OStream = 'streaming',
     Participant = 'participant',
     Participation = 'participation',
