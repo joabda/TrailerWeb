@@ -229,11 +229,7 @@ export class DatabaseController {
             }
             this.databaseService.validateOrderStream(req.body.id, this.decode(tokenString).user)
                 .then((result: pg.QueryResult) => {
-                    if (result.rowCount === 1) {
-                        res.json(result.rows[0]);
-                    } else {
-                        res.json(HTTP.Error);
-                    }
+                    res.json(result.rows[0]);
                 }).catch((e: Error) => {
                     console.error(e.stack);
                     res.json(HTTP.Error);
@@ -247,35 +243,49 @@ export class DatabaseController {
             }
             this.databaseService.validateOrderDVD(req.body.id, this.decode(tokenString).user)
                 .then((result: pg.QueryResult) => {
-                    if (result.rowCount === 1) {
-                        res.json(result.rows[0]);
-                    } else {
-                        res.json(HTTP.Error);
-                    }
+                    res.json(result.rows[0]);
                 }).catch((e: Error) => {
                     console.error(e.stack);
                     res.json(HTTP.Error);
                 });
         });
 
-        router.post("/order/insert", async (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+        router.post("/order/insert/streaming", async (req: Request, res: Response, next: NextFunction) => {
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
-            const email = this.decode(tokenString).user;
+            const email: string = this.decode(tokenString).user;
             this.databaseService.isPayPerView(email)
-            .then(resU => {
-                console.log('Result is here: ');
-                if(resU.rowCount === 1) {
-                    console.log('User is pay per view');
-                    this.databaseService.incrementMovieCount(email);
-                }
-            })
+                .then((resU) => {
+                    console.log('Result is here: ');
+                    if (resU.rowCount === 1) {
+                        console.log('User is pay per view');
+                        this.databaseService.incrementMovieCount(email);
+                    }
+                });
             this.databaseService.addStreamingOrder(
                 req.body.movieID,
                 this.decode(tokenString).user,
                 req.body.dateOfOrder)
+                .then((result: pg.QueryResult) => {
+                    res.json(HTTP.Accepted);
+                }).catch((e: Error) => {
+                    console.error(e.stack);
+                    res.json(HTTP.Error);
+                });
+        });
+
+        router.post("/order/insert/dvd", async (req: Request, res: Response, next: NextFunction) => {
+            const tokenString: string = req.header(TOKEN) as unknown as string;
+            if (!this.isValid(tokenString)) {
+                res.json(HTTP.Unauthorized);
+            }
+            this.databaseService.addDvdOrder(
+                req.body.movieID,
+                this.decode(tokenString).user,
+                req.body.dateOfOrder,
+                req.body.shippingfee)
                 .then((result: pg.QueryResult) => {
                     res.json(HTTP.Accepted);
                 }).catch((e: Error) => {
@@ -306,7 +316,6 @@ export class DatabaseController {
 
         router.get("/users/postalCode", (req: Request, res: Response, next: NextFunction) => {
             const tokenString = req.header(TOKEN) as unknown as string;
-            console.log('in');
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }

@@ -40,7 +40,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     public title: string;
     public movie: Movie | undefined;
     private subscriptions: Subscription[] = [];
-    isLoading: boolean;
+    public isLoading: boolean;
     @ViewChild(MatInput) private filter: MatInput;
 
     public constructor(
@@ -119,7 +119,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
         );
         if (movie !== undefined) {
             this.service.isOrdered(movie.id, "dvd").subscribe((res) => {
-                if (res !== null && res.valueOf() != HTTP.Error) {
+                if (res !== null && res.valueOf() !== HTTP.Error) {
                     this.confirmation.confirm("You already ordered this movie as DVD", `Are you sure you want to order it again?`)
                         .then((confirmation) => {
                             if (confirmation) {
@@ -135,17 +135,17 @@ export class BrowseComponent implements OnInit, OnDestroy {
         }
     }
 
-    private orderMovie(movie: Movie, type: OrderType): void { //ICI
+    private orderMovie(movie: Movie, type: OrderType): void {
         this.service.creditCards().subscribe(async (res) => {
             if (res !== null) {
                 this.isLoading = true;
                 const distance = await this.service.getDistance();
                 this.isLoading = false;
-                if (distance.rows[0].elements[0].status !== 'OK') {
-                    this.openSnack('Couldn\'t find route to your location sorry.');
+                if (distance.rows[0].elements[0].status !== "OK") {
+                    this.openSnack("Couldn't find route to your location sorry.");
                 } else {
                     const result: string = distance.rows[0].elements[0].distance.text;
-                    const shipping = Number(result.substr(0, result.indexOf(" "))) * PRICE_PER_KM;
+                    const shipping = parseFloat(result.substr(0, result.indexOf(" "))) * PRICE_PER_KM;
                     const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : shipping);
                     reference.afterClosed().pipe(
                         filter((stopTime) => stopTime)
@@ -157,7 +157,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
                                     dateOfOrder: new Date()
                                 });
                             } else {
-                                this.service.orderMovieDVD(movie.id, new Date());
+                                this.service.orderMovieDVD(movie.id, new Date(), shipping);
                             }
                         }
                     });

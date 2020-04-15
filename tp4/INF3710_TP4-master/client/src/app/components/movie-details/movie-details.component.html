@@ -4,18 +4,6 @@
 <h2><strong>Duration : </strong>{{movie.duration}} minutes</h2>
 <h2><strong>DVD price : </strong>{{movie.dvdPrice}} $</h2>
 <h2><strong>Streaming fee : </strong>{{movie.streamingFee}} $</h2>
-
-<button
-    mat-button
-    #play
-    title={{movie.title}}
-    (click)="onClick(play, 1)"
->Play</button>
-<button
-    mat-button
-    title={{movie.title}}
-    (click)="onClick(play, 0)"
->Buy DVD</button>
 <br/>
 <h2><strong>Ocars nominations : </strong></h2>
 <div class="box">
