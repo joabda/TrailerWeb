@@ -105,7 +105,7 @@ export class BrowseService {
 
     public async getDistance(): Promise<any> {
         const res = await this.getProstalCode();
-        const postalCode = this.formatPostalCode(res.postalcode);
+        const postalCode: string = this.formatPostalCode(res.postalcode);
 
         return this.http.get<any>(`${PROXY}https://maps.googleapis.com/maps/api/distancematrix/json?key=${MAPS_API_KEY}&units=metric&origins=${POLYTECHNIQUE_POSTAL_CODE}&destinations=${postalCode}`)
             .toPromise();
@@ -158,16 +158,16 @@ export class BrowseService {
     }
 
     private formatPostalCode(old: string): string {
-        const space = old.indexOf(" ");
-        let newString = old;
+        const space: number = old.indexOf(" ");
+        let newString: string = old;
         if (space !== -1) {
             newString = old.slice(0, space) + old.slice(space + 1);
         }
-        const dash = old.indexOf("-");
+        const dash: number = old.indexOf("-");
         if (dash !== -1) {
             newString = old.slice(0, dash) + old.slice(dash + 1);
         }
-        const seperator = old.indexOf("/");
+        const seperator: number = old.indexOf("/");
         if (dash !== -1) {
             newString = old.slice(0, seperator) + old.slice(seperator + 1);
         }

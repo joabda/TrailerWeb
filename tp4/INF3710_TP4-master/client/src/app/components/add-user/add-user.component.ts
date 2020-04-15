@@ -14,13 +14,13 @@ import { ManageService } from "src/app/services/manage/manage.service";
 })
 export class AddUserComponent {
 
-  public emailRegEx = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-  public specialCharRegEx = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);
-  public upperCaseRegEx = new RegExp("[A-Z]");
-  public numberRegEx = new RegExp("[0-9]");
-  public positiveDigitsRegEx = new RegExp(/^\d*[1-9]\d*$/);
-  public canadianPostalCodeRegEx = new RegExp(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/);
-  public states = CANADIAN_PROVINCES;
+  public emailRegEx: RegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+  public specialCharRegEx: RegExp = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);
+  public upperCaseRegEx: RegExp = new RegExp("[A-Z]");
+  public numberRegEx: RegExp = new RegExp("[0-9]");
+  public positiveDigitsRegEx: RegExp = new RegExp(/^\d*[1-9]\d*$/);
+  public canadianPostalCodeRegEx: RegExp = new RegExp(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/);
+  public states: string[] = CANADIAN_PROVINCES;
   public user: User;
   public loading: boolean;
   @ViewChild(NgForm, { static: true }) public form: NgForm;
@@ -103,7 +103,7 @@ export class AddUserComponent {
     );
   }
 
-  private openSnack(message: string) {
+  private openSnack(message: string): void { 
     this.snacks.open(
       message,
       "",

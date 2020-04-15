@@ -24,9 +24,9 @@ export class TrailerComponent implements OnInit {
 
             return;
         }
-        const tag = document.createElement("script");
+        const tag: HTMLScriptElement = document.createElement("script");
         tag.src = YOUTUBE_API;
-        const firstScriptTag = document.getElementsByTagName("script")[0] as HTMLScriptElement;
+        const firstScriptTag: HTMLScriptElement = document.getElementsByTagName("script")[0] as HTMLScriptElement;
         (firstScriptTag.parentNode as Node).insertBefore(tag, firstScriptTag);
         window["onYouTubeIframeAPIReady"] = () => this.startVideo();
     }

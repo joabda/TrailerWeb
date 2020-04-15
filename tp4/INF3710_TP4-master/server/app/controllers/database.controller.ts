@@ -22,7 +22,7 @@ export class DatabaseController {
 
     public get router(): Router {
         const router: Router = Router();
-        const RSA_PRIVATE_KEY = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
+        const RSA_PRIVATE_KEY: string = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
 
         router.post("/createSchema", (req: Request, res: Response, next: NextFunction) => {
             this.databaseService.createSchema().then((result: pg.QueryResult) => {
@@ -103,7 +103,7 @@ export class DatabaseController {
         });
 
         router.post("/participants/insert", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -194,7 +194,7 @@ export class DatabaseController {
         });
 
         router.put("/movies/delete", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -208,7 +208,7 @@ export class DatabaseController {
         });
 
         router.put("/order/update", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -223,7 +223,7 @@ export class DatabaseController {
         });
 
         router.post("/order/streaming/validation", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -237,7 +237,7 @@ export class DatabaseController {
         });
 
         router.post("/order/dvd/validation", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -295,7 +295,7 @@ export class DatabaseController {
         });
 
         router.post("/ceremony/insert", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -315,7 +315,7 @@ export class DatabaseController {
         });
 
         router.get("/users/postalCode", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -329,7 +329,7 @@ export class DatabaseController {
         });
 
         router.post("/users/insert", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -359,7 +359,7 @@ export class DatabaseController {
             this.databaseService.verifyUser(req.body.username, req.body.password, Tables.M)
                 .then((result: pg.QueryResult) => {
                     if (result.rowCount === 1) {
-                        const jwtBearerToken = jwt.sign({}, RSA_PRIVATE_KEY, {
+                        const jwtBearerToken: string = jwt.sign({}, RSA_PRIVATE_KEY, {
                             algorithm: 'RS256',
                             expiresIn: 7200,
                             subject: req.body.username as string
@@ -378,7 +378,7 @@ export class DatabaseController {
 
         router.post("/participants/insert",
                     (req: Request, res: Response, next: NextFunction) => {
-                const tokenString = req.header(TOKEN) as unknown as string;
+                const tokenString: string = req.header(TOKEN) as unknown as string;
                 if (!this.isValid(tokenString)) {
                     res.json(HTTP.Unauthorized);
                 }
@@ -401,7 +401,7 @@ export class DatabaseController {
             this.databaseService.verifyUser(req.body.username, req.body.password, Tables.A)
                 .then((result: pg.QueryResult) => {
                     if (result.rowCount === 1) {
-                        const jwtBearerToken = jwt.sign({}, RSA_PRIVATE_KEY, {
+                        const jwtBearerToken: string = jwt.sign({}, RSA_PRIVATE_KEY, {
                             algorithm: 'RS256',
                             expiresIn: 7200,
                             subject: req.body.username as string
@@ -429,7 +429,7 @@ export class DatabaseController {
 
         router.post("/users/insert",
                     (req: Request, res: Response, next: NextFunction) => {
-                const tokenString = req.header(TOKEN) as unknown as string;
+                const tokenString: string = req.header(TOKEN) as unknown as string;
                 if (!this.isValid(tokenString)) {
                     res.json(HTTP.Unauthorized);
                 }
@@ -458,7 +458,7 @@ export class DatabaseController {
             });
 
         router.get("/creditcards/", (req: Request, res: Response, next: NextFunction) => {
-            const tokenString = req.header(TOKEN) as unknown as string;
+            const tokenString: string = req.header(TOKEN) as unknown as string;
             if (!this.isValid(tokenString)) {
                 res.json(HTTP.Unauthorized);
             }
@@ -484,14 +484,16 @@ export class DatabaseController {
     }
 
     private isValid(tokenString: string): boolean {
-        const token = this.decode(tokenString);
-        const date = new Date(0);
+        const token: Token = this.decode(tokenString);
+        const date: Date = new Date(0);
         date.setUTCSeconds(token.expiry);
+
         return (date.valueOf() > new Date().valueOf());
     }
 
     private decode(token: string): Token {
         const result: any = jwt.decode(token);
+
         return {
             producedAt: result.iat,
             expiry: result.exp,
