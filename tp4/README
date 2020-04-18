@@ -18,6 +18,10 @@ Application is in the INF3710_TP4-master folder
 
 All the SQL files are in the SQL folder
 
+#Database Setup
+server -> app- -> services -> database.service.ts
+	Modify and put your own database connection params
+
 
 ## Contributing
 Joe ABDO 
