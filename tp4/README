@@ -3,20 +3,20 @@
 Netflixpoly is a Web app for movies.
 
 # Installation
-In client folder:
-	npm install
-	npm start
+Application is in the INF3710_TP4-master folder
+	In client folder:
+		npm install
+		npm start
 
-In server folder:
-	npm install
-	npm start
+	In server folder:
+		npm install
+		npm start
 
-In cors-anywhere folder:
-	npm install
-	npm start
+	In cors-anywhere folder:
+		npm install
+		npm start
 
-## Usage
-
+All the SQL files are in the SQL folder
 
 
 ## Contributing
