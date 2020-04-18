@@ -29,7 +29,7 @@ export class HotkeyService {
 
     public addShortcut(options: Partial<Options>): Observable<Event> {
         const merged = { ...this.defaults, ...options };
-        const event = `keydown.${merged.keys}`;
+        const event: string = `keydown.${merged.keys}`;
 
         return new Observable((observer) => {
             const handler = (e: Event) => {
@@ -37,7 +37,7 @@ export class HotkeyService {
                 observer.next(e);
             };
 
-            const dispose = this.eventManager.addEventListener(
+            const dispose: Function = this.eventManager.addEventListener(
                 merged.element, event, handler
             );
 

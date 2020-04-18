@@ -1,10 +1,12 @@
 import { Category } from "../enum/category";
 import { NominationCategory } from "../enum/nomination-category";
 import { Role } from "../enum/role";
+import { Participant } from "../interfaces/participant";
+import { User } from "../interfaces/user";
 
-export const API_URL = "http://localhost:3000/database/";
+export const API_URL: string = "http://localhost:3000/database/";
 
-export const ALL_CATEGORIES = [
+export const ALL_CATEGORIES: Category[] = [
     Category.Action,
     Category.Comedy,
     Category.Drama,
@@ -12,7 +14,7 @@ export const ALL_CATEGORIES = [
     Category.Thriller
 ];
 
-export const ALL_NOMINATIONS = [
+export const ALL_NOMINATIONS: NominationCategory[] = [
     NominationCategory.Actor,
     NominationCategory.Actress,
     NominationCategory.International,
@@ -22,13 +24,13 @@ export const ALL_NOMINATIONS = [
     NominationCategory.VE
 ];
 
-export const TITLE = "title";
+export const TITLE: string = "title";
 
-export const YOUTUBE_API = "http://youtube.com/iframe_api";
+export const YOUTUBE_API: string = "http://youtube.com/iframe_api";
 
-export const CC_NUMBER_OF_DIGITS = 16;
+export const CC_NUMBER_OF_DIGITS: number = 16;
 
-export const CANADIAN_PROVINCES = [
+export const CANADIAN_PROVINCES: string[] = [
     "Alberta",
     "British Columbia",
     "Manitoba",
@@ -41,7 +43,7 @@ export const CANADIAN_PROVINCES = [
     "Saskatchewan",
 ];
 
-export const DEFAULT_USER = {
+export const DEFAULT_USER: User = {
     email: "",
     password: "",
     firstName: "",
@@ -70,7 +72,7 @@ export const DEFAULT_MOVIE = {
     honors: [],
 };
 
-export const DEFAULT_PARTICIPANT = {
+export const DEFAULT_PARTICIPANT: Participant = {
     name: "",
     dateOfbirth: "",
     nationality: "",
@@ -79,23 +81,23 @@ export const DEFAULT_PARTICIPANT = {
     salary: 0
 };
 
-export const ALL_ROLES = [
+export const ALL_ROLES: Role[] = [
     Role.Actor,
     Role.Producer,
 ];
 
 export const DEFAULT_CEREMONY = {
-    date        :   "",
-    location    :   "",
-    host        :   "",
-    winner      :   false,
-    category    :   NominationCategory.None
+    date: "",
+    location: "",
+    host: "",
+    winner: false,
+    category: NominationCategory.None
 };
 
-export const POLYTECHNIQUE_POSTAL_CODE = "H3T1J4";
+export const POLYTECHNIQUE_POSTAL_CODE: string = "H3T1J4";
 
-export const MAPS_API_KEY = "AIzaSyBwnIPWbcvxyKd0inqjMZZocyCIDUKPGkE";
+export const MAPS_API_KEY: string = "AIzaSyBwnIPWbcvxyKd0inqjMZZocyCIDUKPGkE";
 
-export const PROXY = "http://localhost:8080/";
+export const PROXY: string = "http://localhost:8080/";
 
-export const PRICE_PER_KM = 0.25;
+export const PRICE_PER_KM: number = 0.25;

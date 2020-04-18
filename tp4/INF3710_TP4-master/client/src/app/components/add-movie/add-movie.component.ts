@@ -35,11 +35,11 @@ export class AddMovieComponent implements OnInit {
     public currentParticipant: Participant;
     public currentCeremony: Oscar;
     public categories: Category[];
-    public urlRegEx = new RegExp(/^(https?|ftp|torrent|image|irc):\/\/(-\.)?([^\s\/?\.#-]+\.?)+(\/[^\s]*)?$/i);
+    public urlRegEx: RegExp = new RegExp(/^(https?|ftp|torrent|image|irc):\/\/(-\.)?([^\s\/?\.#-]+\.?)+(\/[^\s]*)?$/i);
 
     public displayedColumns: string[] = ["name", "role", "delete"];
     public displayedColumns2: string[] = ["host", "date", "delete"];
-    public dataSource = new MatTableDataSource();
+    public dataSource: MatTableDataSource<unknown> = new MatTableDataSource();
     public loading: boolean;
     @ViewChild(MatSort, { static: true }) public sort: MatSort;
     @ViewChildren(NgForm) public forms: QueryList<NgForm>;
@@ -232,7 +232,7 @@ export class AddMovieComponent implements OnInit {
         );
     }
 
-    private openSnack(message: string) {
+    private openSnack(message: string): void {
         this.snacks.open(
             message,
             "",

@@ -27,8 +27,8 @@ export class DatabaseService {
             .then((res) => {
                 if (res.rowCount === 0) {
                     console.log('Creating Database');
-                    this.createSchema().then((db) =>
-                        this.populateDb().then((pop) => console.log('Done'))
+                    this.createSchema().then(() =>
+                        this.populateDb().then(() => console.log('Done'))
                     );
                 } else {
                     console.log('Database already exists');
@@ -92,6 +92,7 @@ export class DatabaseService {
         ];
         const queryText: string = `INSERT INTO ${DB_NAME}.${Tables.Movie} VALUES(DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8);`;
         this.pool.query(queryText, values);
+
         return this.pool.query(`SELECT max(idmovie) FROM ${DB_NAME}.${Tables.Movie};`);
     }
 
@@ -105,6 +106,7 @@ export class DatabaseService {
 
     ): Promise<pg.QueryResult> {
         await this.pool.query(`INSERT INTO ${DB_NAME}.${Tables.Oscars} VALUES('${date}', '${location}', '${host}');`);
+
         return this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Nomination} VALUES('${date}', ${movieID}, ${winner}, '${category}');
         `);
@@ -121,6 +123,7 @@ export class DatabaseService {
     public async deleteMovie(id: number): Promise<pg.QueryResult> {
         await this.pool.query(`DELETE FROM ${DB_NAME}.${Tables.Nomination} WHERE movieid = ${id};`);
         await this.pool.query(`DELETE FROM ${DB_NAME}.${Tables.Participation} WHERE movieid = ${id};`);
+
         return this.pool.query(`
             DELETE
             FROM ${DB_NAME}.${Tables.Movie}
@@ -131,6 +134,7 @@ export class DatabaseService {
     public async updateURL(id: number, stoppedAt: number): Promise<pg.QueryResult> {
         const queryText: string = `
             UPDATE ${DB_NAME}.${Tables.OStream} SET stoppedat=${stoppedAt} WHERE idorder = ${id};`;
+
         return this.pool.query(queryText);
     }
 
@@ -158,7 +162,8 @@ export class DatabaseService {
         `);
 
         return this.pool.query(`
-            INSERT INTO ${DB_NAME}.${Tables.ODVD} VALUES( (SELECT max(idorder) FROM ${DB_NAME}.${Tables.Order}), (SELECT max(dvdid) FROM ${DB_NAME}.${Tables.ODVD}), ${fees});
+            INSERT INTO ${DB_NAME}.${Tables.ODVD} VALUES( (SELECT max(idorder) FROM ${DB_NAME}.${Tables.Order}),
+            (SELECT max(dvdid) FROM ${DB_NAME}.${Tables.ODVD}), ${fees});
         `);
     }
 
@@ -194,6 +199,7 @@ export class DatabaseService {
             INSERT INTO ${DB_NAME}.${Tables.Participant} VALUES(DEFAULT, '${name}', '${dateOfBirth}',
             '${nationality}', '${sex}');
         `);
+
         return this.pool.query(`
             INSERT INTO ${DB_NAME}.${Tables.Role} VALUES(${movieID},
                 (SELECT max(idparticipant) FROM ${DB_NAME}.${Tables.Participant}), '${role}', ${salary});
@@ -222,7 +228,8 @@ export class DatabaseService {
     ): Promise<pg.QueryResult> {
         const values: any[] = [];
         await this.pool.query(`
-            INSERT INTO ${DB_NAME}.${Tables.M} VALUES('${email}', ${DB_NAME}.crypt('${password}', ${DB_NAME}.gen_salt('bf')), '${firstName}',
+            INSERT INTO ${DB_NAME}.${Tables.M} VALUES('${email}', ${DB_NAME}.crypt('${password}',
+            ${DB_NAME}.gen_salt('bf')), '${firstName}',
                 '${lastName}', '${street}', ${appartmentNo}, '${postalCode}',
                 '${city}', '${state}', '${country}');
         `);
@@ -230,22 +237,24 @@ export class DatabaseService {
             values.push(fee);
             values.push(endDate);
         }
+
         return this.pool.query(`INSERT INTO ${DB_NAME}.${subscribed ? Tables.SM : Tables.PPVM}
             VALUES('${email}', ${subscribed ? (`${fee}, '${this.getCurrentDate()}' ,'${endDate}'`) : 0});`
         );
     }
 
     private getCurrentDate(): string {
-        let d = new Date(),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
+        let d: Date = new Date(),
+            month: string = '' + (d.getMonth() + 1),
+            day: string = '' + d.getDate(),
+            year: number = d.getFullYear();
         if (month.length < 2) {
             month = '0' + month;
         }
         if (day.length < 2) {
             day = '0' + day;
         }
+
         return [year, month, day].join('-');
     }
 }

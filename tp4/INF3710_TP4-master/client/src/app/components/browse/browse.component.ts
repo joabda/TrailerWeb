@@ -31,8 +31,8 @@ export class BrowseComponent implements OnInit, OnDestroy {
     public movies: Movie[];
     public searchedMovies: Movie[];
 
-    public titleControl = new FormControl();
-    public categoryControl = new FormControl();
+    public titleControl: FormControl = new FormControl();
+    public categoryControl: FormControl = new FormControl();
 
     public filteredMovies: Observable<string[]>;
     public titles: string[];
@@ -56,7 +56,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     }
 
     public async ngOnInit(): Promise<void> {
-        const result = await this.service.getMovies();
+        const result: boolean | Movie[] = await this.service.getMovies();
         if (result.valueOf() === false) {
             this.openSnack("Please Sign In First");
             this.router.navigate([""]);
@@ -145,7 +145,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
                     this.openSnack("Couldn't find route to your location sorry.");
                 } else {
                     const result: string = distance.rows[0].elements[0].distance.text;
-                    const shipping = parseFloat(result.substr(0, result.indexOf(" "))) * PRICE_PER_KM;
+                    const shipping: number = parseFloat(result.substr(0, result.indexOf(" "))) * PRICE_PER_KM;
                     const reference = this.openOrderDialog(movie.title, res, type ? movie.streamingFee : movie.dvdPrice, type ? 0 : shipping);
                     reference.afterClosed().pipe(
                         filter((stopTime) => stopTime)

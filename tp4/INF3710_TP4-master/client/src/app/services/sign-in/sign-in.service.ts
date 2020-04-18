@@ -15,8 +15,8 @@ export class SignInService {
     public constructor(private http: HttpClient) {
     }
 
-    public async login(toAuthenticate: Logins): Promise<any> {
-        return this.http.post<any>(`${API_URL}users`, toAuthenticate)
+    public async login(toAuthenticate: Logins): Promise<void> {
+        return this.http.post<HTTP>(`${API_URL}users`, toAuthenticate)
             .toPromise()
             .then(
                 (result) => {
@@ -28,8 +28,8 @@ export class SignInService {
             .catch((e: HttpErrorResponse) => { localStorage.setItem(Token.id, ""); });
     }
 
-    public async loginAdmin(toAuthenticate: Logins): Promise<any> {
-        return this.http.post<any>(`${API_URL}admins`, toAuthenticate)
+    public async loginAdmin(toAuthenticate: Logins): Promise<void> {
+        return this.http.post<HTTP>(`${API_URL}admins`, toAuthenticate)
             .toPromise()
             .then(
                 (result) => {
@@ -42,14 +42,14 @@ export class SignInService {
     }
 
     private setSession(authResult: any): void {
-        const expiresAt = moment().add(authResult.expiresIn, "minute");
+        const expiresAt: moment.Moment = moment().add(authResult.expiresIn, "minute");
         localStorage.setItem(Token.id, authResult.idToken);
         localStorage.setItem(Token.expiry, JSON.stringify(expiresAt.valueOf()));
         localStorage.setItem(Token.admin, authResult.admin);
     }
 
-    public createAndPopulateDB(): Observable<any> {
-        return concat(this.http.post<any>(`${API_URL}createSchema`, []),
-                      this.http.post<any>(`${API_URL}populateDb`, []));
+    public createAndPopulateDB(): Observable<HTTP> {
+        return concat(this.http.post<HTTP>(`${API_URL}createSchema`, []),
+                      this.http.post<HTTP>(`${API_URL}populateDb`, []));
     }
 }
