@@ -166,7 +166,26 @@ SELECT title,  productionDate, name as participant, count AS nbOscars
 	ORDER BY title;
 
 -- 12 Quelles paires de femmes québécoises ont le plus souvent travaillé ensemble dans différents films ? 
+DROP VIEW IF EXISTS qcActress CASCADE;
+CREATE VIEW qcActress
+	AS 	SELECT idParticipant, name 
+		FROM Participant
+		WHERE sex='F' 
+		AND nationality = 'Quebec';
 
+DROP VIEW IF EXISTS sameMovie CASCADE;
+CREATE VIEW sameMovie
+	AS 	SELECT idParticipants, name, COUNT(movieid) AS MovieCount
+	FROM (
+		SELECT movieid, array_agg(ARRAY[idParticipant]) AS idParticipants, name
+		FROM Participation r, qcActress
+		WHERE r.participantid = qcActress.idparticipant
+		GROUP BY movieid, name
+		) as sameMovieQcActress
+	GROUP BY name, idParticipants;
+SELECT DISTINCT ON (name) name, MAX(movieCount) FROM sameMovie
+GROUP BY name
+HAVING COUNT(movieCount)=MAX(movieCount);
 
 -- 13 Comment a évolué la carrière de Woody Allen ? (On veut connaitre tous ses rôles dans un film (réalisateur, acteur, etc.) du plus ancien au plus récent)
 SELECT name, title, role, productionDate
