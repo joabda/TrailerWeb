@@ -24,7 +24,7 @@ CREATE VIEW categoryCountByMember									 -- Obtenir le nb de films regardé pa
 		WHERE netflixpoly.Order.idOrder = streaming.idOrder 
 		AND netflixpoly.Order.clientID = netflixpoly.Member.email
 		AND netflixpoly.Order.movieID = Movie.idMovie
-		GROUP BY firstName, lastName, category;
+		GROUP BY firstName, lastName, category, email;
 
 SELECT *															-- Si plusieurs personnes ont le meme nombre, affiche les deux
 	FROM categoryCountByMember
@@ -99,6 +99,7 @@ AND o.movieid NOT IN (
 )
 GROUP BY title
 HAVING COUNT(title) > 10;
+-- ERROR HERE
 
 -- 8 Trouvez le nom et date de naissance des acteurs qui jouent dans les films qui sont visionnés le plus souvent (soit plus que la moyenne) 
 DROP VIEW IF EXISTS mostViewedMovies;
@@ -115,7 +116,6 @@ SELECT name, dateOfBirth, title
 	AND Participation.participantID = Participant.idParticipant
 	AND Participation.role = 'Actor'
 	AND mostViewedMovies.count >= (SELECT AVG(mostViewedMovies.count) FROM mostViewedMovies);
-	
 
 -- 9 Trouvez le nom du ou des réalisateurs qui ont réalisé les films qui ont le plus grand nombre de nominations aux oscars.  Par exemple, Woody Allen et Steven Spielberg ont réalisé 10 films qui ont été nominés aux oscars.
 DROP VIEW IF EXISTS nominationCount;
