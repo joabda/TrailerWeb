@@ -97,7 +97,7 @@ AND o.movieid NOT IN (
 	FROM netflixpoly.orderdvd as d, netflixpoly.order as o
 	WHERE d.idorder = o.idorder
 )
-GROUP BY title
+GROUP BY title, dvdPrice, streamingFee
 HAVING COUNT(title) > 10;
 -- ERROR HERE
 
