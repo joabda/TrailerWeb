@@ -141,26 +141,30 @@ INSERT INTO NETFLIXPOLY.Streaming VALUES (42, 2);
 
 -- Participant
 SELECT SETVAL((SELECT pg_get_serial_sequence('NETFLIXPOLY.Participant', 'idparticipant')), 1, false);
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Vin Diesel',          '1967/07/18', 'USA',      'M'); -- 1
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'John Cena',           '1977/04/23', 'USA',      'M'); -- 2
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jason Statham',       '1967/07/26', 'USA',      'M'); -- 3
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Iliza Shlesinger',    '1983/02/22', 'USA',      'F'); -- 4
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Angelina Jolie',      '1975/06/04', 'USA',      'F'); -- 5
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jeremy Renner',       '1971/01/07', 'USA',      'M'); -- 6
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Daniel Craig',        '1968/03/02', 'England',  'M'); -- 7
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Dwayne Johnson',      '1972/05/02', 'Canada',   'M'); -- 8
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kevin Hart',          '1979/07/06', 'USA',      'M'); -- 9
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Tom Cruise',          '1962/07/03', 'USA',      'M'); -- 10
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kate Winslet',        '1975/10/05', 'England',  'F'); -- 11
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'James Cameron',       '1954/08/16', 'USA',      'M'); -- 12
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Steven Spielberg',    '1946/12/18', 'USA',      'M'); -- 13
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Mel Brooks'      ,    '1926/06/28', 'USA',      'M'); -- 14
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jerry Bruckheimer',   '1943/09/21', 'USA',      'M'); -- 15
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'George Lucas',        '1944/05/14', 'USA',      'M'); -- 16
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Woody Allen',        	'1935/12/01', 'USA',      'M'); -- 17
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Hope Olaide Wilson', 	'1985/08/16', 'England',  'F'); -- 18
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'olya zueva',        	'1987/08/23', 'Russia',   'F'); -- 19
-INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jennifer Connelly',  	'1970/12/12', 'USA',      'F'); -- 20
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Vin Diesel',              '1967/07/18', 'USA',      'M'); -- 1
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'John Cena',               '1977/04/23', 'USA',      'M'); -- 2
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jason Statham',           '1967/07/26', 'USA',      'M'); -- 3
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Iliza Shlesinger',        '1983/02/22', 'USA',      'F'); -- 4
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Angelina Jolie',          '1975/06/04', 'USA',      'F'); -- 5
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jeremy Renner',           '1971/01/07', 'USA',      'M'); -- 6
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Daniel Craig',            '1968/03/02', 'England',  'M'); -- 7
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Dwayne Johnson',          '1972/05/02', 'Canada',   'M'); -- 8
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kevin Hart',              '1979/07/06', 'USA',      'M'); -- 9
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Tom Cruise',              '1962/07/03', 'USA',      'M'); -- 10
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Kate Winslet',            '1975/10/05', 'England',  'F'); -- 11
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'James Cameron',           '1954/08/16', 'USA',      'M'); -- 12
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Steven Spielberg',        '1946/12/18', 'USA',      'M'); -- 13
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Mel Brooks'      ,        '1926/06/28', 'USA',      'M'); -- 14
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jerry Bruckheimer',       '1943/09/21', 'USA',      'M'); -- 15
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'George Lucas',            '1944/05/14', 'USA',      'M'); -- 16
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Woody Allen',        	    '1935/12/01', 'USA',      'M'); -- 17
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Hope Olaide Wilson', 	    '1985/08/16', 'England',  'F'); -- 18
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'olya zueva',        	    '1987/08/23', 'Russia',   'F'); -- 19
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Jennifer Connelly',  	    '1970/12/12', 'USA',      'F'); -- 20
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Marie-Josée Croze',  	    '1970/02/23', 'Quebec',   'F'); -- 21
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Nathalie Coupal',  	    '1960/08/11', 'Quebec',   'F'); -- 22
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Camille Cyr-Desmarais',   '1977/11/13', 'Quebec',   'F'); -- 23
+INSERT INTO NETFLIXPOLY.Participant VALUES (DEFAULT, 'Catherine Bonneau',  	    '1974/01/07', 'Quebec',   'F'); -- 24
 
 
 -- Participation
@@ -191,6 +195,12 @@ INSERT INTO NETFLIXPOLY.Participation VALUES (2, 17,    'Actor', 	15000);
 INSERT INTO NETFLIXPOLY.Participation VALUES (3, 18,    'Actor', 	19500);
 INSERT INTO NETFLIXPOLY.Participation VALUES (4, 19,    'Actor', 	190500);
 INSERT INTO NETFLIXPOLY.Participation VALUES (9, 20,    'Actor', 	85000);
+INSERT INTO NETFLIXPOLY.Participation VALUES (9, 21,    'Actor', 	85000);
+INSERT INTO NETFLIXPOLY.Participation VALUES (9, 22,    'Actor', 	85000);
+INSERT INTO NETFLIXPOLY.Participation VALUES (1, 21,    'Actor', 	85000);
+INSERT INTO NETFLIXPOLY.Participation VALUES (1, 22,    'Actor', 	85000);
+INSERT INTO NETFLIXPOLY.Participation VALUES (2, 23,    'Actor', 	85000);
+INSERT INTO NETFLIXPOLY.Participation VALUES (2, 24,    'Actor', 	85000);
 
 -- Oscars
 INSERT INTO NETFLIXPOLY.Oscars VALUES ('2020-02-09', 'Los Angeles', ''); -- No host
