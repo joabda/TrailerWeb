@@ -1,0 +1,27 @@
+# Netflixpoly
+
+Netflixpoly is a Web app for movies.
+
+# Installation
+In client folder:
+	npm install
+	npm start
+
+In server folder:
+	npm install
+	npm start
+
+In cors-anywhere folder:
+	npm install
+	npm start
+
+## Usage
+
+
+
+## Contributing
+Joe ABDO 
+Hugo Perronet
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)

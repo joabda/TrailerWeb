@@ -69,7 +69,6 @@ export class AddMovieComponent implements OnInit {
     public async addMovie(): Promise<void> {
         if (!this.valid()) {
             this.openSnack(`Please correct the form before submitting!`);
-
             return;
         }
         this.loading = true;
@@ -224,7 +223,6 @@ export class AddMovieComponent implements OnInit {
                 return actor.id;
             }
         }
-
         return -1;
     }
 
