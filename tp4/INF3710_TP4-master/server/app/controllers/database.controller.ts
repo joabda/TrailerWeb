@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
-import * as fs from "fs";
 import { inject, injectable } from "inversify";
 import * as jwt from 'jsonwebtoken';
 import * as pg from "pg";
-import { TOKEN } from "../constants";
+import { TOKEN, RSA_PRIVATE_KEY } from "../constants";
 import { HTTP } from "../enum/http-codes";
 import { Tables } from "../enum/tables";
 import { Actor } from "../interface/actor";
@@ -22,7 +21,6 @@ export class DatabaseController {
 
     public get router(): Router {
         const router: Router = Router();
-        const RSA_PRIVATE_KEY: string = fs.readFileSync(require('path').resolve(__dirname, 'private.key')).toString('utf8');
 
         router.post("/createSchema", (req: Request, res: Response, next: NextFunction) => {
             this.databaseService.createSchema().then((result: pg.QueryResult) => {
