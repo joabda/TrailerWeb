@@ -96,7 +96,7 @@ export const DEFAULT_CEREMONY = {
 
 export const POLYTECHNIQUE_POSTAL_CODE: string = "H3T1J4";
 
-export const MAPS_API_KEY: string = "AIzaSyBwnIPWbcvxyKd0inqjMZZocyCIDUKPGkE";
+export const MAPS_API_KEY: string = "INSERT YOUR OWN KEY";
 
 export const PROXY: string = "http://localhost:8080/";
 
